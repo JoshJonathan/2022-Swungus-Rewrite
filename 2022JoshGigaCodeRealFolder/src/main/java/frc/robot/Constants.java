@@ -13,5 +13,21 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    static final double intakeSpeed = 0.65;
+    //IO
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
+    
+    //intake
+    public static final double SPEED = 0.82;
+    public static final int SOLENOID_CHANNEL = 0;
+    public static final int DEVICE_NUMBER = 40;
+    public static final double RAMP_TIME = .25;
+    public static final double INTAKE_MOTOR_SATURATION_VOLTAGE = 9.5;
+
+    //shooter
+    public static final int MAIN_WHEEL_LEFT_DEVICE_NUMBER = 21;
+    public static final int MAIN_WHEEL_RIGHT_DEVICE_NUMBER = 22;
+    public static final double SHOOTER_RAMP_TIME = .1;
+    public static final double SHOOTER_KF = 0;
+    public static final double SHOOTER_KP = 0;
+    public static final double MAIN_WHEEL_IDLE_VELOCITY = 500;
 }
