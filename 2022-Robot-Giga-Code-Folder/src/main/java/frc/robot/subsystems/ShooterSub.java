@@ -11,10 +11,10 @@ import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Shooter extends SubsystemBase {
+public class ShooterSub extends SubsystemBase {
   TalonFX shooterMainWheelLeft = new TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
   /** Creates a new ExampleSubsystem. */
-  public Shooter() {
+  public ShooterSub() {
     shooterMainWheelLeft.configFactoryDefault();
     shooterMainWheelLeft.configClosedloopRamp(.25);
     shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
@@ -35,7 +35,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.print("SHOOTER_MAIN_WHEEL_VELOCITY" + shooterMainWheelLeft.getSelectedSensorVelocity());
+    System.out.print("SHOOTER_MAIN_WHEEL_VELOCITY: " + shooterMainWheelLeft.getSelectedSensorVelocity());
     // This method will be called once per scheduler run
   }
 
