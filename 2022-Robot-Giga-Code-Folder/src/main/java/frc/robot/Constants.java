@@ -14,7 +14,7 @@ package frc.robot;
  */
 public final class Constants {
 
-    public static final int SHOOTER_MAIN_WHEEL_LEFT_ID = 0;
+    public static final int SHOOTER_MAIN_WHEEL_LEFT_ID = 5;
     public static final double SHOOTER_MAIN_WHEEL_KF = .0005;
     public static final double SHOOTER_MAIN_WHEEL_KP = 0;
     public static final double SHOOTER_VELOCITY = 6500;

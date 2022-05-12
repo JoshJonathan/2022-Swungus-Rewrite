@@ -16,9 +16,9 @@ public class ShooterSub extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public ShooterSub() {
     shooterMainWheelLeft.configFactoryDefault();
-    shooterMainWheelLeft.configClosedloopRamp(.25);
-    shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-    shooterMainWheelLeft.configVelocityMeasurementWindow(1);
+    //shooterMainWheelLeft.configClosedloopRamp(.25);
+    //shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+    //shooterMainWheelLeft.configVelocityMeasurementWindow(1);
     shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
     shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
     shooterMainWheelLeft.config_kD(0, 0);
@@ -35,7 +35,7 @@ public class ShooterSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.print("SHOOTER_MAIN_WHEEL_VELOCITY: " + shooterMainWheelLeft.getSelectedSensorVelocity());
+    //System.out.print("SHOOTER_MAIN_WHEEL_VELOCITY: " + shooterMainWheelLeft.getSelectedSensorVelocity());
     // This method will be called once per scheduler run
   }
 
