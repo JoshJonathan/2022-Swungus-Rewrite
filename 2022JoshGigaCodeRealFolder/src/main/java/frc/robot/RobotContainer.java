@@ -5,7 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.PS4ControllerSim;
 import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.ShooterSub;
@@ -30,8 +32,8 @@ public class RobotContainer {
 
   private final Command idleShooter = new InstantCommand(rc_ShooterSub::idle, rc_ShooterSub);
  
-  XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
-  XboxControllerSim rc_operatorControllerSim = new XboxControllerSim(rc_operatorController);
+  PS4Controller rc_operatorController = new PS4Controller(Constants.OPERATOR_CONTROLLER_PORT);
+  PS4ControllerSim rc_operatorControllerSim = new PS4ControllerSim(rc_operatorController);
 
 
 
@@ -49,11 +51,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value)
+    new JoystickButton(rc_operatorController, PS4Controller.Button.kR1.value)
         .whenPressed(deployIntake);
-    new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value)
+    new JoystickButton(rc_operatorController, PS4Controller.Button.kL1.value)
         .whenPressed(retractIntake);
-    new JoystickButton(rc_operatorController, XboxController.Button.kA.value)
+    new JoystickButton(rc_operatorController, PS4Controller.Button.kCross.value)
         .whenPressed(idleShooter);
   }
 }
