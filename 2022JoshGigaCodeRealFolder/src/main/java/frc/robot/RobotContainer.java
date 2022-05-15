@@ -6,7 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,11 +27,18 @@ public class RobotContainer {
   private final Command deployIntake = new InstantCommand(rc_IntakeSub::deployIntake, rc_IntakeSub);
   private final Command retractIntake = new InstantCommand(rc_IntakeSub::retractIntake, rc_IntakeSub);
 
+  private final ShooterSub rc_ShooterSub = new ShooterSub();
+
+  private final Command idleShooter = new InstantCommand(rc_ShooterSub::idle, rc_ShooterSub);
+ 
   XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  XboxControllerSim rc_operatorControllerSim = new XboxControllerSim(rc_operatorController);
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    rc_ShooterSub.setDefaultCommand(idleShooter);
     // Configure the button bindings
     configureButtonBindings();
   }
