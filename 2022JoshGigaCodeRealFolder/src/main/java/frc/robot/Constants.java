@@ -33,14 +33,6 @@ public final class Constants {
     public static final double SHOOTER_KP = 0;
     public static final double MAIN_WHEEL_IDLE_VELOCITY = 500;
     public static final double SHOOTER_GEARING = 1;
-
     public static final double SHOOTER_MOI = 0.00221762329;
-
-    public static final DigitalSource SHOOTER_ENCODER_CHANNEL_A = null;
-
-    public static final DigitalSource SHOOTER_ENCODER_CHANNEL_B = null;
-
-    public static final double SHOOTER_ENCODER_DISTANCE_PER_PULSE = 0;
-
     public static final double SHOOTER_SIM_LOOP_TIME = 0.02;
 }

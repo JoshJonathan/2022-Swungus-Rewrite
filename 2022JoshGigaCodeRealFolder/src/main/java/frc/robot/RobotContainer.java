@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -38,7 +37,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    rc_ShooterSub.setDefaultCommand(idleShooter);
+    //rc_ShooterSub.setDefaultCommand(idleShooter);
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -54,5 +53,7 @@ public class RobotContainer {
         .whenPressed(deployIntake);
     new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value)
         .whenPressed(retractIntake);
+    new JoystickButton(rc_operatorController, XboxController.Button.kA.value)
+        .whenPressed(idleShooter);
   }
 }

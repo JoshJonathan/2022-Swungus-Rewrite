@@ -3,6 +3,7 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/IntakeSub": "Subsystem",
+      "/LiveWindow/ShooterSub": "Subsystem",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
     }
   }
