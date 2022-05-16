@@ -21,7 +21,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ShooterSub rc_shootersub = new ShooterSub();
 
-  private final Command rc_spinshooter = new InstantCommand(rc_shootersub::spinWheels, rc_shootersub);
+  private final Command rc_idleshooter = new InstantCommand(rc_shootersub::idle, rc_shootersub);
   private final Command rc_stopshooter = new InstantCommand(rc_shootersub::stop, rc_shootersub);
   XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
@@ -39,8 +39,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_spinshooter);
-    new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whenReleased(rc_stopshooter);
+    rc_shootersub.setDefaultCommand(rc_idleshooter);
+    //new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_idleshooter);
+    new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whileHeld(rc_stopshooter);
   }
 
   /**
