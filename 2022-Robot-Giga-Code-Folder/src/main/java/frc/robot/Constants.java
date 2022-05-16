@@ -18,4 +18,15 @@ public final class Constants {
     public static final double SHOOTER_MAIN_WHEEL_KF = .0452;
     public static final double SHOOTER_MAIN_WHEEL_KP = 0.08;
     public static final int OPERATOR_CONTROLLER_PORT = 0;
-    public static final double SHOOTER_IDLE_VELOCITY = 8000;}
+    public static final double SHOOTER_IDLE_VELOCITY = 8000;
+    public static final double SHOOTER_RAMP_TIME = 0;
+    public static final int SHOOTER_MAIN_WHEEL_RIGHT_ID = 0;
+    public static final int SHOOTER_HOOD_WHEEL_ID = 0;
+    public static final double SHOOTER_HOOD_WHEEL_KF = 0;
+    public static final double SHOOTER_HOOD_WHEEL_KP = 0;
+    public static final double SHOOTER_MAINWHEEL_IDLE_VELOCITY = 0;
+    public static final double SHOOTER_HOODWHEEL_IDLE_VELOCITY = 0;
+    public static final double SHOOTER_ALLOWABLE_ERROR = 0;
+    public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0;
+    public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0;
+    public static final double SHOOTER_SERVO_ALLOWABLE_ERROR = 0;}
