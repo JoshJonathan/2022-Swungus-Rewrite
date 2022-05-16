@@ -29,10 +29,13 @@ public final class Constants {
     public static final int MAIN_WHEEL_LEFT_DEVICE_NUMBER = 21;
     public static final int MAIN_WHEEL_RIGHT_DEVICE_NUMBER = 22;
     public static final double SHOOTER_RAMP_TIME = .1;
-    public static final double SHOOTER_KF = 0;
+    public static final double SHOOTER_KF = 0.1599;
     public static final double SHOOTER_KP = 0;
-    public static final double MAIN_WHEEL_IDLE_VELOCITY = 500;
+    public static final double MAIN_WHEEL_IDLE_VELOCITY = 1000;
+    public static final double MAIN_WHEEL_SHOOT_VELOCITY = 8000;
     public static final double SHOOTER_GEARING = 1;
     public static final double SHOOTER_MOI = 0.00221762329;
     public static final double SHOOTER_SIM_LOOP_TIME = 0.02;
+
+    public static final double RPM_TO_FALCON_CONVERSION_CONSTANT = (2.9296875);//600000/204800
 }

@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -24,11 +25,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSub extends SubsystemBase {
-  TalonFX mainWheelLeft = new TalonFX(Constants.MAIN_WHEEL_LEFT_DEVICE_NUMBER);
+  WPI_TalonFX mainWheelLeft = new WPI_TalonFX(Constants.MAIN_WHEEL_LEFT_DEVICE_NUMBER);
   TalonFX mainWheelRight = new TalonFX(Constants.MAIN_WHEEL_RIGHT_DEVICE_NUMBER);
-
-  TalonFXSimCollection talonSim = new TalonFXSimCollection(mainWheelLeft);
-  
+    
   private final FlywheelSim mainWheelSim = new FlywheelSim(DCMotor.getFalcon500(2), Constants.SHOOTER_GEARING, Constants.SHOOTER_MOI);
 
   /** Creates a new ShooterSub. */
@@ -38,10 +37,10 @@ public class ShooterSub extends SubsystemBase {
     mainWheelRight.configFactoryDefault();
     mainWheelLeft.setNeutralMode(NeutralMode.Coast);
     mainWheelRight.setNeutralMode(NeutralMode.Coast);
-    mainWheelLeft.configClosedloopRamp(Constants.SHOOTER_RAMP_TIME);
+    //mainWheelLeft.configClosedloopRamp(Constants.SHOOTER_RAMP_TIME);
     mainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
     mainWheelLeft.configVelocityMeasurementWindow(1);
-    mainWheelLeft.configOpenloopRamp(Constants.SHOOTER_RAMP_TIME);
+    //mainWheelLeft.configOpenloopRamp(Constants.SHOOTER_RAMP_TIME);
     mainWheelLeft.config_kF(0, Constants.SHOOTER_KF);
     mainWheelLeft.config_kP(0, Constants.SHOOTER_KP);
     mainWheelLeft.config_kD(0, 0);
@@ -49,10 +48,21 @@ public class ShooterSub extends SubsystemBase {
     mainWheelLeft.setInverted(TalonFXInvertType.Clockwise);
     mainWheelRight.setInverted(TalonFXInvertType.OpposeMaster);
     mainWheelRight.follow(mainWheelLeft);
+    SmartDashboard.putNumber("Shooter kP", Constants.SHOOTER_KP);
+    SmartDashboard.putNumber("Shooter kF", Constants.SHOOTER_KF);
+
   }
 
   public void idle() {
-    mainWheelLeft.set(ControlMode.Velocity, Constants.MAIN_WHEEL_IDLE_VELOCITY);
+    SmartDashboard.updateValues();
+    mainWheelLeft.config_kP(0, SmartDashboard.getNumber("Shooter kP", Constants.SHOOTER_KP));
+    mainWheelLeft.config_kF(0, SmartDashboard.getNumber("Shooter kF", Constants.SHOOTER_KF));
+    mainWheelLeft.set(ControlMode.Velocity, Constants.MAIN_WHEEL_SHOOT_VELOCITY);
+    //mainWheelLeft.set(ControlMode.PercentOutput, 1);
+  }
+
+  public void stop() {
+    mainWheelLeft.set(ControlMode.PercentOutput, 0);
   }
 
   public void shoot(double IO) {
@@ -65,12 +75,14 @@ public class ShooterSub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Shooter Output Voltage", mainWheelLeft.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Closed Loop Error", mainWheelLeft.getClosedLoopError());
   }
 
   @Override
   public void simulationPeriodic() {
     mainWheelSim.setInput(mainWheelLeft.getMotorOutputVoltage());
     mainWheelSim.update(Constants.SHOOTER_SIM_LOOP_TIME);
-    SmartDashboard.putNumber("ShooterSim Velocity", mainWheelSim.getAngularVelocityRPM());
+    SmartDashboard.putNumber("ShooterSim Velocity", mainWheelSim.getAngularVelocityRPM()*Constants.RPM_TO_FALCON_CONVERSION_CONSTANT);
   }
 }

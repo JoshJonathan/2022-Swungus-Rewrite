@@ -31,6 +31,7 @@ public class RobotContainer {
   private final ShooterSub rc_ShooterSub = new ShooterSub();
 
   private final Command idleShooter = new InstantCommand(rc_ShooterSub::idle, rc_ShooterSub);
+  private final Command stopShooter = new InstantCommand(rc_ShooterSub::stop, rc_ShooterSub);
  
   PS4Controller rc_operatorController = new PS4Controller(Constants.OPERATOR_CONTROLLER_PORT);
   PS4ControllerSim rc_operatorControllerSim = new PS4ControllerSim(rc_operatorController);
@@ -57,5 +58,8 @@ public class RobotContainer {
         .whenPressed(retractIntake);
     new JoystickButton(rc_operatorController, PS4Controller.Button.kCross.value)
         .whenPressed(idleShooter);
+    new JoystickButton(rc_operatorController, PS4Controller.Button.kSquare.value)
+        .whenPressed(stopShooter);
+
   }
 }
