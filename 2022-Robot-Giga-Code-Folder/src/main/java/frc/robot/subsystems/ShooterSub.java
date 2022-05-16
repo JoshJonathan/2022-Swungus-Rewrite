@@ -5,14 +5,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSub extends SubsystemBase {
-  TalonFX shooterMainWheelLeft = new TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
+  WPI_TalonFX shooterMainWheelLeft = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
   /** Creates a new ExampleSubsystem. */
   public ShooterSub() {
     shooterMainWheelLeft.configFactoryDefault();
@@ -35,8 +36,8 @@ public class ShooterSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //System.out.print("SHOOTER_MAIN_WHEEL_VELOCITY: " + shooterMainWheelLeft.getSelectedSensorVelocity());
-    // This method will be called once per scheduler run
+  SmartDashboard.putNumber("ShooterVelocity", shooterMainWheelLeft.getSelectedSensorVelocity());
+  // This method will be called once per scheduler run
   }
 
   @Override

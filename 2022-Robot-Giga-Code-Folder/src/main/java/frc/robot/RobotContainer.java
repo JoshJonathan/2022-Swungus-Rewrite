@@ -40,7 +40,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_spinshooter);
-    new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenReleased(rc_stopshooter);
+    new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whenReleased(rc_stopshooter);
   }
 
   /**
