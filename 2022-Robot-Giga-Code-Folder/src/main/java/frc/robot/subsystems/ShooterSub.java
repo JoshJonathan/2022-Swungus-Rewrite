@@ -12,7 +12,6 @@ import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class ShooterSub extends SubsystemBase {
   WPI_TalonFX shooterMainWheelLeft = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
@@ -29,8 +28,7 @@ public class ShooterSub extends SubsystemBase {
   }
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new RobotContainer.rc_idleshooter());
-}
+  }
 
   public void idle() {
     shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_IDLE_VELOCITY);
