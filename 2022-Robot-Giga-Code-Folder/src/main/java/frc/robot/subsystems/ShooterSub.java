@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
@@ -18,16 +19,22 @@ public class ShooterSub extends SubsystemBase {
   public ShooterSub() {
     shooterMainWheelLeft.configFactoryDefault();
     //shooterMainWheelLeft.configClosedloopRamp(.25);
-    //shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-    //shooterMainWheelLeft.configVelocityMeasurementWindow(1);
+    shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+    shooterMainWheelLeft.configVelocityMeasurementWindow(1);
     shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
     shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
     shooterMainWheelLeft.config_kD(0, 0);
     shooterMainWheelLeft.config_kI(0, 0);
+    SmartDashboard.putNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF);
+    SmartDashboard.putNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP);
   }
 
   public void spinWheels() {
-    shooterMainWheelLeft.set(TalonFXControlMode.Velocity, Constants.SHOOTER_VELOCITY);
+    SmartDashboard.updateValues();
+    shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF));
+    shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP));
+    shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_VELOCITY);
+    //shooterMainWheelLeft.set(ControlMode.PercentOutput, 0.1);
   }
 
   public void stop() {
