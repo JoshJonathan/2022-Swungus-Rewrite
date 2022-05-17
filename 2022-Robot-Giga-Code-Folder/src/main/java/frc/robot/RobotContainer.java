@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -19,17 +20,26 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ShooterSub rc_shootersub = new ShooterSub();
+  //shooter
+    private final ShooterSub rc_shootersub = new ShooterSub();
+    //commands
+      //default command
+      private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
+      //stop shooter command
+      private final Command rc_stopshooter = new InstantCommand(rc_shootersub::stopShooter, rc_shootersub);
 
-  private final Command rc_idleshooter = new InstantCommand(rc_shootersub::idle, rc_shootersub);
-  private final Command rc_stopshooter = new InstantCommand(rc_shootersub::stop, rc_shootersub);
-  XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  //IO
+    //Controllers
+    XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    //set default commands
+    rc_shootersub.setDefaultCommand(rc_idleshooter);
   }
 
   /**
@@ -39,8 +49,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    rc_shootersub.setDefaultCommand(rc_idleshooter);
-    //new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_idleshooter);
     new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whileHeld(rc_stopshooter);
   }
 
