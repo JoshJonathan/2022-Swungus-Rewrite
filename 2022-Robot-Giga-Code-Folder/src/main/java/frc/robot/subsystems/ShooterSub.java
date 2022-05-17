@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
@@ -15,98 +16,197 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class ShooterSub extends SubsystemBase {
-  //Main Wheel Motor Controllers
-  WPI_TalonFX shooterMainWheelLeft = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
-  WPI_TalonFX shooterMainWheelRight = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_RIGHT_ID);
-
-  //Hood Wheels Motor Controller
-  WPI_TalonFX shooterHoodWheels = new WPI_TalonFX(Constants.SHOOTER_HOOD_WHEEL_ID);
-
-  //Hood Servos
-
+  //Motor Controllers
+    //MainWheel
+    WPI_TalonFX shooterMainWheelLeft = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
+    WPI_TalonFX shooterMainWheelRight = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_RIGHT_ID);
+    //HoodWheels
+      /*
+    WPI_TalonFX shooterHoodWheels = new WPI_TalonFX(Constants.SHOOTER_HOOD_WHEELS_ID);
+      */
+    //KickerWheel
+      /*
+    WPI_TalonFX shooterKickerWheel = new WPI_TalonFX(Constants.SHOOTER_HOOD_WHEELS_ID);
+      */
+  //Servos
+    //HoodServos
 
   //Static Variables
-  boolean shooterReady = false;
-  boolean mainWheelReady = false;
-  boolean hoodWheelsReady = false;
-  boolean hoodServosReady = false;
-
-
+    //Ready
+      
+      //Subsystem
+      boolean readyToShoot = false;
+      //Motors
+      boolean mainWheelReadyToShoot = false;
+        /*
+      boolean hoodWheelsReady = false;
+      boolean kickerWheelReady = false;
+      //Servos
+      boolean hoodServosReady = false;
+        */
   
   /** Creates a new ExampleSubsystem. */
   public ShooterSub() {
-    //config main wheel left controller
-    shooterMainWheelLeft.configFactoryDefault();
-    shooterMainWheelLeft.setNeutralMode(NeutralMode.Coast);
-    shooterMainWheelLeft.configClosedloopRamp(Constants.SHOOTER_RAMP_TIME);
-    shooterMainWheelLeft.configOpenloopRamp(Constants.SHOOTER_RAMP_TIME);
-
-    //config main wheel right controller
-    shooterMainWheelRight.configFactoryDefault();
-    shooterMainWheelRight.setNeutralMode(NeutralMode.Coast);
-
-    //config hood wheels controller
-    shooterHoodWheels.configFactoryDefault();
-    shooterHoodWheels.setNeutralMode(NeutralMode.Coast);
-    shooterHoodWheels.configClosedloopRamp(Constants.SHOOTER_RAMP_TIME);
-    shooterHoodWheels.configOpenloopRamp(Constants.SHOOTER_RAMP_TIME);
-
-    //config Main Wheel PID
-    shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-    shooterMainWheelLeft.configVelocityMeasurementWindow(1);
-    shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
-    shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
-
-    //config hood wheels PID
-    shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-    shooterHoodWheels.configVelocityMeasurementWindow(1);
-    shooterHoodWheels.config_kF(0, Constants.SHOOTER_HOOD_WHEEL_KF);
-    shooterHoodWheels.config_kP(0, Constants.SHOOTER_HOOD_WHEEL_KP);
+    //Controllers
+      //mainWheelLeft
+      shooterMainWheelLeft.configFactoryDefault();
+      shooterMainWheelLeft.setNeutralMode(NeutralMode.Coast);
+      shooterMainWheelLeft.setInverted(TalonFXInvertType.Clockwise);
+      shooterMainWheelLeft.configClosedloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      shooterMainWheelLeft.configOpenloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      //mainWheelRight
+      shooterMainWheelRight.configFactoryDefault();
+      shooterMainWheelRight.follow(shooterMainWheelLeft);
+      shooterMainWheelLeft.setInverted(TalonFXInvertType.OpposeMaster);
+      shooterMainWheelRight.setNeutralMode(NeutralMode.Coast);
+      //hoodWheels
+        /*
+      shooterHoodWheels.configFactoryDefault();
+      shooterHoodWheels.setNeutralMode(NeutralMode.Coast);
+      shooterMainWheelLeft.setInverted(TalonFXInvertType.CounterClockwise);
+      shooterHoodWheels.configClosedloopRamp(Constants.SHOOTER_HOOD_WHEELS_RAMP_TIME);
+      shooterHoodWheels.configOpenloopRamp(Constants.SHOOTER_HOOD_WHEELS_RAMP_TIME);
+        */
+      //kickerWheel
+        /*
+      shooterKickerWheel.configFactoryDefault();
+      shooterKickerWheel.setNeutralMode(NeutralMode.Coast);
+      shooterKickerWheel.setInverted(TalonFXInvertType.Clockwise);
+      shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+        */
+    //PID
+      //mainWheel PID
+      shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+      shooterMainWheelLeft.configVelocityMeasurementWindow(1);
+      shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
+      shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
+      //hoodWheels PID
+        /*
+      shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+      shooterHoodWheels.configVelocityMeasurementWindow(1);
+      shooterHoodWheels.config_kF(0, Constants.SHOOTER_HOOD_WHEELS_KF);
+      shooterHoodWheels.config_kP(0, Constants.SHOOTER_HOOD_WHEELS_KP);
+        */
+      //kickerWheel PID
+        /*
+      shooterKickerWheel.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
+      shooterKickerWheel.configVelocityMeasurementWindow(1);
+      shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
+      shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
+      */
+    //DashBoards
+      //PID Tuning
+        SmartDashboard.putNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF);
+        SmartDashboard.putNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP);
+        SmartDashboard.putNumber("Velocity", 0);
   }
-
-  public void idle() {
-    shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_MAINWHEEL_IDLE_VELOCITY);
-    shooterHoodWheels.set(ControlMode.Velocity, Constants.SHOOTER_HOODWHEEL_IDLE_VELOCITY);
+//State computers
+    
+  //Shooter ready to shoot
+//  public void computeShooterReadyToShoot() {
+    //compute subsubsystems
+      //mainWheel
+//      computeMainWheelReadyToShoot();
+      //hoodWheels
+        /*
+      computeHoodWheelsReadyToShoot()
+        */
+      //kickerWheels
+        /*
+      computeKickerWheelReadyToShoot();
+        */
+      //servos
+    //compute subsystem
+//    if (mainWheelReadyToShoot
+      /*
+     && hoodWheelsReadyToShoot
+      */
+      /*
+     && kickerWheelsReadyToShoot
+     */
+    /*
+     &&hoodServosReady
+     */
+//    ) readyToShoot = true;
+//    else readyToShoot = false;
+//  }
+  //compute mainWheel ready to shoot
+    /*
+  public void computeMainWheelReadyToShoot() {
+    if (shooterMainWheelLeft.getSelectedSensorVelocity()
+        < (shooterMainWheelLeft.getClosedLoopTarget()+(shooterMainWheelLeft.getClosedLoopTarget()*Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR))
+        &&
+        shooterMainWheelLeft.getSelectedSensorVelocity()
+         > (shooterMainWheelLeft.getClosedLoopTarget()-(shooterMainWheelLeft.getClosedLoopTarget()*Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR))
+    ) mainWheelReadyToShoot = true;
+    else mainWheelReadyToShoot = false;
   }
-
-  public void Shoot(double mainWheelVelocity, double hoodWheelsVelocity) {
-    shooterMainWheelLeft.set(ControlMode.Velocity, mainWheelVelocity);
-    shooterHoodWheels.set(ControlMode.Velocity, hoodWheelsVelocity);
+    */
+  //compute hoodWheels ready to shoot
+    /*
+  public void computeHoodWheelsReadyToShoot() {
+    if (shooterHoodWheels.getSelectedSensorVelocity()
+        < (shooterHoodWheels.getClosedLoopTarget()+(shooterHoodWheels.getClosedLoopTarget()*Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR))
+        &&
+        shooterHoodWheels.getSelectedSensorVelocity()
+        > (shooterHoodWheels.getClosedLoopTarget()-(shooterHoodWheels.getClosedLoopTarget()*Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR))
+    ) hoodWheelsReady = true;
+    else hoodWheelsReadyToShoot = false;
   }
-
-  public void stop() {
+    */
+  //compute kickerWheel ready to shoot
+    /*
+  public void computeKickerWheelReadyToShoot() {
+    if (shooterKickerWheel.getSelectedSensorVelocity()
+        < (shooterKickerWheel.getClosedLoopTarget()+(shooterKickerWheel.getClosedLoopTarget()*Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR))
+        &&
+        shooterKickerWheel.getSelectedSensorVelocity()
+         > (shooterKickerWheel.getClosedLoopTarget()-(shooterKickerWheel.getClosedLoopTarget()*Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR))
+    ) kickerWheelReadyToShoot = true;
+    else kickerWheelReadyToShoot = false;
+  }
+    &/
+  //compute servos ready to shoot
+    /*
+  public void computeServosReadyToShoot() {
+    
+  }
+    */
+//Actions
+  public void idleShooter() {
+    shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF));
+    shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP));
+    //idle motors
+    shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY);
+      /*
+    shooterHoodWheels.set(ControlMode.Velocity, Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY);
+      */
+      /*
+    shooterKickerWheel.set(ControlMode.Velocity, Constants.SHOOTER_KICKER_WHEEL_IDLE_VELOCITY);
+      */
+    //set servo position
+  }
+  public void stopShooter() {
+    //stop motors
     shooterMainWheelLeft.set(TalonFXControlMode.PercentOutput, 0);
+      /*
     shooterHoodWheels.set(TalonFXControlMode.PercentOutput, 0);
+      */
+      /*
+    shooterKickerWheel.set(TalonFXControlMode.PercentOutput, 0);
+      */
+    //stop servos
   }
-
+//Periodics
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    //is main wheel ready?
-    if (shooterMainWheelLeft.getSelectedSensorVelocity() < (shooterMainWheelLeft.getClosedLoopTarget()+(shooterMainWheelLeft.getClosedLoopTarget()*Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR))
-        &&
-        shooterMainWheelLeft.getSelectedSensorVelocity() > (shooterMainWheelLeft.getClosedLoopTarget()-(shooterMainWheelLeft.getClosedLoopTarget()*Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR))
-    ) mainWheelReady = true;
-    else mainWheelReady = false;
-
-    //is hood wheel ready?
-    if (shooterHoodWheels.getSelectedSensorVelocity() < (shooterHoodWheels.getClosedLoopTarget()+(shooterHoodWheels.getClosedLoopTarget()*Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR))
-        &&
-        shooterHoodWheels.getSelectedSensorVelocity() > (shooterHoodWheels.getClosedLoopTarget()-(shooterHoodWheels.getClosedLoopTarget()*Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR))
-    ) hoodWheelsReady = true;
-    else hoodWheelsReady = false;
-
-    //are servos ready?
-
-    //is shooter ready?
-    if (mainWheelReady
-      &&hoodServosReady
-    //  &&hoodServosReady
-    ) shooterReady = true;
-    else shooterReady = false;
-
-    SmartDashboard.putBoolean("ShooterReady", shooterReady);
+    //evaluate if the robot is ready to shoot
+      /*
+    computeShooterReadyToShoot();
+      */
   }
 
   @Override
