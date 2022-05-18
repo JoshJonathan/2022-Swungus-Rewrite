@@ -28,8 +28,8 @@ public final class Constants {
             public static final int SERVO_RIGHT_PORT = 0;//unassigned
         //PID
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_KF = .001;
-            public static final double SHOOTER_MAIN_WHEEL_KP = 0.0;
+            public static final double SHOOTER_MAIN_WHEEL_KF = .0532;
+            public static final double SHOOTER_MAIN_WHEEL_KP = 0.2; //dont really know
             //HoodWheels
             public static final double SHOOTER_HOOD_WHEELS_KF = 0.0;//unassigned
             public static final double SHOOTER_HOOD_WHEELS_KP = 0.0;//unassigned
@@ -38,7 +38,7 @@ public final class Constants {
             public static final double SHOOTER_KICKER_WHEEL_KP = 0.0;//unassigned
         //Velocities
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000;
+            public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000; //1000
             //HoodWheels
             public static final double SHOOTER_HOOD_WHEELS_IDLE_VELOCITY = 1000;//unassigned
             //KickerWheel

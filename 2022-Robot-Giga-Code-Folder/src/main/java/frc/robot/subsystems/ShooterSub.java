@@ -80,10 +80,9 @@ public class ShooterSub extends SubsystemBase {
     //PID
       //mainWheel PID
       shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterMainWheelLeft.configVelocityMeasurementWindow(1);
+      shooterMainWheelLeft.configVelocityMeasurementWindow(32);
       shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
       shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
-      SmartDashboard.putNumber("Falcon Firmware Version", shooterMainWheelLeft.getFirmwareVersion()) ;
       //hoodWheels PID
         /*
       shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
@@ -178,8 +177,8 @@ public class ShooterSub extends SubsystemBase {
     */
 //Actions
   public void idleShooter() {
+    SmartDashboard.updateValues();
     SmartDashboard.putBoolean("Shooter Idling", true);
-    SmartDashboard.putNumber("Shooter Voltage", shooterMainWheelLeft.getMotorOutputVoltage());
     shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF));
     shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP));
     //idle motors
@@ -207,6 +206,9 @@ public class ShooterSub extends SubsystemBase {
 //Periodics
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Velocity", shooterMainWheelLeft.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter Voltage", shooterMainWheelLeft.getMotorOutputVoltage());
+    SmartDashboard.putNumber("Shooter Error", shooterMainWheelLeft.getClosedLoopError());
     // This method will be called once per scheduler run
 
     //evaluate if the robot is ready to shoot
