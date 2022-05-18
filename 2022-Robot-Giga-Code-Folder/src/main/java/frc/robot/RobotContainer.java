@@ -24,14 +24,12 @@ public class RobotContainer {
     private final ShooterSub rc_shootersub = new ShooterSub();
     //commands
       //default command
-      private final Command rc_idleshooter = new InstantCommand(rc_shootersub::idleShooter, rc_shootersub);
+      private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
       //stop shooter command
       private final Command rc_stopshooter = new InstantCommand(rc_shootersub::stopShooter, rc_shootersub);
-
   //IO
     //Controllers
     XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -39,7 +37,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     //set default commands
-    //rc_shootersub.setDefaultCommand(rc_idleshooter);
+    rc_shootersub.setDefaultCommand(rc_idleshooter);
   }
 
   /**
@@ -50,7 +48,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whileHeld(rc_stopshooter);
-    new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_idleshooter);
   }
 
   /**

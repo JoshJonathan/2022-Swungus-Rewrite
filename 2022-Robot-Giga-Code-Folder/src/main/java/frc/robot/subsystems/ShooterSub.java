@@ -45,8 +45,6 @@ public class ShooterSub extends SubsystemBase {
   public ShooterSub() {
     //Controllers
       //mainWheelLeft
-      SmartDashboard.putBoolean("Motors Initializing", true);
-      SmartDashboard.putBoolean("Shooter Idling", false);
       shooterMainWheelLeft.configFactoryDefault();
       shooterMainWheelLeft.setNeutralMode(NeutralMode.Coast);
       shooterMainWheelLeft.setInverted(TalonFXInvertType.Clockwise);
@@ -86,10 +84,6 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
     //DashBoards
-      //PID Tuning
-        SmartDashboard.putNumber("kF", Constants.SHOOTER_KICKER_WHEEL_KF);
-        SmartDashboard.putNumber("kP", Constants.SHOOTER_KICKER_WHEEL_KP);
-        SmartDashboard.putNumber("Velocity", 0);
   }
 //State computers
     
@@ -165,20 +159,15 @@ public class ShooterSub extends SubsystemBase {
     */
 //Actions
   public void idleShooter() {
-    SmartDashboard.updateValues();
-    SmartDashboard.putBoolean("Shooter Idling", true);
-    shooterKickerWheel.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_KICKER_WHEEL_KF));
-    shooterKickerWheel.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_KICKER_WHEEL_KP));
     //idle motors
-    //shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY);
-    //shooterHoodWheels.set(ControlMode.Velocity, Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY);
+    shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY);
+    shooterHoodWheels.set(ControlMode.Velocity, Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY);
     shooterKickerWheel.set(ControlMode.Velocity, Constants.SHOOTER_KICKER_WHEEL_IDLE_VELOCITY);
     //set servo position
   }
   public void stopShooter() {
     //stop motors
     shooterMainWheelLeft.set(TalonFXControlMode.PercentOutput, 0);
-    SmartDashboard.putBoolean("Shooter Idling", false);
     shooterHoodWheels.set(TalonFXControlMode.PercentOutput, 0);
     shooterKickerWheel.set(TalonFXControlMode.PercentOutput, 0);
     //stop servos
@@ -186,9 +175,6 @@ public class ShooterSub extends SubsystemBase {
 //Periodics
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Velocity", shooterKickerWheel.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Shooter Voltage", shooterKickerWheel.getMotorOutputVoltage());
-    SmartDashboard.putNumber("Shooter Error", shooterKickerWheel.getClosedLoopError());
     // This method will be called once per scheduler run
 
     //evaluate if the robot is ready to shoot
