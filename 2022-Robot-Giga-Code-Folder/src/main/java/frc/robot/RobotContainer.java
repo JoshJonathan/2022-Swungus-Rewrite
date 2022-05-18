@@ -25,11 +25,9 @@ public class RobotContainer {
     //commands
       //default command
       private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
-
   //IO
     //Controllers
     XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
-
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
