@@ -31,19 +31,14 @@ public class ShooterSub extends SubsystemBase {
   //Servos
     //HoodServos
 
-  //Static Variables
-    //Ready
-      
-      //Subsystem
-      boolean readyToShoot = false;
-      //Motors
-      boolean mainWheelReadyToShoot = false;
-        /*
-      boolean hoodWheelsReady = false;
-      boolean kickerWheelReady = false;
-      //Servos
-      boolean hoodServosReady = false;
-        */
+    //Characterization Table
+      double[][] characterizationTable = {
+        /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 
+        /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+      };
   
   /** Creates a new ExampleSubsystem. */
   public ShooterSub() {
@@ -174,6 +169,9 @@ public class ShooterSub extends SubsystemBase {
   }
     */
 //Actions
+  public void runShooter() {
+    shooterMainWheelLeft.set(ControlMode.Velocity, getMainWheelSetpoint());
+  }
   public void idleShooter() {
     shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF));
     shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP));
@@ -187,17 +185,7 @@ public class ShooterSub extends SubsystemBase {
       */
     //set servo position
   }
-  public void stopShooter() {
-    //stop motors
-    shooterMainWheelLeft.set(TalonFXControlMode.PercentOutput, 0);
-      /*
-    shooterHoodWheels.set(TalonFXControlMode.PercentOutput, 0);
-      */
-      /*
-    shooterKickerWheel.set(TalonFXControlMode.PercentOutput, 0);
-      */
-    //stop servos
-  }
+
 //Periodics
   @Override
   public void periodic() {
