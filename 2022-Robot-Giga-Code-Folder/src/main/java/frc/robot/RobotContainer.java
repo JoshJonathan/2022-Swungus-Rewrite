@@ -25,8 +25,6 @@ public class RobotContainer {
     //commands
       //default command
       private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
-      //stop shooter command
-      private final Command rc_stopshooter = new InstantCommand(rc_shootersub::stopShooter, rc_shootersub);
   //IO
     //Controllers
     XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
@@ -47,7 +45,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whileHeld(rc_stopshooter);
   }
 
   /**
