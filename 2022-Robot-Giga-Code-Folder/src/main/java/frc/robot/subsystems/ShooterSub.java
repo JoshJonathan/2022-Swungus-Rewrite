@@ -49,6 +49,8 @@ public class ShooterSub extends SubsystemBase {
   public ShooterSub() {
     //Controllers
       //mainWheelLeft
+      SmartDashboard.putBoolean("Motors Initializing", true);
+      SmartDashboard.putBoolean("Shooter Idling", false);
       shooterMainWheelLeft.configFactoryDefault();
       shooterMainWheelLeft.setNeutralMode(NeutralMode.Coast);
       shooterMainWheelLeft.setInverted(TalonFXInvertType.Clockwise);
@@ -81,6 +83,7 @@ public class ShooterSub extends SubsystemBase {
       shooterMainWheelLeft.configVelocityMeasurementWindow(1);
       shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
       shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
+      SmartDashboard.putNumber("Falcon Firmware Version", shooterMainWheelLeft.getFirmwareVersion()) ;
       //hoodWheels PID
         /*
       shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
@@ -175,6 +178,8 @@ public class ShooterSub extends SubsystemBase {
     */
 //Actions
   public void idleShooter() {
+    SmartDashboard.putBoolean("Shooter Idling", true);
+    SmartDashboard.putNumber("Shooter Voltage", shooterMainWheelLeft.getMotorOutputVoltage());
     shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF));
     shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP));
     //idle motors
@@ -190,6 +195,7 @@ public class ShooterSub extends SubsystemBase {
   public void stopShooter() {
     //stop motors
     shooterMainWheelLeft.set(TalonFXControlMode.PercentOutput, 0);
+    SmartDashboard.putBoolean("Shooter Idling", false);
       /*
     shooterHoodWheels.set(TalonFXControlMode.PercentOutput, 0);
       */
