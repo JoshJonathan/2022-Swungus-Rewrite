@@ -21,13 +21,9 @@ public class ShooterSub extends SubsystemBase {
     WPI_TalonFX shooterMainWheelLeft = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_LEFT_ID);
     WPI_TalonFX shooterMainWheelRight = new WPI_TalonFX(Constants.SHOOTER_MAIN_WHEEL_RIGHT_ID);
     //HoodWheels
-      /*
     WPI_TalonFX shooterHoodWheels = new WPI_TalonFX(Constants.SHOOTER_HOOD_WHEELS_ID);
-      */
     //KickerWheel
-      /*
-    WPI_TalonFX shooterKickerWheel = new WPI_TalonFX(Constants.SHOOTER_HOOD_WHEELS_ID);
-      */
+    WPI_TalonFX shooterKickerWheel = new WPI_TalonFX(Constants.SHOOTER_KICKER_WHEEL_ID);
   //Servos
     //HoodServos
 
@@ -60,46 +56,34 @@ public class ShooterSub extends SubsystemBase {
       shooterMainWheelLeft.setInverted(TalonFXInvertType.OpposeMaster);
       shooterMainWheelRight.setNeutralMode(NeutralMode.Coast);
       //hoodWheels
-        /*
       shooterHoodWheels.configFactoryDefault();
       shooterHoodWheels.setNeutralMode(NeutralMode.Coast);
-      shooterMainWheelLeft.setInverted(TalonFXInvertType.CounterClockwise);
+      shooterHoodWheels.setInverted(TalonFXInvertType.Clockwise);
       shooterHoodWheels.configClosedloopRamp(Constants.SHOOTER_HOOD_WHEELS_RAMP_TIME);
       shooterHoodWheels.configOpenloopRamp(Constants.SHOOTER_HOOD_WHEELS_RAMP_TIME);
-        */
       //kickerWheel
-        /*
       shooterKickerWheel.configFactoryDefault();
       shooterKickerWheel.setNeutralMode(NeutralMode.Coast);
-      shooterKickerWheel.setInverted(TalonFXInvertType.Clockwise);
+      shooterKickerWheel.setInverted(TalonFXInvertType.CounterClockwise);
       shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
       shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
-        */
     //PID
       //mainWheel PID
       shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterMainWheelLeft.configVelocityMeasurementWindow(1);
+      shooterMainWheelLeft.configVelocityMeasurementWindow(32);
       shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
       shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
       //hoodWheels PID
-        /*
       shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterHoodWheels.configVelocityMeasurementWindow(1);
+      shooterHoodWheels.configVelocityMeasurementWindow(32);
       shooterHoodWheels.config_kF(0, Constants.SHOOTER_HOOD_WHEELS_KF);
       shooterHoodWheels.config_kP(0, Constants.SHOOTER_HOOD_WHEELS_KP);
-        */
       //kickerWheel PID
-        /*
       shooterKickerWheel.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterKickerWheel.configVelocityMeasurementWindow(1);
+      shooterKickerWheel.configVelocityMeasurementWindow(32);
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
-      */
     //DashBoards
-      //PID Tuning
-        SmartDashboard.putNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF);
-        SmartDashboard.putNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP);
-        SmartDashboard.putNumber("Velocity", 0);
   }
 //State computers
     
@@ -175,27 +159,17 @@ public class ShooterSub extends SubsystemBase {
     */
 //Actions
   public void idleShooter() {
-    shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("kF", Constants.SHOOTER_MAIN_WHEEL_KF));
-    shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("kP", Constants.SHOOTER_MAIN_WHEEL_KP));
     //idle motors
     shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY);
-      /*
     shooterHoodWheels.set(ControlMode.Velocity, Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY);
-      */
-      /*
     shooterKickerWheel.set(ControlMode.Velocity, Constants.SHOOTER_KICKER_WHEEL_IDLE_VELOCITY);
-      */
     //set servo position
   }
   public void stopShooter() {
     //stop motors
     shooterMainWheelLeft.set(TalonFXControlMode.PercentOutput, 0);
-      /*
     shooterHoodWheels.set(TalonFXControlMode.PercentOutput, 0);
-      */
-      /*
     shooterKickerWheel.set(TalonFXControlMode.PercentOutput, 0);
-      */
     //stop servos
   }
 //Periodics
