@@ -60,7 +60,41 @@ public final class Constants {
             //Servos
             public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0;//unassigned
 ////////
+    //Drivetrain
+        //IDs
+            //LeftFront
+            public static final int DRIVETRAIN_LEFT_FRONT_ID = 4;
+            //LeftRear
+            public static final int DRIVETRAIN_LEFT_REAR_ID = 3;
+            //RightFront
+            public static final int DRIVETRAIN_RIGHT_FRONT_ID = 2;
+            //RightRear
+            public static final int DRIVETRAIN_RIGHT_REAR_ID = 1;
+        //Config Parameters
+            //NeutralDeadband
+            public static final double DRIVETRAIN_NEUTRAL_DEADBAND = 0;//unassigned
+            //NominalVoltage
+            public static final double DRIVETRAIN_NOMINAL_VOLTAGE = 12.5;//unsure
+            //VoltageFilterWindowSamples
+            public static final int DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unsure
+        //Slew Rates
+            //speed
+            public static final double DRIVETRAIN_SPEED_SLEW = 0.5;//unsure
+            //turn
+            public static final double DRIVETRAIN_TURN_SLEW = 0.5;//unsure
+        //Controller Deadzones
+            //speed
+            public static final double DRIVETRAIN_SPEED_DEADZONE = 0.2;//unsure
+            //turn
+            public static final double DRIVETRAIN_TURN_DEADZONE = 0.2;//unsure
+        //Minimum Outputs
+            //speed
+            public static final double DRIVETRAIN_SPEED_MINIMUM_OUTPUT = 0.2;//unsure
+            //Turn
+            public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.3;//unsure
+////////
     //IO
         //Controller Ports
+        public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int OPERATOR_CONTROLLER_PORT = 1;
 }

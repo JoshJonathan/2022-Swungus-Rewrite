@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,14 +21,21 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  //shooter
+    //IO
+    //Controllers
+    XboxController rc_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
+    XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  //Shooter
     private final ShooterSub rc_shootersub = new ShooterSub();
     //commands
       //default command
       private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
-  //IO
-    //Controllers
-    XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
+  //Drivetrain
+    private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
+      //default command
+      private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(), 
+                                                                                  rc_driverController.getLeftTriggerAxis(), 
+                                                                                  rc_driverController.getLeftX()), rc_drivetrainsub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -36,6 +44,7 @@ public class RobotContainer {
 
     //set default commands
     rc_shootersub.setDefaultCommand(rc_idleshooter);
+    rc_drivetrainsub.setDefaultCommand(rc_drive);
   }
 
   /**
