@@ -48,9 +48,13 @@ public class DrivetrainSub extends SubsystemBase {
       drivetrainLeftFront.enableVoltageCompensation(true);
       drivetrainRightFront.enableVoltageCompensation(true);
       drivetrainLeftFront.setInverted(TalonFXInvertType.Clockwise);
+      drivetrainLeftRear.setInverted(TalonFXInvertType.Clockwise);
       drivetrainRightFront.setInverted(TalonFXInvertType.CounterClockwise);
-      drivetrainLeftFront.setNeutralMode(NeutralMode.Brake);
-      drivetrainRightFront.setNeutralMode(NeutralMode.Brake);
+      drivetrainRightRear.setInverted(TalonFXInvertType.CounterClockwise);
+      drivetrainLeftFront.setNeutralMode(NeutralMode.Coast);
+      drivetrainLeftRear.setNeutralMode(NeutralMode.Coast);
+      drivetrainRightFront.setNeutralMode(NeutralMode.Coast);
+      drivetrainRightRear.setNeutralMode(NeutralMode.Coast);
       drivetrainLeftRear.follow(drivetrainLeftFront);
       drivetrainRightRear.follow(drivetrainRightFront);
     //Drivetrain Configs
@@ -66,7 +70,7 @@ public class DrivetrainSub extends SubsystemBase {
       lt=0;
     }
     else lt=ilt;
-    if(ilx < Constants.DRIVETRAIN_TURN_DEADZONE) {
+    if(Math.abs(ilx) < Constants.DRIVETRAIN_TURN_DEADZONE) {
       lx=0;
     }
     else lx=ilx;
@@ -95,6 +99,7 @@ public class DrivetrainSub extends SubsystemBase {
     if (turn < 0) {
       turn = (-Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(turn)-((-Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(turn));
     }
+    turn = turn*Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE;
     }
 
   public void arcadeDrive() {

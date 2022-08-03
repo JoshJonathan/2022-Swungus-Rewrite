@@ -153,9 +153,10 @@ public class ShooterSub extends SubsystemBase {
   }
     */
 //Actions
-  public void runShooter() {
+  /*public void runShooter() {
     shooterMainWheelLeft.set(ControlMode.Velocity, getMainWheelSetpoint());
   }
+  */
   public void idleShooter() {
     //idle motors
     shooterMainWheelLeft.set(ControlMode.Velocity, Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY);
