@@ -96,6 +96,17 @@ public final class Constants {
             //Turn
             public static double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
 ////////
+    //Intake
+        //Solenoid Channels
+            //Solenoid
+            public static final int INTAKE_SOLENOID_CHANNEL = 0;//unassigned
+        //Motor IDs
+            //Motor
+            public static final int INTAKE_TALON_ID = 0;//unassigned
+        //Motor Outputs
+            //motor
+            public static final double INTAKE_MOTOR_OUTPUT = 0.5;//unassigned
+////////
     //IO
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;

@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.DrivetrainSub;
+import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,12 +31,19 @@ public class RobotContainer {
     //commands
       //default command
       private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
+      //spin shooter
   //Drivetrain
     private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
       //default command
       private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(), 
                                                                                   rc_driverController.getLeftTriggerAxis(), 
                                                                                   rc_driverController.getLeftX()), rc_drivetrainsub);
+  //Intake
+    private final IntakeSub rc_intakesub = new IntakeSub();
+    //Commands
+      //deploy intake
+      private final Command rc_deployIntake = new InstantCommand(rc_intakesub::deployIntake, rc_intakesub);
+      private final Command rc_retractIntake = new InstantCommand(rc_intakesub::retractIntake, rc_intakesub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -54,6 +62,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_deployIntake);
+    new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_retractIntake);
+
   }
 
   /**
