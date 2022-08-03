@@ -72,26 +72,29 @@ public final class Constants {
             public static final int DRIVETRAIN_RIGHT_REAR_ID = 1;
         //Config Parameters
             //NeutralDeadband
-            public static final double DRIVETRAIN_NEUTRAL_DEADBAND = 0;//unassigned
+            public static final double DRIVETRAIN_NEUTRAL_DEADBAND = 0.0;//unassigned, .1
             //NominalVoltage
             public static final double DRIVETRAIN_NOMINAL_VOLTAGE = 12.5;//unsure
             //VoltageFilterWindowSamples
             public static final int DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unsure
         //Slew Rates
             //speed
-            public static final double DRIVETRAIN_SPEED_SLEW = 0.5;//unsure
+            public static final double DRIVETRAIN_SPEED_SLEW = 0.8;
             //turn
-            public static final double DRIVETRAIN_TURN_SLEW = 0.5;//unsure
+            public static final double DRIVETRAIN_TURN_SLEW = 2.0;
         //Controller Deadzones
             //speed
-            public static final double DRIVETRAIN_SPEED_DEADZONE = 0.2;//unsure
+            public static final double DRIVETRAIN_SPEED_DEADZONE = 0.00;
             //turn
-            public static final double DRIVETRAIN_TURN_DEADZONE = 0.2;//unsure
+            public static final double DRIVETRAIN_TURN_DEADZONE = 0.075;
         //Minimum Outputs
             //speed
-            public static final double DRIVETRAIN_SPEED_MINIMUM_OUTPUT = 0.2;//unsure
+            public static final double DRIVETRAIN_SPEED_MINIMUM_OUTPUT = 0.11;
             //Turn
-            public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.3;//unsure
+            public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.19;
+        //Maximum Outputs
+            //Turn
+            public static double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
 ////////
     //IO
         //Controller Ports
