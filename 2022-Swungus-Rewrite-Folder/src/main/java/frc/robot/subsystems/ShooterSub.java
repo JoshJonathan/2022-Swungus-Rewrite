@@ -65,17 +65,17 @@ public class ShooterSub extends SubsystemBase {
     //PID
       //mainWheel PID
       shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterMainWheelLeft.configVelocityMeasurementWindow(32);
+      shooterMainWheelLeft.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
       shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
       shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
       //hoodWheels PID
       shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterHoodWheels.configVelocityMeasurementWindow(32);
+      shooterHoodWheels.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
       shooterHoodWheels.config_kF(0, Constants.SHOOTER_HOOD_WHEELS_KF);
       shooterHoodWheels.config_kP(0, Constants.SHOOTER_HOOD_WHEELS_KP);
       //kickerWheel PID
       shooterKickerWheel.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterKickerWheel.configVelocityMeasurementWindow(32);
+      shooterKickerWheel.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
     //DashBoards

@@ -44,6 +44,8 @@ public final class Constants {
             //KickerWheel
             public static final double SHOOTER_KICKER_WHEEL_IDLE_VELOCITY = 1000;
         //Configurations
+            //Velocity Measurement Window
+            public static final int SHOOTER_VELOCITY_MEASUREMENT_WINDOW = 32;
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_RAMP_TIME = 0.25;
             //HoodWheels
