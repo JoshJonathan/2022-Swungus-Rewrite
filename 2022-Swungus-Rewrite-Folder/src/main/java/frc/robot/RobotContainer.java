@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-    //IO
+  //IO
     //Controllers
     XboxController rc_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
     XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
@@ -41,8 +41,9 @@ public class RobotContainer {
   //Intake
     private final IntakeSub rc_intakesub = new IntakeSub();
     //Commands
-      //deploy intake
+      //Deploy
       private final Command rc_deployIntake = new InstantCommand(rc_intakesub::deployIntake, rc_intakesub);
+      //Retract
       private final Command rc_retractIntake = new InstantCommand(rc_intakesub::retractIntake, rc_intakesub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -62,9 +63,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_deployIntake);
-    new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_retractIntake);
-
+    //Intake
+      //deploy
+      new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_deployIntake);
+      //retract
+      new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_retractIntake);
   }
 
   /**

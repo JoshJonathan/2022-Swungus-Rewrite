@@ -99,13 +99,20 @@ public final class Constants {
     //Intake
         //Solenoid Channels
             //Solenoid
-            public static final int INTAKE_SOLENOID_CHANNEL = 0;//unassigned
+            public static final int INTAKE_SOLENOID_CHANNEL = 0;
         //Motor IDs
             //Motor
-            public static final int INTAKE_TALON_ID = 0;//unassigned
+            public static final int INTAKE_TALON_ID = 40;
         //Motor Outputs
-            //motor
+            //Motor
             public static final double INTAKE_MOTOR_OUTPUT = 0.5;//unassigned
+        //Config Parameters
+            //Motor Ramp Time
+            public static final double INTAKE_RAMP_TIME = .5;//unassigned
+            //Nominal Robot Voltage
+            public static final double INTAKE_NOMINAL_ROBOT_VOLTAGE = 12.5;
+            //VoltageFilterWindowSamples
+            public static final int INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unassigned
 ////////
     //IO
         //Controller Ports

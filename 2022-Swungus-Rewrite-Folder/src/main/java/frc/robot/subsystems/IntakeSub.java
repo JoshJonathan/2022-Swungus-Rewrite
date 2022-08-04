@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -13,12 +14,20 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSub extends SubsystemBase {
-Solenoid intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_CHANNEL);
-WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.INTAKE_TALON_ID);
+  //Solenoid
+    Solenoid intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_CHANNEL);
+  //Motor  
+    WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.INTAKE_TALON_ID);
 
   /** Creates a new IntakeSub. */
   public IntakeSub() {
-    intakeMotor.configFactoryDefault();
+    //Config Motor
+      intakeMotor.configFactoryDefault();
+      intakeMotor.configOpenloopRamp(Constants.INTAKE_RAMP_TIME);
+      intakeMotor.configVoltageCompSaturation(Constants.INTAKE_NOMINAL_ROBOT_VOLTAGE);
+      intakeMotor.configVoltageMeasurementFilter(Constants.INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES);
+      intakeMotor.enableVoltageCompensation(true);
+      intakeMotor.setNeutralMode(NeutralMode.Coast);
   }
   
   public void deployIntake() {
