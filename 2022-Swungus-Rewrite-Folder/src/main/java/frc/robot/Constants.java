@@ -96,6 +96,24 @@ public final class Constants {
             //Turn
             public static double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
 ////////
+    //Intake
+        //Solenoid Channels
+            //Solenoid
+            public static final int INTAKE_SOLENOID_CHANNEL = 0;
+        //Motor IDs
+            //Motor
+            public static final int INTAKE_TALON_ID = 40;
+        //Motor Outputs
+            //Motor
+            public static final double INTAKE_MOTOR_OUTPUT = 1.00;
+        //Config Parameters
+            //Motor Ramp Time
+            public static final double INTAKE_RAMP_TIME = 0.25;
+            //Nominal Robot Voltage
+            public static final double INTAKE_NOMINAL_ROBOT_VOLTAGE = 12.5;
+            //VoltageFilterWindowSamples
+            public static final int INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unassigned
+////////
     //IO
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;
