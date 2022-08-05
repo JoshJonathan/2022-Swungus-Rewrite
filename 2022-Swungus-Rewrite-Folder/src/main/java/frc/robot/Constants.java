@@ -39,11 +39,20 @@ public final class Constants {
         //Velocities
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000;
+            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 5000;//unassigned
             //HoodWheels
             public static final double SHOOTER_HOOD_WHEELS_IDLE_VELOCITY = 1000;
+            public static final double SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY = 8000;//unassigned
             //KickerWheel
             public static final double SHOOTER_KICKER_WHEEL_IDLE_VELOCITY = 1000;
+            public static final double SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY = 3000;//unassigned
+        //Positions
+            //servos
+            public static final double SHOOTER_SERVOS_IDLE_POSITION = 0;//unassigned
+            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = 0;//unassigned
         //Configurations
+            //Velocity Measurement Window
+            public static final int SHOOTER_VELOCITY_MEASUREMENT_WINDOW = 32;
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_RAMP_TIME = 0.25;
             //HoodWheels
