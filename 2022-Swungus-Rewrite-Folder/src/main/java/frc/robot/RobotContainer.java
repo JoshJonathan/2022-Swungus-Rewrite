@@ -65,9 +65,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //Intake
       //deploy
-      new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_deployIntake);
+      new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_deployIntake);
       //retract
-      new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_retractIntake);
+      new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_retractIntake);
   }
 
   /**

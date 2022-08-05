@@ -27,6 +27,7 @@ public class IntakeSub extends SubsystemBase {
       intakeMotor.configVoltageCompSaturation(Constants.INTAKE_NOMINAL_ROBOT_VOLTAGE);
       intakeMotor.configVoltageMeasurementFilter(Constants.INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES);
       intakeMotor.enableVoltageCompensation(true);
+      intakeMotor.setInverted(true);
       intakeMotor.setNeutralMode(NeutralMode.Coast);
   }
   

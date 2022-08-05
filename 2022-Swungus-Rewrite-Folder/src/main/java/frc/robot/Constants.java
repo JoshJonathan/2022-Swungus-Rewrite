@@ -105,10 +105,10 @@ public final class Constants {
             public static final int INTAKE_TALON_ID = 40;
         //Motor Outputs
             //Motor
-            public static final double INTAKE_MOTOR_OUTPUT = 0.5;//unassigned
+            public static final double INTAKE_MOTOR_OUTPUT = 1.00;
         //Config Parameters
             //Motor Ramp Time
-            public static final double INTAKE_RAMP_TIME = .5;//unassigned
+            public static final double INTAKE_RAMP_TIME = 0.25;
             //Nominal Robot Voltage
             public static final double INTAKE_NOMINAL_ROBOT_VOLTAGE = 12.5;
             //VoltageFilterWindowSamples
