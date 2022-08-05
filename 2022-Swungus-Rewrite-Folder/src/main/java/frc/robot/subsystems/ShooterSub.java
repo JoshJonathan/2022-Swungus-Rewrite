@@ -6,12 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -35,7 +32,18 @@ public class ShooterSub extends SubsystemBase {
         /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
         /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
       };
-  
+  //static variables
+    //setpoints
+    public static double mainWheelSetpoint = 0;
+    public static double hoodWheelsSetpoint = 0;
+    public static double kickerWheelSetpoint = 0;
+    public static double servoSetpoint = 0;
+    //values
+    public static double mainWheelValue = 0;
+    public static double hoodWheelsValue = 0;
+    public static double kickerWheelValue = 0;
+    public static double servoValue = 0;
+
   /** Creates a new ExampleSubsystem. */
   public ShooterSub() {
     //Controllers
@@ -83,26 +91,21 @@ public class ShooterSub extends SubsystemBase {
 
   //Output to shooter
   public void outputToShooter(double mainWheel, double hoodWheel, double kickerWheel, double servoPosition) {
+    //modify setpoints
+    mainWheelSetpoint = mainWheel;
+    hoodWheelsSetpoint = hoodWheel;
+    kickerWheelSetpoint = kickerWheel;
+    servoSetpoint = servoPosition;
     //wheels
     shooterMainWheelLeft.set(ControlMode.Velocity, mainWheel);
     shooterHoodWheels.set(ControlMode.Velocity, kickerWheel);
     shooterKickerWheel.set(ControlMode.Velocity, kickerWheel);
     //servo
-  }
 
-//Periodics
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    //modify values
+    mainWheelValue = shooterMainWheelLeft.getSelectedSensorVelocity();
+    hoodWheelsValue = shooterHoodWheels.getSelectedSensorVelocity();
+    kickerWheelValue = shooterKickerWheel.getSelectedSensorVelocity();
 
-    //evaluate if the robot is ready to shoot
-      /*
-    computeShooterReadyToShoot();
-      */
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
 }

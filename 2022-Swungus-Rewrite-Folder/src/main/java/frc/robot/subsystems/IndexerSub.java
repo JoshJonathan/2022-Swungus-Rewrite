@@ -38,5 +38,19 @@ public class IndexerSub extends SubsystemBase {
   }
 
   //Shoot
-  
+  public void shoot() {
+    //determine if we are at setpoints
+    if(ShooterSub.mainWheelSetpoint != Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY &&
+       readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR)
+    ) index(Constants.INDEXER_OUTPUT);
+    else index(0);
+  }
+
+  //Check if shooter is ready
+  public boolean readyToShoot(double setpoint, double value, double allowableError) {
+    if (value > (setpoint-allowableError) && value < (setpoint+allowableError)) return true;
+    else return false;
+  }
 }
