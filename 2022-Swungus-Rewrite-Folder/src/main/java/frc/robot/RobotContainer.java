@@ -29,7 +29,15 @@ public class RobotContainer {
     private final ShooterSub rc_shootersub = new ShooterSub();
     //commands
       //default command
-      private final Command rc_idleshooter = new RunCommand(rc_shootersub::idleShooter, rc_shootersub);
+      private final Command rc_idleshooter = new RunCommand(()-> rc_shootersub.outputToShooter(Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY,
+                                                                                               Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY,
+                                                                                               Constants.SHOOTER_KICKER_WHEEL_IDLE_VELOCITY,
+                                                                                               Constants.SHOOTER_SERVOS_IDLE_POSITION), rc_shootersub);
+      //Fendershot
+      private final Command rc_fendershot = new RunCommand(()-> rc_shootersub.outputToShooter(Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY,
+                                                                                              Constants.SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY,
+                                                                                              Constants.SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY,
+                                                                                              Constants.SHOOTER_SERVOS_FENDERSHOT_POSITION), rc_shootersub);
   //Drivetrain
     private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
       //default command
@@ -54,6 +62,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    //Shooter
+      //Fendershot
+      new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
   }
 
   /**
