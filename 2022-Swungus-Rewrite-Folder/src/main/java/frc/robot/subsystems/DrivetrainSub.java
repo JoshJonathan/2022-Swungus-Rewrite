@@ -61,6 +61,7 @@ public class DrivetrainSub extends SubsystemBase {
       arcadeDrive.setDeadband(0);
   }
 
+  //calls functions to translate inputs to outputs, and impliments a deadzone
   public void drive(double irt, double ilt, double ilx) {
     if(irt < Constants.DRIVETRAIN_SPEED_DEADZONE) {
       rt=0;
@@ -81,11 +82,13 @@ public class DrivetrainSub extends SubsystemBase {
     arcadeDrive();
   }
 
+  //slew filters joystick inputs
   public void filterValues() {
     speed = speedFilter.calculate(speed);
     turn = turnFilter.calculate(turn);
   }
 
+  //scales values such that play is reduced, and the full range of throttle is still viable
   public void scaleValues() {
     if (speed > 0) {
       speed = (Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+(speed)-((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(speed));
@@ -102,6 +105,7 @@ public class DrivetrainSub extends SubsystemBase {
     turn = turn*Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE;
     }
 
+  //outputs calculated values to the motors
   public void arcadeDrive() {
     arcadeDrive.arcadeDrive(speed, turn);
   }
