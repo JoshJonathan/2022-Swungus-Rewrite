@@ -42,6 +42,7 @@ public class RobotContainer {
     //Index
     private final Command rc_indexup = new RunCommand(()-> rc_indexersub.index(Constants.INDEXER_OUTPUT), rc_indexersub);
     private final Command rc_indexdown = new RunCommand(()-> rc_indexersub.index(-Constants.INDEXER_OUTPUT), rc_indexersub);
+    private final Command rc_indexstop = new RunCommand(()-> rc_indexersub.index(0), rc_indexersub);
     //Shoot
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -63,9 +64,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //Indexer
       //Index Up
-      new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value).whileHeld(rc_indexup);
+      new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value).whileHeld(rc_indexup).whenReleased(rc_indexstop);
       //Index Down
-      new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value).whileHeld(rc_indexdown);
+      new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value).whileHeld(rc_indexdown).whenReleased(rc_indexstop);
   }
 
   /**

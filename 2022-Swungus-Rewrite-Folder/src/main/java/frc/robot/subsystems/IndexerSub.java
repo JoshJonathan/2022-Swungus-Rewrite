@@ -21,11 +21,12 @@ public class IndexerSub extends SubsystemBase {
   public IndexerSub() {
     //Configure Motors
     indexerFront.configFactoryDefault();
+    indexerFront.configOpenloopRamp(Constants.INDEXER_RAMP_TIME);
     indexerFront.configVoltageCompSaturation(Constants.INDEXER_NOMINAL_VOLTAGE);
     indexerFront.configVoltageMeasurementFilter(Constants.INDEXER_VOLTAGE_FILTER_WINDOW_SAMPLES);
     indexerFront.enableVoltageCompensation(true);
     indexerFront.setInverted(true);
-    indexerRear.setInverted(InvertType.OpposeMaster);
+    indexerRear.setInverted(InvertType.FollowMaster);
     indexerFront.setNeutralMode(NeutralMode.Coast);
     indexerFront.setNeutralMode(NeutralMode.Coast);
     indexerRear.follow(indexerFront);
