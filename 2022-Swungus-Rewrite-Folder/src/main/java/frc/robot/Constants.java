@@ -96,6 +96,21 @@ public final class Constants {
             //Turn
             public static double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
 ////////
+
+    //Indexer
+        //Motor IDs
+            //Front
+            public static final int INDEXER_FRONT_ID = 32;//unassigned
+            //Rear
+            public static final int INDEXER_REAR_ID = 31;//unassigned
+        //Motor Configs
+            //Voltage compensation
+            public static final double INDEXER_NOMINAL_VOLTAGE = 12.5;
+            public static final int INDEXER_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;
+            public static final double INDEXER_RAMP_TIME = .05;
+        //Motor Voltage
+            //Indexing
+            public static final double INDEXER_OUTPUT = 0.5;//unassigned
     //Intake
         //Solenoid Channels
             //Solenoid
