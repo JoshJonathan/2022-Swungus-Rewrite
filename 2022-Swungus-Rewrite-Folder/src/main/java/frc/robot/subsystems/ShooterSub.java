@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,15 +27,16 @@ public class ShooterSub extends SubsystemBase {
     WPI_TalonFX shooterKickerWheel = new WPI_TalonFX(Constants.SHOOTER_KICKER_WHEEL_ID);
   //Servos
     //HoodServos
-
-    //Characterization Table
-      double[][] characterizationTable = {
-        /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 
-        /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
-      };
+    Servo shooterServoLeft = new Servo(Constants.SERVO_LEFT_PORT);
+    Servo shooterServoRight = new Servo(Constants.SERVO_RIGHT_PORT);
+  //Characterization Table
+    double[][] characterizationTable = {
+      /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+      /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+      /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 
+      /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+      /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+    };
   
   /** Creates a new ExampleSubsystem. */
   public ShooterSub() {
@@ -78,7 +80,9 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
-    //DashBoards
+    //Servos
+      shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+      shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
   }
 
   //Output to shooter
@@ -88,6 +92,8 @@ public class ShooterSub extends SubsystemBase {
     shooterHoodWheels.set(ControlMode.Velocity, kickerWheel);
     shooterKickerWheel.set(ControlMode.Velocity, kickerWheel);
     //servo
+    shooterServoLeft.setSpeed(servoPosition);
+    shooterServoRight.setSpeed(servoPosition);
   }
 
 //Periodics
