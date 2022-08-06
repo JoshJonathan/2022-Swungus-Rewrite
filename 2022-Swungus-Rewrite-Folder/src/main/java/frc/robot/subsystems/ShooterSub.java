@@ -62,8 +62,8 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.configFactoryDefault();
       shooterKickerWheel.setNeutralMode(NeutralMode.Coast);
       shooterKickerWheel.setInverted(TalonFXInvertType.CounterClockwise);
-      shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
-      shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_KICKER_WHEEL_RAMP_TIME);
+      shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_KICKER_WHEEL_RAMP_TIME);
     //PID
       //mainWheel PID
       shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
