@@ -24,8 +24,8 @@ public final class Constants {
             //KickerWheel
             public static final int SHOOTER_KICKER_WHEEL_ID = 23;
             //Servos
-            public static final int SERVO_LEFT_PORT = 0;//unassigned
-            public static final int SERVO_RIGHT_PORT = 0;//unassigned
+            public static final int SERVO_LEFT_PORT = 0;
+            public static final int SERVO_RIGHT_PORT = 9;
         //PID
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_KF = .0532;
