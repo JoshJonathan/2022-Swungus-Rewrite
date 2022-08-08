@@ -50,7 +50,7 @@ public class ShooterSub extends SubsystemBase {
       //mainWheelRight
       shooterMainWheelRight.configFactoryDefault();
       shooterMainWheelRight.follow(shooterMainWheelLeft);
-      shooterMainWheelLeft.setInverted(TalonFXInvertType.OpposeMaster);
+      shooterMainWheelRight.setInverted(TalonFXInvertType.OpposeMaster);
       shooterMainWheelRight.setNeutralMode(NeutralMode.Coast);
       //hoodWheels
       shooterHoodWheels.configFactoryDefault();
