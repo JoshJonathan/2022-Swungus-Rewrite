@@ -61,14 +61,15 @@ public final class Constants {
             public static final double SHOOTER_KICKER_WHEEL_RAMP_TIME = 0.25;
         //Allowable Errors
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0.00625; //50/8000
+            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0.00625; // 50/8000
             //HoodWheels
-            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0.005; //50/10000
+            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0.005; // 50/10000
             //KickerWheels
             public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 0; //unassigned
             //Servos
             public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0;//unassigned
 ////////
+
     //Drivetrain
         //IDs
             //LeftFront
@@ -138,6 +139,7 @@ public final class Constants {
             //VoltageFilterWindowSamples
             public static final int INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unassigned
 ////////
+
     //IO
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;

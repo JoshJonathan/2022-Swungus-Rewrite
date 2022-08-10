@@ -16,12 +16,12 @@ import frc.robot.Constants;
 public class IntakeSub extends SubsystemBase {
   //Solenoid
     Solenoid intakeSolenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.INTAKE_SOLENOID_CHANNEL);
-  //Motor  
+  //Motor Controller 
     WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Constants.INTAKE_TALON_ID);
 
   /** Creates a new IntakeSub. */
   public IntakeSub() {
-    //Config Motor
+    //Motor Controller Configs
       intakeMotor.configFactoryDefault();
       intakeMotor.configOpenloopRamp(Constants.INTAKE_RAMP_TIME);
       intakeMotor.configVoltageCompSaturation(Constants.INTAKE_NOMINAL_ROBOT_VOLTAGE);
@@ -31,11 +31,13 @@ public class IntakeSub extends SubsystemBase {
       intakeMotor.setNeutralMode(NeutralMode.Coast);
   }
   
+  //Deploy Intake
   public void deployIntake() {
     intakeSolenoid.set(true);
     intakeMotor.set(ControlMode.PercentOutput, Constants.INTAKE_MOTOR_OUTPUT);
   }
 
+  //Retract Intake
   public void retractIntake(){
     intakeSolenoid.set(false);
     intakeMotor.set(ControlMode.PercentOutput, 0);
