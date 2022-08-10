@@ -13,23 +13,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IndexerSub extends SubsystemBase {
-  //Motors
-  WPI_TalonSRX indexerFront = new WPI_TalonSRX(Constants.INDEXER_FRONT_ID);
-  WPI_TalonSRX indexerRear = new WPI_TalonSRX(Constants.INDEXER_REAR_ID); 
+  //Motor Controllers
+    WPI_TalonSRX indexerFront = new WPI_TalonSRX(Constants.INDEXER_FRONT_ID);
+    WPI_TalonSRX indexerRear = new WPI_TalonSRX(Constants.INDEXER_REAR_ID); 
 
   /** Creates a new IndexerSub. */
   public IndexerSub() {
-    //Configure Motors
-    indexerFront.configFactoryDefault();
-    indexerFront.configOpenloopRamp(Constants.INDEXER_RAMP_TIME);
-    indexerFront.configVoltageCompSaturation(Constants.INDEXER_NOMINAL_VOLTAGE);
-    indexerFront.configVoltageMeasurementFilter(Constants.INDEXER_VOLTAGE_FILTER_WINDOW_SAMPLES);
-    indexerFront.enableVoltageCompensation(true);
-    indexerFront.setInverted(true);
-    indexerRear.setInverted(InvertType.FollowMaster);
-    indexerFront.setNeutralMode(NeutralMode.Coast);
-    indexerFront.setNeutralMode(NeutralMode.Coast);
-    indexerRear.follow(indexerFront);
+    //Motor Controller Configs
+      indexerFront.configFactoryDefault();
+      indexerFront.configOpenloopRamp(Constants.INDEXER_RAMP_TIME);
+      indexerFront.configVoltageCompSaturation(Constants.INDEXER_NOMINAL_VOLTAGE);
+      indexerFront.configVoltageMeasurementFilter(Constants.INDEXER_VOLTAGE_FILTER_WINDOW_SAMPLES);
+      indexerFront.enableVoltageCompensation(true);
+      indexerFront.setInverted(true);
+      indexerRear.setInverted(InvertType.FollowMaster);
+      indexerFront.setNeutralMode(NeutralMode.Coast);
+      indexerFront.setNeutralMode(NeutralMode.Coast);
+      indexerRear.follow(indexerFront);
   }
 
   //Index

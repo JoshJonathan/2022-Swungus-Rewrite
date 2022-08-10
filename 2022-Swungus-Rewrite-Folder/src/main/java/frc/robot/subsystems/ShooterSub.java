@@ -38,9 +38,9 @@ public class ShooterSub extends SubsystemBase {
       /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
     };
   
-  /** Creates a new ExampleSubsystem. */
+  /** Creates a new ShooterSubsystem. */
   public ShooterSub() {
-    //Controllers
+    //Config Motor Controllers
       //mainWheelLeft
       shooterMainWheelLeft.configFactoryDefault();
       shooterMainWheelLeft.setNeutralMode(NeutralMode.Coast);
@@ -64,7 +64,7 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.setInverted(TalonFXInvertType.CounterClockwise);
       shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_KICKER_WHEEL_RAMP_TIME);
       shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_KICKER_WHEEL_RAMP_TIME);
-    //PID
+    //Config PID Loops
       //mainWheel PID
       shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
       shooterMainWheelLeft.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
@@ -80,12 +80,12 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
-    //Servos
-      shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
-      shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+  //Config Servos
+    shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+    shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
   }
 
-  //Output to shooter
+  //Output To Shooter
   public void outputToShooter(double mainWheel, double hoodWheel, double kickerWheel, double servoPosition) {
     //wheels
     shooterMainWheelLeft.set(ControlMode.Velocity, mainWheel);
@@ -94,21 +94,5 @@ public class ShooterSub extends SubsystemBase {
     //servo
     shooterServoLeft.setSpeed(servoPosition);
     shooterServoRight.setSpeed(servoPosition);
-  }
-
-//Periodics
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-
-    //evaluate if the robot is ready to shoot
-      /*
-    computeShooterReadyToShoot();
-      */
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
 }
