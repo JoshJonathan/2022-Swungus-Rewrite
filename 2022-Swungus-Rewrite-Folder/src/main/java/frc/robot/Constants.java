@@ -137,6 +137,21 @@ public final class Constants {
             public static final double INTAKE_NOMINAL_ROBOT_VOLTAGE = 12.5;
             //VoltageFilterWindowSamples
             public static final int INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unassigned
+
+    //Elevator
+        //Motor IDs
+            //Motor
+            public static final int ELEVATOR_MOTOR_ID = 05; //unassigned
+        //Limit Switch
+            //Bottom
+            public static final int ELEVATOR_LIMIT_SWITCH_DIO = 0;//unassigned
+
+        //Outputs
+            //Elevator
+            public static final double ELEVATOR_SPEED = 0.3;
+
+
+
 ////////
     //IO
         //Controller Ports
