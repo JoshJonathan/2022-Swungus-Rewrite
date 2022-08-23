@@ -40,6 +40,8 @@ public class RobotContainer {
                                                                                               Constants.SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY,
                                                                                               Constants.SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY,
                                                                                               Constants.SHOOTER_SERVOS_FENDERSHOT_POSITION), rc_shootersub);
+      //PID tuning
+      //private final Command rc_setconstants = new InstantCommand(rc_shootersub::setConstants, rc_shootersub);
   //Drivetrain
     private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
       //default command
@@ -53,6 +55,7 @@ public class RobotContainer {
     private final Command rc_indexdown = new RunCommand(()-> rc_indexersub.index(-Constants.INDEXER_OUTPUT), rc_indexersub);
     private final Command rc_indexstop = new RunCommand(()-> rc_indexersub.index(0), rc_indexersub);
     //Shoot
+    private final Command rc_indexshoot = new RunCommand(rc_indexersub::shoot, rc_indexersub);
   //Intake
     private final IntakeSub rc_intakesub = new IntakeSub();
     //Commands
@@ -81,16 +84,17 @@ public class RobotContainer {
     //Shooter
       //Fendershot
       new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
-
+      //PID Tuning
+      //new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_setconstants);
     //Indexer
-      //Index Up
+      //Index
       new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value).whileHeld(rc_indexup).whenReleased(rc_indexstop);
-      //Index Down
       new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value).whileHeld(rc_indexdown).whenReleased(rc_indexstop);
+      //Shoot
+      new JoystickButton(rc_driverController, XboxController.Button.kA.value).whileHeld(rc_indexshoot).whenReleased(rc_indexstop);
     //Intake
       //deploy
       new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_deployIntake);
-      //retract
       new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_retractIntake);
   }
 

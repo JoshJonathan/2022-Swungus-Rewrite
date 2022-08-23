@@ -28,31 +28,38 @@ public final class Constants {
             public static final int SERVO_RIGHT_PORT = 9;
         //PID
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_KF = .0532;
-            public static final double SHOOTER_MAIN_WHEEL_KP = 0.2; //dont really know
+            public static final double SHOOTER_MAIN_WHEEL_KF = 0.0474; //0.0474
+            public static final double SHOOTER_MAIN_WHEEL_KP = 0.13; //0.13
+            public static final double SHOOTER_MAIN_WHEEL_KI = 0.001; //0.001
+            public static final double SHOOTER_MAIN_WHEEL_KI_ZONE = 100.0; //100
+            public static final double SHOOTER_MAIN_WHEEL_KD = 0.0;//unassigned
             //HoodWheels
-            public static final double SHOOTER_HOOD_WHEELS_KF = 0.058; 
-            public static final double SHOOTER_HOOD_WHEELS_KP = 0.02; //dont really know
+            public static final double SHOOTER_HOOD_WHEELS_KF = 0.051; //0.051
+            public static final double SHOOTER_HOOD_WHEELS_KP = 0.1; //0.1
+            public static final double SHOOTER_HOOD_WHEELS_KI = 0.001; //0.001
+            public static final double SHOOTER_HOOD_WHEELS_KI_ZONE = 100.0; //100
+            public static final double SHOOTER_HOOD_WHEELS_KD = 0.0; //unassigned
             //KickerWheel
-            public static final double SHOOTER_KICKER_WHEEL_KF = 0.046;
-            public static final double SHOOTER_KICKER_WHEEL_KP = 0.0; //dont really know
+            public static final double SHOOTER_KICKER_WHEEL_KF = 0.0478; //.0478
+            public static final double SHOOTER_KICKER_WHEEL_KP = 0.03; //.03
+            public static final double SHOOTER_KICKER_WHEEL_KI = 0.001; //.001
+            public static final double SHOOTER_KICKER_WHEEL_KI_ZONE = 100.0; //100
+            public static final double SHOOTER_KICKER_WHEEL_KD = 0.0; //0.0
         //Velocities
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000;
-            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 5000;//unassigned
+            public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000; //1000
+            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 6500;//unassigned //6500 for testing
             //HoodWheels
-            public static final double SHOOTER_HOOD_WHEELS_IDLE_VELOCITY = 1000;
-            public static final double SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY = 8000;//unassigned
+            public static final double SHOOTER_HOOD_WHEELS_IDLE_VELOCITY = 1000; //1000
+            public static final double SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY = 10000;//unassigned //10000 for testing
             //KickerWheel
-            public static final double SHOOTER_KICKER_WHEEL_IDLE_VELOCITY = 1000;
-            public static final double SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY = 3000;//unassigned
+            public static final double SHOOTER_KICKER_WHEEL_IDLE_VELOCITY = 1000; //1000
+            public static final double SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY = 4000;//unassigned //4000 for testing
         //Positions
             //servos
             public static final double SHOOTER_SERVOS_IDLE_POSITION = 0;//unassigned
             public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = 0;//unassigned
         //Configurations
-            //Velocity Measurement Window
-            public static final int SHOOTER_VELOCITY_MEASUREMENT_WINDOW = 32;
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_RAMP_TIME = 0.25;
             //HoodWheels
@@ -61,11 +68,11 @@ public final class Constants {
             public static final double SHOOTER_KICKER_WHEEL_RAMP_TIME = 0.25;
         //Allowable Errors
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0.00625; // 50/8000
+            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0.0154; //100/6500
             //HoodWheels
-            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0.005; // 50/10000
+            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0.01; //100/10000
             //KickerWheels
-            public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 0; //unassigned
+            public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 0.0125; //50/4000
             //Servos
             public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0;//unassigned
 ////////
@@ -117,10 +124,13 @@ public final class Constants {
             //Voltage compensation
             public static final double INDEXER_NOMINAL_VOLTAGE = 12.5;
             public static final int INDEXER_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;
-            public static final double INDEXER_RAMP_TIME = .05;
+            public static final double INDEXER_RAMP_TIME = .125;
         //Motor Voltage
             //Indexing
-            public static final double INDEXER_OUTPUT = 0.5;//unassigned
+            public static final double INDEXER_OUTPUT = 0.35;//unassigned
+        //Shooting Constants
+            //Timer Delay
+            public static final double INDEXER_TIMER_DELAY = 0.25;
     //Intake
         //Solenoid Channels
             //Solenoid

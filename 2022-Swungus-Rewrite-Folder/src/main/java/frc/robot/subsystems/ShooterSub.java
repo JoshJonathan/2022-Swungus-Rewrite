@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
@@ -29,16 +28,26 @@ public class ShooterSub extends SubsystemBase {
     //HoodServos
     Servo shooterServoLeft = new Servo(Constants.SERVO_LEFT_PORT);
     Servo shooterServoRight = new Servo(Constants.SERVO_RIGHT_PORT);
-  //Characterization Table
-    double[][] characterizationTable = {
-      /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-      /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-      /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 
-      /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-      /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
-    };
-  
-  /** Creates a new ShooterSubsystem. */
+    //Characterization Table
+      double[][] characterizationTable = {
+        /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+      };
+  //static variables
+    //setpoints
+    public static double mainWheelSetpoint = 0;
+    public static double hoodWheelsSetpoint = 0;
+    public static double kickerWheelSetpoint = 0;
+    public static double servoSetpoint = 0;
+    //values
+    public static double mainWheelValue = 0;
+    public static double hoodWheelsValue = 0;
+    public static double kickerWheelValue = 0;
+    public static double servoValue = 0;
+    
   public ShooterSub() {
     //Config Motor Controllers
       //mainWheelLeft
@@ -47,52 +56,107 @@ public class ShooterSub extends SubsystemBase {
       shooterMainWheelLeft.setInverted(TalonFXInvertType.Clockwise);
       shooterMainWheelLeft.configClosedloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
       shooterMainWheelLeft.configOpenloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      shooterMainWheelLeft.configVoltageCompSaturation(12.0);
+      shooterMainWheelLeft.enableVoltageCompensation(true);
       //mainWheelRight
       shooterMainWheelRight.configFactoryDefault();
       shooterMainWheelRight.follow(shooterMainWheelLeft);
       shooterMainWheelRight.setInverted(TalonFXInvertType.OpposeMaster);
       shooterMainWheelRight.setNeutralMode(NeutralMode.Coast);
+      shooterMainWheelRight.configVoltageCompSaturation(12.0);
+      shooterMainWheelRight.enableVoltageCompensation(true);
       //hoodWheels
       shooterHoodWheels.configFactoryDefault();
       shooterHoodWheels.setNeutralMode(NeutralMode.Coast);
       shooterHoodWheels.setInverted(TalonFXInvertType.Clockwise);
       shooterHoodWheels.configClosedloopRamp(Constants.SHOOTER_HOOD_WHEELS_RAMP_TIME);
       shooterHoodWheels.configOpenloopRamp(Constants.SHOOTER_HOOD_WHEELS_RAMP_TIME);
+      shooterHoodWheels.configVoltageCompSaturation(12.0);
+      shooterHoodWheels.enableVoltageCompensation(true);
       //kickerWheel
       shooterKickerWheel.configFactoryDefault();
       shooterKickerWheel.setNeutralMode(NeutralMode.Coast);
       shooterKickerWheel.setInverted(TalonFXInvertType.CounterClockwise);
-      shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_KICKER_WHEEL_RAMP_TIME);
-      shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_KICKER_WHEEL_RAMP_TIME);
-    //Config PID Loops
+      shooterKickerWheel.configClosedloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      shooterKickerWheel.configOpenloopRamp(Constants.SHOOTER_MAIN_WHEEL_RAMP_TIME);
+      shooterKickerWheel.configVoltageCompSaturation(12.0);
+      shooterKickerWheel.enableVoltageCompensation(true);
+    //PID
       //mainWheel PID
-      shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterMainWheelLeft.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
+      shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms); //10 and 5 seem alright, not sure which is better
+      shooterMainWheelLeft.configVelocityMeasurementWindow(32);
       shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
       shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
+      shooterMainWheelLeft.config_kI(0, Constants.SHOOTER_MAIN_WHEEL_KI);
+      shooterMainWheelLeft.config_IntegralZone(0, Constants.SHOOTER_MAIN_WHEEL_KI_ZONE);
+      shooterMainWheelLeft.config_kD(0, Constants.SHOOTER_MAIN_WHEEL_KD);
       //hoodWheels PID
-      shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterHoodWheels.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
+      shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+      shooterHoodWheels.configVelocityMeasurementWindow(32);
       shooterHoodWheels.config_kF(0, Constants.SHOOTER_HOOD_WHEELS_KF);
       shooterHoodWheels.config_kP(0, Constants.SHOOTER_HOOD_WHEELS_KP);
+      shooterHoodWheels.config_kI(0, Constants.SHOOTER_HOOD_WHEELS_KI);
+      shooterHoodWheels.config_IntegralZone(0, Constants.SHOOTER_HOOD_WHEELS_KI_ZONE);
+      shooterHoodWheels.config_kD(0, Constants.SHOOTER_HOOD_WHEELS_KD);
       //kickerWheel PID
-      shooterKickerWheel.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_1Ms);
-      shooterKickerWheel.configVelocityMeasurementWindow(Constants.SHOOTER_VELOCITY_MEASUREMENT_WINDOW);
+      shooterKickerWheel.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+      shooterKickerWheel.configVelocityMeasurementWindow(32);
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
-  //Config Servos
-    shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
-    shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+      shooterKickerWheel.config_kI(0, Constants.SHOOTER_KICKER_WHEEL_KI);
+      shooterKickerWheel.config_IntegralZone(0, Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
+      shooterKickerWheel.config_kD(0, Constants.SHOOTER_KICKER_WHEEL_KD);
+    //Config Servos
+      shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+      shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+//DashBoards
+    //PID tuning, edit names as needed
+      //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
+      //SmartDashboard.putNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP);
+      //SmartDashboard.putNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KI);
+      //SmartDashboard.putNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
+      //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
   }
 
   //Output To Shooter
   public void outputToShooter(double mainWheel, double hoodWheel, double kickerWheel, double servoPosition) {
+    //modify setpoints
+    mainWheelSetpoint = mainWheel;
+    hoodWheelsSetpoint = hoodWheel;
+    kickerWheelSetpoint = kickerWheel;
+    servoSetpoint = servoPosition;
     //wheels
     shooterMainWheelLeft.set(ControlMode.Velocity, mainWheel);
-    shooterHoodWheels.set(ControlMode.Velocity, kickerWheel);
+    shooterHoodWheels.set(ControlMode.Velocity, hoodWheel);
     shooterKickerWheel.set(ControlMode.Velocity, kickerWheel);
     //servo
     shooterServoLeft.setSpeed(servoPosition);
     shooterServoRight.setSpeed(servoPosition);
+
+    //modify values
+    mainWheelValue = shooterMainWheelLeft.getSelectedSensorVelocity();
+    hoodWheelsValue = shooterHoodWheels.getSelectedSensorVelocity();
+    kickerWheelValue = shooterKickerWheel.getSelectedSensorVelocity();
+
+    //PID Tuning, change names as needed
+    //SmartDashboard.putNumber("mainWheelSetpoint", mainWheelSetpoint);
+      //SmartDashboard.putNumber("mainWheelValue", mainWheelValue);
+      //SmartDashboard.putNumber("robotVoltage", shooterMainWheelLeft.getBusVoltage());
+      //SmartDashboard.putNumber("mainWheelVoltage", shooterMainWheelLeft.getMotorOutputVoltage());
+      //SmartDashboard.putNumber("hoodWheelsSetpoint", hoodWheelsSetpoint);
+      //SmartDashboard.putNumber("hoodWheelsValue", hoodWheelsValue);
+      //SmartDashboard.putNumber("kickerWheelSetpoint", kickerWheelSetpoint);
+      //SmartDashboard.putNumber("kickerWheelValue", kickerWheelValue);
   }
+
+  //PID tuning, change values as needed
+  /*
+  public void setConstants() {
+    shooterKickerWheel.config_kF(0, SmartDashboard.getNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF));
+    shooterKickerWheel.config_kP(0, SmartDashboard.getNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP));
+    shooterKickerWheel.config_kI(0, SmartDashboard.getNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KP));
+    shooterKickerWheel.config_IntegralZone(0, SmartDashboard.getNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE));
+    shooterKickerWheel.config_kD(0, SmartDashboard.getNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD));
+  }
+  */
 }
