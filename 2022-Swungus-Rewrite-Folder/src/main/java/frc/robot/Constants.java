@@ -68,11 +68,11 @@ public final class Constants {
             public static final double SHOOTER_KICKER_WHEEL_RAMP_TIME = 0.25;
         //Allowable Errors
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 100/6500; //100/6500
+            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0.0154; //100/6500
             //HoodWheels
-            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 100/10000; //100/10000
+            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0.01; //100/10000
             //KickerWheels
-            public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 50/4000; //50/4000
+            public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 0.0125; //50/4000
             //Servos
             public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0;//unassigned
 ////////
@@ -127,6 +127,9 @@ public final class Constants {
         //Motor Voltage
             //Indexing
             public static final double INDEXER_OUTPUT = 0.35;//unassigned
+        //Shooting Constants
+            //Timer Delay
+            public static final double INDEXER_TIMER_DELAY = 0.25;
     //Intake
         //Solenoid Channels
             //Solenoid

@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,7 +17,10 @@ import frc.robot.Constants;
 public class IndexerSub extends SubsystemBase {
   //Motors
   WPI_TalonSRX indexerFront = new WPI_TalonSRX(Constants.INDEXER_FRONT_ID);
-  WPI_TalonSRX indexerRear = new WPI_TalonSRX(Constants.INDEXER_REAR_ID); 
+  WPI_TalonSRX indexerRear = new WPI_TalonSRX(Constants.INDEXER_REAR_ID);
+
+  //Timer
+  Timer timer = new Timer();
 
   /** Creates a new IndexerSub. */
   public IndexerSub() {
@@ -31,6 +35,9 @@ public class IndexerSub extends SubsystemBase {
     indexerFront.setNeutralMode(NeutralMode.Coast);
     indexerFront.setNeutralMode(NeutralMode.Coast);
     indexerRear.follow(indexerFront);
+
+    timer.reset();
+    timer.start();
   }
 
   //Index
@@ -40,13 +47,19 @@ public class IndexerSub extends SubsystemBase {
 
   //Shoot
   public void shoot() {
+    SmartDashboard.putBoolean("mainWheel", readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR));
+    SmartDashboard.putNumber("mainWheelValue", ShooterSub.mainWheelValue);
     //determine if we are at setpoints
     if(ShooterSub.mainWheelSetpoint != Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY &&
        readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR)
-    ) index(Constants.INDEXER_OUTPUT);
-    else index(0);
+    ) {
+      index(Constants.INDEXER_OUTPUT);
+      timer.reset();
+      timer.start();
+    }
+    else if (timer.get() > Constants.INDEXER_TIMER_DELAY) index(0);
   }
 
   //Check if shooter is ready
