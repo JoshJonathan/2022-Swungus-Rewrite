@@ -24,8 +24,8 @@ public final class Constants {
             //KickerWheel
             public static final int SHOOTER_KICKER_WHEEL_ID = 23;
             //Servos
-            public static final int SERVO_LEFT_PORT = 0;//unassigned
-            public static final int SERVO_RIGHT_PORT = 0;//unassigned
+            public static final int SERVO_LEFT_PORT = 0;
+            public static final int SERVO_RIGHT_PORT = 9;
         //PID
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_KF = 0.0474; //0.0474
@@ -76,6 +76,7 @@ public final class Constants {
             //Servos
             public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0;//unassigned
 ////////
+
     //Drivetrain
         //IDs
             //LeftFront
@@ -148,6 +149,7 @@ public final class Constants {
             //VoltageFilterWindowSamples
             public static final int INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unassigned
 ////////
+
     //IO
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;

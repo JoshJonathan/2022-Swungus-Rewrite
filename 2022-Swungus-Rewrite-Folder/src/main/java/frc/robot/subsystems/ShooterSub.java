@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,7 +26,8 @@ public class ShooterSub extends SubsystemBase {
     WPI_TalonFX shooterKickerWheel = new WPI_TalonFX(Constants.SHOOTER_KICKER_WHEEL_ID);
   //Servos
     //HoodServos
-
+    Servo shooterServoLeft = new Servo(Constants.SERVO_LEFT_PORT);
+    Servo shooterServoRight = new Servo(Constants.SERVO_RIGHT_PORT);
     //Characterization Table
       double[][] characterizationTable = {
         /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
@@ -45,10 +47,9 @@ public class ShooterSub extends SubsystemBase {
     public static double hoodWheelsValue = 0;
     public static double kickerWheelValue = 0;
     public static double servoValue = 0;
-
-  /** Creates a new ExampleSubsystem. */
+    
   public ShooterSub() {
-    //Controllers
+    //Config Motor Controllers
       //mainWheelLeft
       shooterMainWheelLeft.configFactoryDefault();
       shooterMainWheelLeft.setNeutralMode(NeutralMode.Coast);
@@ -105,6 +106,9 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.config_kI(0, Constants.SHOOTER_KICKER_WHEEL_KI);
       shooterKickerWheel.config_IntegralZone(0, Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
       shooterKickerWheel.config_kD(0, Constants.SHOOTER_KICKER_WHEEL_KD);
+    //Config Servos
+      shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
+      shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
 //DashBoards
     //PID tuning, edit names as needed
       //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
@@ -114,7 +118,7 @@ public class ShooterSub extends SubsystemBase {
       //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
   }
 
-  //Output to shooter
+  //Output To Shooter
   public void outputToShooter(double mainWheel, double hoodWheel, double kickerWheel, double servoPosition) {
     //modify setpoints
     mainWheelSetpoint = mainWheel;
@@ -126,6 +130,8 @@ public class ShooterSub extends SubsystemBase {
     shooterHoodWheels.set(ControlMode.Velocity, hoodWheel);
     shooterKickerWheel.set(ControlMode.Velocity, kickerWheel);
     //servo
+    shooterServoLeft.setSpeed(servoPosition);
+    shooterServoRight.setSpeed(servoPosition);
 
     //modify values
     mainWheelValue = shooterMainWheelLeft.getSelectedSensorVelocity();
