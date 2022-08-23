@@ -41,26 +41,19 @@ public class IndexerSub extends SubsystemBase {
   //Shoot
   public void shoot() {
     //determine if we are at setpoints
-    //SmartDashboard.putNumber("mainWheelSetpoint", ShooterSub.mainWheelSetpoint);
-    //SmartDashboard.putNumber("mainWheelValue", ShooterSub.mainWheelValue);
-    //SmartDashboard.putNumber("hoodWheelsSetpoint", ShooterSub.hoodWheelsSetpoint);
-    //SmartDashboard.putNumber("hoodWheelsValue", ShooterSub.hoodWheelsValue);
-    //SmartDashboard.putNumber("kickerWheelSetpoint", ShooterSub.kickerWheelSetpoint);
-    //SmartDashboard.putNumber("kickerWheelValue", ShooterSub.kickerWheelValue);
     if(ShooterSub.mainWheelSetpoint != Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY &&
-       readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) //&&
-       //readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
-       //readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR)
+       readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR)
     ) index(Constants.INDEXER_OUTPUT);
     else index(0);
   }
 
   //Check if shooter is ready
   public boolean readyToShoot(double setpoint, double value, double allowableError) {
-    SmartDashboard.putNumber("value", value);
-    SmartDashboard.putNumber("min", setpoint-(allowableError*setpoint));
-    SmartDashboard.putNumber("max", (allowableError*setpoint)+setpoint);
-    if (value > (setpoint-(allowableError*setpoint)) && value < ((allowableError*setpoint)+setpoint)) return true;
+    if (value > (setpoint-(allowableError*setpoint)) &&
+        value < (setpoint+(allowableError*setpoint))
+        ) return true;
     else return false;
   }
 }

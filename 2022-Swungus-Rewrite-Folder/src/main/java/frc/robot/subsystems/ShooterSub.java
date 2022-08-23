@@ -30,7 +30,7 @@ public class ShooterSub extends SubsystemBase {
       double[][] characterizationTable = {
         /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
         /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 
+        /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
         /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
         /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
       };
@@ -82,29 +82,36 @@ public class ShooterSub extends SubsystemBase {
       shooterKickerWheel.enableVoltageCompensation(true);
     //PID
       //mainWheel PID
-      shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+      shooterMainWheelLeft.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms); //10 and 5 seem alright, not sure which is better
       shooterMainWheelLeft.configVelocityMeasurementWindow(32);
       shooterMainWheelLeft.config_kF(0, Constants.SHOOTER_MAIN_WHEEL_KF);
       shooterMainWheelLeft.config_kP(0, Constants.SHOOTER_MAIN_WHEEL_KP);
       shooterMainWheelLeft.config_kI(0, Constants.SHOOTER_MAIN_WHEEL_KI);
       shooterMainWheelLeft.config_IntegralZone(0, Constants.SHOOTER_MAIN_WHEEL_KI_ZONE);
       shooterMainWheelLeft.config_kD(0, Constants.SHOOTER_MAIN_WHEEL_KD);
-      SmartDashboard.putNumber("shooterMainWheelkF", Constants.SHOOTER_MAIN_WHEEL_KF);
-      SmartDashboard.putNumber("shooterMainWheelkP", Constants.SHOOTER_MAIN_WHEEL_KP);
-      SmartDashboard.putNumber("shooterMainWheelkI", Constants.SHOOTER_MAIN_WHEEL_KI);
-      SmartDashboard.putNumber("shooterMainWheelkIZone", Constants.SHOOTER_MAIN_WHEEL_KI_ZONE);
-      SmartDashboard.putNumber("shooterMainWheelkD", Constants.SHOOTER_MAIN_WHEEL_KD);
       //hoodWheels PID
       shooterHoodWheels.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
       shooterHoodWheels.configVelocityMeasurementWindow(32);
       shooterHoodWheels.config_kF(0, Constants.SHOOTER_HOOD_WHEELS_KF);
       shooterHoodWheels.config_kP(0, Constants.SHOOTER_HOOD_WHEELS_KP);
+      shooterHoodWheels.config_kI(0, Constants.SHOOTER_HOOD_WHEELS_KI);
+      shooterHoodWheels.config_IntegralZone(0, Constants.SHOOTER_HOOD_WHEELS_KI_ZONE);
+      shooterHoodWheels.config_kD(0, Constants.SHOOTER_HOOD_WHEELS_KD);
       //kickerWheel PID
       shooterKickerWheel.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
       shooterKickerWheel.configVelocityMeasurementWindow(32);
       shooterKickerWheel.config_kF(0, Constants.SHOOTER_KICKER_WHEEL_KF);
       shooterKickerWheel.config_kP(0, Constants.SHOOTER_KICKER_WHEEL_KP);
-    //DashBoards
+      shooterKickerWheel.config_kI(0, Constants.SHOOTER_KICKER_WHEEL_KI);
+      shooterKickerWheel.config_IntegralZone(0, Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
+      shooterKickerWheel.config_kD(0, Constants.SHOOTER_KICKER_WHEEL_KD);
+//DashBoards
+    //PID tuning, edit names as needed
+      //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
+      //SmartDashboard.putNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP);
+      //SmartDashboard.putNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KI);
+      //SmartDashboard.putNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
+      //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
   }
 
   //Output to shooter
@@ -116,7 +123,7 @@ public class ShooterSub extends SubsystemBase {
     servoSetpoint = servoPosition;
     //wheels
     shooterMainWheelLeft.set(ControlMode.Velocity, mainWheel);
-    shooterHoodWheels.set(ControlMode.Velocity, kickerWheel);
+    shooterHoodWheels.set(ControlMode.Velocity, hoodWheel);
     shooterKickerWheel.set(ControlMode.Velocity, kickerWheel);
     //servo
 
@@ -125,20 +132,25 @@ public class ShooterSub extends SubsystemBase {
     hoodWheelsValue = shooterHoodWheels.getSelectedSensorVelocity();
     kickerWheelValue = shooterKickerWheel.getSelectedSensorVelocity();
 
+    //PID Tuning, change names as needed
     //SmartDashboard.putNumber("mainWheelSetpoint", mainWheelSetpoint);
-    SmartDashboard.putNumber("mainWheelValue", mainWheelValue);
-    SmartDashboard.putNumber("robotVoltage", shooterMainWheelLeft.getBusVoltage());
-    SmartDashboard.putNumber("mainWheelVoltage", shooterMainWheelLeft.getMotorOutputVoltage());
-    //SmartDashboard.putNumber("hoodWheelsSetpoint", hoodWheelsSetpoint);
-    //SmartDashboard.putNumber("hoodWheelsValue", hoodWheelsValue);
-    //SmartDashboard.putNumber("kickerWheelSetpoint", kickerWheelSetpoint);
-    //SmartDashboard.putNumber("kickerWheelValue", kickerWheelValue);
+      //SmartDashboard.putNumber("mainWheelValue", mainWheelValue);
+      //SmartDashboard.putNumber("robotVoltage", shooterMainWheelLeft.getBusVoltage());
+      //SmartDashboard.putNumber("mainWheelVoltage", shooterMainWheelLeft.getMotorOutputVoltage());
+      //SmartDashboard.putNumber("hoodWheelsSetpoint", hoodWheelsSetpoint);
+      //SmartDashboard.putNumber("hoodWheelsValue", hoodWheelsValue);
+      //SmartDashboard.putNumber("kickerWheelSetpoint", kickerWheelSetpoint);
+      //SmartDashboard.putNumber("kickerWheelValue", kickerWheelValue);
   }
+
+  //PID tuning, change values as needed
+  /*
   public void setConstants() {
-    shooterMainWheelLeft.config_kF(0, SmartDashboard.getNumber("shooterMainWheelkF", Constants.SHOOTER_MAIN_WHEEL_KF));
-    shooterMainWheelLeft.config_kP(0, SmartDashboard.getNumber("shooterMainWheelkP", Constants.SHOOTER_MAIN_WHEEL_KP));
-    shooterMainWheelLeft.config_kI(0, SmartDashboard.getNumber("shooterMainWheelkI", Constants.SHOOTER_MAIN_WHEEL_KP));
-    shooterMainWheelLeft.config_IntegralZone(0, SmartDashboard.getNumber("shooterMainWheelkIZone", Constants.SHOOTER_MAIN_WHEEL_KI_ZONE));
-    shooterMainWheelLeft.config_kD(0, SmartDashboard.getNumber("shooterMainWheelkD", Constants.SHOOTER_MAIN_WHEEL_KD));
+    shooterKickerWheel.config_kF(0, SmartDashboard.getNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF));
+    shooterKickerWheel.config_kP(0, SmartDashboard.getNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP));
+    shooterKickerWheel.config_kI(0, SmartDashboard.getNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KP));
+    shooterKickerWheel.config_IntegralZone(0, SmartDashboard.getNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE));
+    shooterKickerWheel.config_kD(0, SmartDashboard.getNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD));
   }
+  */
 }

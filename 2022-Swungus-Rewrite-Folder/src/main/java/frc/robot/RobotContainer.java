@@ -40,8 +40,8 @@ public class RobotContainer {
                                                                                               Constants.SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY,
                                                                                               Constants.SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY,
                                                                                               Constants.SHOOTER_SERVOS_FENDERSHOT_POSITION), rc_shootersub);
-      //set constants command
-      private final Command rc_setconstants = new InstantCommand(rc_shootersub::setConstants, rc_shootersub);
+      //PID tuning
+      //private final Command rc_setconstants = new InstantCommand(rc_shootersub::setConstants, rc_shootersub);
   //Drivetrain
     private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
       //default command
@@ -84,7 +84,8 @@ public class RobotContainer {
     //Shooter
       //Fendershot
       new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
-      new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_setconstants);
+      //PID Tuning
+      //new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_setconstants);
     //Indexer
       //Index
       new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value).whileHeld(rc_indexup).whenReleased(rc_indexstop);
