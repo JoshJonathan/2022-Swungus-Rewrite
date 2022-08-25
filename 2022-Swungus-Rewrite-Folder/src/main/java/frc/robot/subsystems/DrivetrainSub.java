@@ -134,4 +134,10 @@ public class DrivetrainSub extends SubsystemBase {
   public void arcadeDrive() {
     arcadeDrive.arcadeDrive(speed, turn);
   }
+
+  public void arcadeDrive(double speed, double turn) {
+    arcadeDrive.arcadeDrive(speed, turn);
+  }
+
+
 }
