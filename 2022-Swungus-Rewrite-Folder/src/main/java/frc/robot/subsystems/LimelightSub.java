@@ -47,24 +47,23 @@ public class LimelightSub extends SubsystemBase {
 
   private static boolean lastRememberedSide;
   public static double desiredRotation(){
-    if(area<0.1){
-      if(lastRememberedSide)return 0.35;
-      return -0.35;
+    if(area<Constants.SWUNGUS_MIN_AREA){
+      if(lastRememberedSide)return Constants.SWUNGUS_CHASE_ROTATION_SPEED;
+      return 0-Constants.SWUNGUS_CHASE_ROTATION_SPEED;
     }
-      
 
-      if(area>0.1)
+      if(area>Constants.SWUNGUS_MIN_AREA)
     lastRememberedSide = x>0;
 
     if(x>0)
-    return (x/150)+0.19;
-    return (x/150)-0.19;
+    return (x*Constants.SWUNGUS_TURN_MULTIPLIER)+Constants.SWUNGUS_MIN_TURN_SPEED;
+    return (x*Constants.SWUNGUS_TURN_MULTIPLIER)-Constants.SWUNGUS_MIN_TURN_SPEED;
   }
 
   public static double desiredSpeed(){
-    if(area<0.1) return 0;
+    if(area<Constants.SWUNGUS_MIN_AREA) return 0;
 
-   return powerLimit(0-(area-0.5)*1.5,0.5);
+   return powerLimit(0-(area-Constants.SWUNGUS_DESIRED_AREA)*Constants.SWUNGUS_SPEED_MULTIPLIER,Constants.SWUNGUS_CHASE_MAX_SPEED);
 
   }
 
