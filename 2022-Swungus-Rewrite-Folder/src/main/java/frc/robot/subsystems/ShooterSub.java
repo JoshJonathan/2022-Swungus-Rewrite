@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -46,7 +47,9 @@ public class ShooterSub extends SubsystemBase {
     public static double mainWheelValue = 0;
     public static double hoodWheelsValue = 0;
     public static double kickerWheelValue = 0;
-    public static double servoValue = 0;
+    public static double servoValue = -1;
+    //timestamps
+    double lastTimestamp = 0;
     
   public ShooterSub() {
     //Config Motor Controllers
@@ -109,13 +112,13 @@ public class ShooterSub extends SubsystemBase {
     //Config Servos
       shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
       shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
-//DashBoards
-    //PID tuning, edit names as needed
-      //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
-      //SmartDashboard.putNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP);
-      //SmartDashboard.putNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KI);
-      //SmartDashboard.putNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
-      //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
+    //DashBoards
+      //PID tuning, edit names as needed
+        //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
+        //SmartDashboard.putNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP);
+        //SmartDashboard.putNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KI);
+        //SmartDashboard.putNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
+        //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
   }
 
   //Output To Shooter
@@ -133,19 +136,25 @@ public class ShooterSub extends SubsystemBase {
     shooterServoLeft.setSpeed(servoPosition);
     shooterServoRight.setSpeed(servoPosition);
 
-    //modify values
+    //modify wheel values
     mainWheelValue = shooterMainWheelLeft.getSelectedSensorVelocity();
     hoodWheelsValue = shooterHoodWheels.getSelectedSensorVelocity();
     kickerWheelValue = shooterKickerWheel.getSelectedSensorVelocity();
-
+    //check for stale last timestamp
+    if(Timer.getFPGATimestamp()-lastTimestamp > Constants.SHOOTER_SERVOS_MAXIMUM_TIME_DELTA) {
+      lastTimestamp = Timer.getFPGATimestamp();
+    }
+    //modify servo values
+    if(servoValue < shooterServoLeft.getSpeed()) {
+      servoValue += Constants.SHOOTER_SERVOS_VELOCITY*(Timer.getFPGATimestamp()-lastTimestamp);
+    }
+    else if(servoValue > shooterServoLeft.getSpeed()) {
+      servoValue -= Constants.SHOOTER_SERVOS_VELOCITY*(Timer.getFPGATimestamp()-lastTimestamp);
+    }
+    lastTimestamp = Timer.getFPGATimestamp();
     //PID Tuning, change names as needed
-    //SmartDashboard.putNumber("mainWheelSetpoint", mainWheelSetpoint);
       //SmartDashboard.putNumber("mainWheelValue", mainWheelValue);
-      //SmartDashboard.putNumber("robotVoltage", shooterMainWheelLeft.getBusVoltage());
-      //SmartDashboard.putNumber("mainWheelVoltage", shooterMainWheelLeft.getMotorOutputVoltage());
-      //SmartDashboard.putNumber("hoodWheelsSetpoint", hoodWheelsSetpoint);
       //SmartDashboard.putNumber("hoodWheelsValue", hoodWheelsValue);
-      //SmartDashboard.putNumber("kickerWheelSetpoint", kickerWheelSetpoint);
       //SmartDashboard.putNumber("kickerWheelValue", kickerWheelValue);
   }
 
