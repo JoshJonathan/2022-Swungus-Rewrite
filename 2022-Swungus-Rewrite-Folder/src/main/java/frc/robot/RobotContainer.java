@@ -9,11 +9,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IndexerSub;
 import frc.robot.subsystems.IntakeSub;
+import frc.robot.subsystems.LimelightSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -64,6 +67,14 @@ public class RobotContainer {
       //Retract
       private final Command rc_retractIntake = new InstantCommand(rc_intakesub::retractIntake, rc_intakesub);
 
+      private final Subsystem rc_limelight = new LimelightSub();
+
+
+      private final Command limelightTest = new RunCommand(()-> rc_drivetrainsub.arcadeDrive(LimelightSub.desiredSpeed(),LimelightSub.desiredRotation()));
+
+
+     // private final Command rc_limelightRun = new InstantCommand();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -72,6 +83,7 @@ public class RobotContainer {
     //set default commands
     rc_shootersub.setDefaultCommand(rc_idleshooter);
     rc_drivetrainsub.setDefaultCommand(rc_drive);
+  
   }
 
   /**
@@ -81,6 +93,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+      new JoystickButton(rc_driverController, XboxController.Button.kY.value).whileHeld(limelightTest);
+
     //Shooter
       //Fendershot
       new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
