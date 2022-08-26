@@ -66,14 +66,10 @@ public class RobotContainer {
       private final Command rc_deployIntake = new InstantCommand(rc_intakesub::deployIntake, rc_intakesub);
       //Retract
       private final Command rc_retractIntake = new InstantCommand(rc_intakesub::retractIntake, rc_intakesub);
+  //limeLight
+      //LimelightShot
+      private final Command rc_limelightShotDrive = new RunCommand(()-> rc_drivetrainsub.aim(), rc_drivetrainsub);
 
-      private final Subsystem rc_limelight = new LimelightSub();
-
-
-      private final Command limelightTest = new RunCommand(()-> rc_drivetrainsub.arcadeDrive(LimelightSub.desiredSpeed(),LimelightSub.desiredRotation()));
-
-
-     // private final Command rc_limelightRun = new InstantCommand();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -93,9 +89,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
-      new JoystickButton(rc_driverController, XboxController.Button.kY.value).whileHeld(limelightTest);
-
     //Shooter
       //Fendershot
       new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
@@ -111,6 +104,8 @@ public class RobotContainer {
       //deploy
       new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_deployIntake);
       new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_retractIntake);
+    //Limelight
+      new JoystickButton(rc_driverController, XboxController.Button.kX.value).whileHeld(rc_limelightShotDrive);
   }
 
   /**

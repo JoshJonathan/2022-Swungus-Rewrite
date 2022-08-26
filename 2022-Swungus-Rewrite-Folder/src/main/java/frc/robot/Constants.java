@@ -114,7 +114,10 @@ public final class Constants {
             public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.19;
         //Maximum Outputs
             //Turn
-            public static double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
+            public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
+        //Automation Constants
+            //Turn kP
+            public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
 ////////
 
     //Indexer
@@ -157,19 +160,4 @@ public final class Constants {
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int OPERATOR_CONTROLLER_PORT = 1;
-
-    //MISC
-        //Pursuit speed
-        public static final double SWUNGUS_SPEED_MULTIPLIER = 1.5;
-        public static final double SWUNGUS_CHASE_MAX_SPEED = 1; //hard max
-
-        //Turning speeds
-        public static final double SWUNGUS_CHASE_ROTATION_SPEED = 0.45;
-        public static final double SWUNGUS_MIN_TURN_SPEED = 0.19;
-        public static final double SWUNGUS_TURN_MULTIPLIER = 1/150;
-
-        //distsance and sensitivity
-        public static final double SWUNGUS_DESIRED_AREA = 0.5;
-        public static final double SWUNGUS_MIN_AREA = 0.05; //min area to follow target, was 0.1
-        
 }
