@@ -31,11 +31,11 @@ public class ShooterSub extends SubsystemBase {
     Servo shooterServoRight = new Servo(Constants.SERVO_RIGHT_PORT);
     //Characterization Table
       double[][] characterizationTable = {
-        /*tY*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*mW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*hW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*kW*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-        /*sP*/{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
+        /*tY*/{   15.0,   11.0,    7.0,    3.0,   -1.0,   -5.0,   -9.0},
+        /*mW*/{ 6000.0, 6300.0, 6700.0, 7000.0, 7300.0, 7700.0, 8000.0},
+        /*hW*/{ 8000.0, 8600.0, 9300.0,10000.0,10700.0,11300.0,12000.0},
+        /*kW*/{ 4000.0, 4000.0, 4000.0, 4000.0, 4000.0, 4000.0, 4000.0},
+        /*sP*/{   -1.0,  -0.66,  -0.33,   0.00,    0.33,   0.66,   1.00}
       };
   //static variables
     //setpoints
@@ -50,6 +50,8 @@ public class ShooterSub extends SubsystemBase {
     public static double servoValue = -1;
     //timestamps
     double lastTimestamp = 0;
+    //table indices
+    public static int tablety = 0; 
     
   public ShooterSub() {
     //Config Motor Controllers
@@ -156,6 +158,29 @@ public class ShooterSub extends SubsystemBase {
       //SmartDashboard.putNumber("mainWheelValue", mainWheelValue);
       //SmartDashboard.putNumber("hoodWheelsValue", hoodWheelsValue);
       //SmartDashboard.putNumber("kickerWheelValue", kickerWheelValue);
+  }
+
+  //Limelight shot
+  public void limelightShot() {
+    searchTablety();
+    outputToShooter(linearOutput(1), linearOutput(2), linearOutput(3), linearOutput(4));
+  }
+
+  //search characterization table for ty column
+  public void searchTablety() {
+    if (LimelightSub.v == 1) {
+      for(int i = 0; i<characterizationTable[0].length; i++) {
+        if(characterizationTable[0][i] < LimelightSub.y) {
+          tablety = i;
+          break;
+        }
+      }
+    }   
+  }
+
+  //Linear Output
+  public double linearOutput (int tableIndex) {
+    return ((characterizationTable[tableIndex][tablety] - characterizationTable[tableIndex][tablety-1]) / (characterizationTable[0][tablety] - characterizationTable[0][tablety-1])) * (LimelightSub.y - characterizationTable[0][tablety-1]) + characterizationTable[tableIndex][tablety-1];
   }
 
   //PID tuning, change values as needed
