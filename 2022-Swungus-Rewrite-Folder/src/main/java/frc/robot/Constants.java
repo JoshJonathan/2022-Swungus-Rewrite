@@ -118,6 +118,8 @@ public final class Constants {
         //Automation Constants
             //Turn kP
             public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
+            //Allowable error
+            public static final double DRIVETRAIN_ALLOWABLE_ERROR = 3;
 ////////
 
     //Indexer
