@@ -52,7 +52,8 @@ public class IndexerSub extends SubsystemBase {
        readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR) &&
-       readyToShoot(ShooterSub.servoSetpoint, ShooterSub.servoValue, Constants.SHOOTER_SERVOS_ALLOWABLE_ERROR)
+       readyToShoot(ShooterSub.servoSetpoint, ShooterSub.servoValue, Constants.SHOOTER_SERVOS_ALLOWABLE_ERROR) &&
+       (readyToShoot(0, LimelightSub.x, Constants.DRIVETRAIN_ALLOWABLE_ERROR) || ShooterSub.mainWheelSetpoint == Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY)
        ) {
       index(Constants.INDEXER_OUTPUT);
       timer.reset();

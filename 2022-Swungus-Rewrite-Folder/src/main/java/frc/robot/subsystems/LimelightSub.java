@@ -13,69 +13,39 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightSub extends SubsystemBase {
   /** Creates a new LimelightSub. */
-  static double x;
-  static double y;
-  static double area;
-  public LimelightSub() {
+  NetworkTable table;
+  NetworkTableEntry tx;
+  NetworkTableEntry ty;
+  NetworkTableEntry tv;
+  public static double x;
+  public static double y;
+  public static double v;
 
+  public static double turn = 0;
+  
+  public LimelightSub() {
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+    tx = table.getEntry("tx");
+    ty = table.getEntry("ty");
+    tv = table.getEntry("tv");
   }
 
-  public double getX(){return x;}
-  public double getY(){return y;}
-  public double getArea(){return area;}
+  public void setTurn() {
+    if (v == 1 && x < 0) {
+      turn = -Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_kP*x;
+    }
+    else if (v == 1 && x > 0) {
+      turn = Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_kP*x;
+    }
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
-    
     //read values periodically
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
-    area = ta.getDouble(0.0);
-    
-    //post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
-    SmartDashboard.putNumber("LimeLight desired rotation", desiredRotation());
-    SmartDashboard.putNumber("LimeLight desired power", desiredSpeed());
+    v = tv.getDouble(0.0);
+    setTurn();
   }
-
-  private static boolean lastRememberedSide;
-  public static double desiredRotation(){
-    if(area<Constants.SWUNGUS_MIN_AREA){
-      if(lastRememberedSide)return Constants.SWUNGUS_CHASE_ROTATION_SPEED;
-      return 0-Constants.SWUNGUS_CHASE_ROTATION_SPEED;
-    }
-
-      if(area>Constants.SWUNGUS_MIN_AREA)
-    lastRememberedSide = x>0;
-
-    if(x>0)
-    return (x*Constants.SWUNGUS_TURN_MULTIPLIER)+Constants.SWUNGUS_MIN_TURN_SPEED;
-    return (x*Constants.SWUNGUS_TURN_MULTIPLIER)-Constants.SWUNGUS_MIN_TURN_SPEED;
-  }
-
-  public static double desiredSpeed(){
-    if(area<Constants.SWUNGUS_MIN_AREA) return 0;
-
-   return powerLimit(0-(area-Constants.SWUNGUS_DESIRED_AREA)*Constants.SWUNGUS_SPEED_MULTIPLIER,Constants.SWUNGUS_CHASE_MAX_SPEED);
-
-  }
-
-  private static double powerLimit(double in, double limit){
-    limit = Math.abs(limit);
-    if(Math.abs(in)>limit){
-      if(in<0) return 0-limit;
-      return limit;
-    }
-    return in;
-  }
-
-
-
 }
