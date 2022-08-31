@@ -37,6 +37,10 @@ public class DrivetrainSub extends SubsystemBase {
     double dt_speed;
     double dt_turn;
 
+  //Static Variables
+    //last turn
+    static boolean lastTurnRight;
+
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
     //Motor Controller Configs
@@ -44,8 +48,7 @@ public class DrivetrainSub extends SubsystemBase {
         //Front
         drivetrainLeftFront.configFactoryDefault();
         drivetrainLeftFront.configNeutralDeadband(Constants.DRIVETRAIN_NEUTRAL_DEADBAND);
-        drivetrainLeftFront.configVoltageCompSaturation(Constants.DRIVETRAIN_NOMINAL_VOLTAGE);
-        drivetrainLeftFront.configVoltageMeasurementFilter(Constants.DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES);
+        drivetrainLeftFront.configVoltageCompSaturation(12.0);
         drivetrainLeftFront.enableVoltageCompensation(true);
         drivetrainLeftFront.setInverted(TalonFXInvertType.Clockwise);
         drivetrainLeftFront.setNeutralMode(NeutralMode.Coast);
@@ -53,12 +56,13 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainLeftRear.follow(drivetrainLeftFront);
         drivetrainLeftRear.setInverted(TalonFXInvertType.FollowMaster);
         drivetrainLeftRear.setNeutralMode(NeutralMode.Coast);
+        drivetrainLeftRear.configVoltageCompSaturation(12.0);
+        drivetrainLeftRear.enableVoltageCompensation(true);
       //Right
         //Front
         drivetrainRightFront.configFactoryDefault();
         drivetrainRightFront.configNeutralDeadband(Constants.DRIVETRAIN_NEUTRAL_DEADBAND);
-        drivetrainRightFront.configVoltageCompSaturation(Constants.DRIVETRAIN_NOMINAL_VOLTAGE);
-        drivetrainRightFront.configVoltageMeasurementFilter(Constants.DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES);
+        drivetrainRightFront.configVoltageCompSaturation(12.0);
         drivetrainRightFront.enableVoltageCompensation(true);
         drivetrainRightFront.setInverted(TalonFXInvertType.CounterClockwise);
         drivetrainRightFront.setNeutralMode(NeutralMode.Coast);
@@ -66,8 +70,14 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.follow(drivetrainRightFront);
         drivetrainRightRear.setInverted(TalonFXInvertType.FollowMaster);
         drivetrainRightRear.setNeutralMode(NeutralMode.Coast);
+        drivetrainRightRear.configVoltageCompSaturation(12.0);
+        drivetrainRightRear.enableVoltageCompensation(true);
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
+
+    //Static Variables
+      //last turn
+      lastTurnRight = true;
   }
 
   //Drive
@@ -123,12 +133,13 @@ public class DrivetrainSub extends SubsystemBase {
     }
     //Turn
     if (dt_turn > 0) {
-      dt_turn = (Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(dt_turn)-((Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(dt_turn));
+      dt_turn = (Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(dt_turn)-((Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(dt_turn))-((1-Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE)*(dt_turn));
+      lastTurnRight = true;
     }
     if (dt_turn < 0) {
-      dt_turn = (-Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(dt_turn)-((-Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(dt_turn));
+      dt_turn = (-Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(dt_turn)-((Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(dt_turn))-((1-Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE)*(dt_turn));
+      lastTurnRight = false;
     }
-    dt_turn = dt_turn*Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE;
   }
 
   //Arcade Drive
@@ -138,8 +149,6 @@ public class DrivetrainSub extends SubsystemBase {
 
   //Aim
   public void aim() {
-    if(LimelightSub.v == 1) {
       arcadeDrive(0, LimelightSub.turn);
-    }
   }
 }
