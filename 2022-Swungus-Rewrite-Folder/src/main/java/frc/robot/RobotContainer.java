@@ -52,24 +52,28 @@ public class RobotContainer {
                                                                                   rc_driverController.getLeftTriggerAxis(), 
                                                                                   rc_driverController.getLeftX()), rc_drivetrainsub);
   //Indexer
-    private final IndexerSub rc_indexersub = new IndexerSub();
-      //Index
-      private final Command rc_indexup = new RunCommand(()-> rc_indexersub.index(Constants.INDEXER_OUTPUT), rc_indexersub);
-      private final Command rc_indexdown = new RunCommand(()-> rc_indexersub.index(-Constants.INDEXER_OUTPUT), rc_indexersub);
-      private final Command rc_indexstop = new RunCommand(()-> rc_indexersub.index(0), rc_indexersub);
-      //Shoot
-      private final Command rc_indexshoot = new RunCommand(rc_indexersub::shoot, rc_indexersub);
+  private final IndexerSub rc_indexersub = new IndexerSub();
+    //Index
+    private final Command rc_indexup = new RunCommand(()-> rc_indexersub.index(Constants.INDEXER_OUTPUT), rc_indexersub);
+    private final Command rc_indexdown = new RunCommand(()-> rc_indexersub.index(-Constants.INDEXER_OUTPUT), rc_indexersub);
+    private final Command rc_indexstop = new RunCommand(()-> rc_indexersub.index(0), rc_indexersub);
+    //Shoot
+    private final Command rc_indexshoot = new RunCommand(rc_indexersub::shoot, rc_indexersub);
   //Intake
     private final IntakeSub rc_intakesub = new IntakeSub();
+    //Commands
       //Deploy
       private final Command rc_deployIntake = new InstantCommand(rc_intakesub::deployIntake, rc_intakesub);
       //Retract
       private final Command rc_retractIntake = new InstantCommand(rc_intakesub::retractIntake, rc_intakesub);
-  //limeLight
-    private final LimelightSub rc_limelightsub = new LimelightSub();
-      //LimelightShot
-      private final Command rc_limelightShotDrive = new RunCommand(rc_drivetrainsub::aim, rc_drivetrainsub);
-      private final Command rc_limelightShotSpinShooter = new RunCommand(rc_shootersub::limelightShot, rc_shootersub);
+
+      private final Subsystem rc_limelight = new LimelightSub();
+
+
+      private final Command limelightTest = new RunCommand(()-> rc_drivetrainsub.arcadeDrive(LimelightSub.desiredSpeed(),LimelightSub.desiredRotation()));
+
+
+     // private final Command rc_limelightRun = new InstantCommand();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -89,6 +93,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+      new JoystickButton(rc_driverController, XboxController.Button.kY.value).whileHeld(limelightTest);
+
     //Shooter
       //Fendershot
       new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
@@ -104,10 +111,7 @@ public class RobotContainer {
       //deploy
       new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_deployIntake);
       new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_retractIntake);
-    //Limelight
-      new JoystickButton(rc_driverController, XboxController.Button.kX.value).whileHeld(rc_limelightShotDrive);
-      new JoystickButton(rc_driverController, XboxController.Button.kX.value).whileHeld(rc_limelightShotSpinShooter);
-    }
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
