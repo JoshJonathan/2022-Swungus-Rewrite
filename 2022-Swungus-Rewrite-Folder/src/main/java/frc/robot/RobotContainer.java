@@ -30,42 +30,10 @@ public class RobotContainer {
     XboxController rc_driverController = new XboxController(Constants.DRIVER_CONTROLLER_PORT);
     XboxController rc_operatorController = new XboxController(Constants.OPERATOR_CONTROLLER_PORT);
   //Shooter
-    private final ShooterSub rc_shootersub = new ShooterSub();
-    //commands
-      //default command
-      private final Command rc_idleshooter = new RunCommand(()-> rc_shootersub.outputToShooter(Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY,
-                                                                                               Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY,
-                                                                                               Constants.SHOOTER_KICKER_WHEEL_IDLE_VELOCITY,
-                                                                                               Constants.SHOOTER_SERVOS_IDLE_POSITION), rc_shootersub);
-      //Fendershot
-      private final Command rc_fendershot = new RunCommand(()-> rc_shootersub.outputToShooter(Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY,
-                                                                                              Constants.SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY,
-                                                                                              Constants.SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY,
-                                                                                              Constants.SHOOTER_SERVOS_FENDERSHOT_POSITION), rc_shootersub);
-  //Drivetrain
-    private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
-      //default command
-      private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(), 
-                                                                                  rc_driverController.getLeftTriggerAxis(), 
-                                                                                  rc_driverController.getLeftX()), rc_drivetrainsub);
-  //Indexer
-  private final IndexerSub rc_indexersub = new IndexerSub();
-    //Index
-    private final Command rc_indexup = new RunCommand(()-> rc_indexersub.index(Constants.INDEXER_OUTPUT), rc_indexersub);
-    private final Command rc_indexdown = new RunCommand(()-> rc_indexersub.index(-Constants.INDEXER_OUTPUT), rc_indexersub);
-    private final Command rc_indexstop = new RunCommand(()-> rc_indexersub.index(0), rc_indexersub);
-    //Shoot
-  //Intake
-    private final IntakeSub rc_intakesub = new IntakeSub();
-    //Commands
-      //Deploy
-      private final Command rc_deployIntake = new InstantCommand(rc_intakesub::deployIntake, rc_intakesub);
-      //Retract
-      private final Command rc_retractIntake = new InstantCommand(rc_intakesub::retractIntake, rc_intakesub);
-
 
     //Elevator
     private final ElevatorSub rc_elevatorsub = new ElevatorSub();
+    private final Command rc_elevatorIdle = new InstantCommand(rc_elevatorsub::periodic);
     private final Command rc_elevatorUp = new InstantCommand(rc_elevatorsub::upButton);
     private final Command rc_elevatorDown = new InstantCommand(rc_elevatorsub::downButton);
     private final Command rc_elevatorBrake = new InstantCommand(rc_elevatorsub::brakeElevator);
@@ -77,10 +45,7 @@ public class RobotContainer {
     configureButtonBindings();
 
 
-    //set default commands
-    rc_shootersub.setDefaultCommand(rc_idleshooter);
-    rc_drivetrainsub.setDefaultCommand(rc_drive);
-    
+//rc_elevatorsub.setDefaultCommand(rc_elevatorsub,rc_elevatorIdle);
    // rc_elevatorsub.setDefaultCommand(rc_elevatorDefault);
   }
 
@@ -93,18 +58,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //Shooter
       //Fendershot
-      new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
-
-    //Indexer
-      //Index Up
-      new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value).whileHeld(rc_indexup).whenReleased(rc_indexstop);
-      //Index Down
-      new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value).whileHeld(rc_indexdown).whenReleased(rc_indexstop);
-    //Intake
-      //deploy
-      new JoystickButton(rc_driverController, XboxController.Button.kRightBumper.value).whenPressed(rc_deployIntake);
-      //retract
-      new JoystickButton(rc_driverController, XboxController.Button.kLeftBumper.value).whenPressed(rc_retractIntake);
+      new JoystickButton(rc_driverController, XboxController.Button.kA.value).whenPressed(rc_elevatorDown);
+      new JoystickButton(rc_driverController, XboxController.Button.kB.value).whenPressed(rc_elevatorUp);
+      new JoystickButton(rc_driverController, XboxController.Button.kY.value).whenPressed(rc_elevatorBrake);
   }
 
   /**

@@ -18,7 +18,7 @@ import frc.robot.Constants;
 
 public class ElevatorSub extends SubsystemBase {
   //Solenoid  //Motor  
-    private WPI_TalonFX elevatorMotor = new WPI_TalonFX(Constants.ELEVATOR_MOTOR_ID);
+    private WPI_TalonSRX elevatorMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR_ID);
     private DigitalInput limitSwitch = new DigitalInput(Constants.ELEVATOR_LIMIT_SWITCH_DIO);
     private double desiredSpeed = 0;
 
@@ -31,7 +31,6 @@ public class ElevatorSub extends SubsystemBase {
   @Override
   public void periodic(){
     elevatorMotor.set(ControlMode.PercentOutput, desiredSpeed*Constants.ELEVATOR_SPEED);
-    //SmartDashboard.putNumber("ticks", elevatorMotor.getEncopos)
     if(getBottomLimit()){
       if(desiredSpeed<0)
         desiredSpeed = 0;
