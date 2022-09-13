@@ -141,7 +141,7 @@ public final class Constants {
     //Elevator
         //Motor IDs
             //Motor
-            public static final int ELEVATOR_MOTOR_ID = 05; //unassigned
+            public static final int ELEVATOR_MOTOR_ID = 01; //unassigned
         //Limit Switch
             //Bottom
             public static final int ELEVATOR_LIMIT_SWITCH_DIO = 0;//unassigned
@@ -149,6 +149,8 @@ public final class Constants {
         //Outputs
             //Elevator
             public static final double ELEVATOR_SPEED = 0.3;
+
+            public static final double ELEVATOR_ENCODER_MAX = 30000;
 
 
 

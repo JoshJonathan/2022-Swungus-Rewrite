@@ -21,6 +21,7 @@ public class ElevatorSub extends SubsystemBase {
     private WPI_TalonSRX elevatorMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR_ID);
     private DigitalInput limitSwitch = new DigitalInput(Constants.ELEVATOR_LIMIT_SWITCH_DIO);
     private double desiredSpeed = 0;
+    private double encoderOffset = 0;
 
   /** Creates a new Elevator. */
   public ElevatorSub() {
@@ -30,11 +31,20 @@ public class ElevatorSub extends SubsystemBase {
 
   @Override
   public void periodic(){
+    SmartDashboard.putNumber("ticks", elevatorMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("adjustedticks", elevatorMotor.getSelectedSensorPosition()-encoderOffset);
     elevatorMotor.set(ControlMode.PercentOutput, desiredSpeed*Constants.ELEVATOR_SPEED);
     if(getBottomLimit()){
       if(desiredSpeed<0)
         desiredSpeed = 0;
       elevatorMotor.setNeutralMode(NeutralMode.Coast);
+      encoderOffset = elevatorMotor.getSelectedSensorPosition();
+      return;
+    }
+    if(getTopLimit()){
+      if(desiredSpeed>0)
+        desiredSpeed = 0;
+      elevatorMotor.setNeutralMode(NeutralMode.Brake);
       return;
     }
     elevatorMotor.setNeutralMode(NeutralMode.Brake);
@@ -49,8 +59,6 @@ public class ElevatorSub extends SubsystemBase {
   }
 
   public void updateSpeed(double speed){
-    if(getBottomLimit())
-      return;
     desiredSpeed = speed;
   }
 
@@ -64,5 +72,9 @@ public class ElevatorSub extends SubsystemBase {
   public boolean getBottomLimit(){
     //return false;
     return limitSwitch.get();
+  }
+
+  public boolean getTopLimit(){
+    return elevatorMotor.getSelectedSensorPosition()-encoderOffset>Constants.ELEVATOR_ENCODER_MAX;
   }
 }
