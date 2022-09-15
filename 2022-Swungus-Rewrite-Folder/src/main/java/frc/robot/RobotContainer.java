@@ -36,6 +36,7 @@ public class RobotContainer {
     private final Command rc_elevatorIdle = new InstantCommand(rc_elevatorsub::periodic);
     private final Command rc_elevatorUp = new InstantCommand(rc_elevatorsub::upButton);
     private final Command rc_elevatorDown = new InstantCommand(rc_elevatorsub::downButton);
+    private final Command rc_elevatorHalf = new InstantCommand(rc_elevatorsub::halfButton);
     private final Command rc_elevatorBrake = new InstantCommand(rc_elevatorsub::brakeElevator);
 
 
@@ -60,6 +61,8 @@ public class RobotContainer {
       //Fendershot
       new JoystickButton(rc_driverController, XboxController.Button.kA.value).whenPressed(rc_elevatorDown);
       new JoystickButton(rc_driverController, XboxController.Button.kB.value).whenPressed(rc_elevatorUp);
+      new JoystickButton(rc_driverController, XboxController.Button.kX.value).whenPressed(rc_elevatorHalf);
+
       new JoystickButton(rc_driverController, XboxController.Button.kY.value).whenPressed(rc_elevatorBrake);
   }
 

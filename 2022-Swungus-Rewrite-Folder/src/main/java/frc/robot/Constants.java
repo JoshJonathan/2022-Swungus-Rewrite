@@ -148,9 +148,11 @@ public final class Constants {
 
         //Outputs
             //Elevator
-            public static final double ELEVATOR_SPEED = 0.3;
+            public static final double ELEVATOR_SPEED = 0.5;
 
             public static final double ELEVATOR_ENCODER_MAX = 30000;
+
+            public static final double ELEVATOR_MIN_SPEED = 0.08;
 
 
 

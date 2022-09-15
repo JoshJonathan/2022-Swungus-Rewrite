@@ -20,61 +20,73 @@ public class ElevatorSub extends SubsystemBase {
   //Solenoid  //Motor  
     private WPI_TalonSRX elevatorMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR_ID);
     private DigitalInput limitSwitch = new DigitalInput(Constants.ELEVATOR_LIMIT_SWITCH_DIO);
-    private double desiredSpeed = 0;
-    private double encoderOffset = 0;
-
+  
   /** Creates a new Elevator. */
   public ElevatorSub() {
     //Config Motor
      
   }
 
+  private double desiredPosition;
+  private double offset = elevatorMotor.getSelectedSensorPosition();
+  private final double threshold = 100;
+  private double powerDampened = 0;
+  private double dampenPower = 0.05;
+
   @Override
   public void periodic(){
-    SmartDashboard.putNumber("ticks", elevatorMotor.getSelectedSensorPosition());
-    SmartDashboard.putNumber("adjustedticks", elevatorMotor.getSelectedSensorPosition()-encoderOffset);
-    elevatorMotor.set(ControlMode.PercentOutput, desiredSpeed*Constants.ELEVATOR_SPEED);
-    if(getBottomLimit()){
-      if(desiredSpeed<0)
-        desiredSpeed = 0;
+    double powerOut = 0;
+
+    if(limitSwitch.get()){
+      offset = elevatorMotor.getSelectedSensorPosition();
+    }
+
+    if(Math.abs(desiredPosition-elevatorPosition())>threshold){
       elevatorMotor.setNeutralMode(NeutralMode.Coast);
-      encoderOffset = elevatorMotor.getSelectedSensorPosition();
-      return;
+     powerOut = (desiredPosition-elevatorPosition())/Constants.ELEVATOR_ENCODER_MAX*Constants.ELEVATOR_SPEED;
+     if(powerOut>0) powerOut+=Constants.ELEVATOR_MIN_SPEED;
+     else powerOut-=Constants.ELEVATOR_MIN_SPEED;
     }
-    if(getTopLimit()){
-      if(desiredSpeed>0)
-        desiredSpeed = 0;
-      elevatorMotor.setNeutralMode(NeutralMode.Brake);
-      return;
-    }
+    else{
     elevatorMotor.setNeutralMode(NeutralMode.Brake);
+    }
+
+  //  if(Math.abs(powerOut)>Math.abs(powerDampened)){
+      powerDampened += (powerOut- powerDampened)*dampenPower;
+  //  else 
+  //    powerDampened = powerOut;
     
+    elevatorMotor.set(ControlMode.PercentOutput,powerDampened);
+
+    SmartDashboard.putNumber("output",powerOut);
+    SmartDashboard.putNumber("output_dampened",powerDampened);
+    SmartDashboard.putNumber("rawEncoder",elevatorMotor.getSelectedSensorPosition());
+    SmartDashboard.putNumber("encoderAdjusted",elevatorPosition());
+    SmartDashboard.putNumber("elevator %",Math.floor(elevatorPosition()/Constants.ELEVATOR_ENCODER_MAX*100));
+
+
   }
+
+  public double elevatorPosition(){
+    return elevatorMotor.getSelectedSensorPosition() - offset;
+  }
+public void setTargetPercent(double target){
+desiredPosition = Constants.ELEVATOR_ENCODER_MAX*target;
+}
 
   public void upButton(){
-    updateSpeed(1);
+setTargetPercent(1);
   }
   public void downButton(){
-    updateSpeed(-1);
+    setTargetPercent(0);
   }
 
-  public void updateSpeed(double speed){
-    desiredSpeed = speed;
+  public void halfButton(){
+    setTargetPercent(0.5);
   }
-
 
   public void brakeElevator(){
-    elevatorMotor.setNeutralMode(NeutralMode.Brake);
-    desiredSpeed = 0;
+    desiredPosition = elevatorPosition();
   }
 
-
-  public boolean getBottomLimit(){
-    //return false;
-    return limitSwitch.get();
-  }
-
-  public boolean getTopLimit(){
-    return elevatorMotor.getSelectedSensorPosition()-encoderOffset>Constants.ELEVATOR_ENCODER_MAX;
-  }
 }
