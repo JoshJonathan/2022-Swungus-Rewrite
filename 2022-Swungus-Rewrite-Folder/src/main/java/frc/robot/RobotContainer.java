@@ -38,12 +38,14 @@ public class RobotContainer {
     private final Command rc_elevatorDown = new InstantCommand(rc_elevatorsub::downButton);
     private final Command rc_elevatorHalf = new InstantCommand(rc_elevatorsub::halfButton);
     private final Command rc_elevatorBrake = new InstantCommand(rc_elevatorsub::brakeElevator);
-
+    private final Command rc_elevatorToggleManual = new InstantCommand(rc_elevatorsub::toggleManualDrive);
+    private final Command rc_elevatorManualDrive = new RunCommand(()->rc_elevatorsub.manualDrive(rc_driverController.getRightY()),rc_elevatorsub);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    rc_elevatorsub.setDefaultCommand(rc_elevatorManualDrive);
 
 
 //rc_elevatorsub.setDefaultCommand(rc_elevatorsub,rc_elevatorIdle);
@@ -62,8 +64,10 @@ public class RobotContainer {
       new JoystickButton(rc_driverController, XboxController.Button.kA.value).whenPressed(rc_elevatorDown);
       new JoystickButton(rc_driverController, XboxController.Button.kB.value).whenPressed(rc_elevatorUp);
       new JoystickButton(rc_driverController, XboxController.Button.kX.value).whenPressed(rc_elevatorHalf);
-
       new JoystickButton(rc_driverController, XboxController.Button.kY.value).whenPressed(rc_elevatorBrake);
+
+      new JoystickButton(rc_driverController, XboxController.Button.kStart.value).whenPressed(rc_elevatorToggleManual);
+
   }
 
   /**

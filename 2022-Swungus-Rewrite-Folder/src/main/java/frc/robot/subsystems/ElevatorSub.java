@@ -26,6 +26,7 @@ public class ElevatorSub extends SubsystemBase {
     //Config Motor
      
   }
+  private boolean manualDriveEnabled = false;
 
   private double desiredPosition;
   private double offset = elevatorMotor.getSelectedSensorPosition();
@@ -35,6 +36,9 @@ public class ElevatorSub extends SubsystemBase {
 
   @Override
   public void periodic(){
+    SmartDashboard.putBoolean("manual drive",manualDriveEnabled);
+    if(manualDriveEnabled) return;
+
     double powerOut = 0;
 
     if(limitSwitch.get()){
@@ -65,6 +69,17 @@ public class ElevatorSub extends SubsystemBase {
     SmartDashboard.putNumber("elevator %",Math.floor(elevatorPosition()/Constants.ELEVATOR_ENCODER_MAX*100));
 
 
+  }
+
+  public void manualDrive(double power){
+    SmartDashboard.putNumber("manualPower", power);
+    if(!manualDriveEnabled) return;
+    elevatorMotor.set(ControlMode.PercentOutput,power);
+    elevatorMotor.setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void toggleManualDrive(){
+    manualDriveEnabled = !manualDriveEnabled;
   }
 
   public double elevatorPosition(){
