@@ -7,9 +7,17 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -25,6 +33,13 @@ public class DrivetrainSub extends SubsystemBase {
   //Drivetrain
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
 
+    public static final DifferentialDriveKinematics kDriveKinematics =
+    new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
+
+    public final Gyro m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
+
+    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());;
+
   //Input Filters
     SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW);
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
@@ -36,6 +51,18 @@ public class DrivetrainSub extends SubsystemBase {
     double speed;
     double turn;
 
+
+    @Override
+    public void periodic(){
+      SmartDashboard.putNumber("xPosition", getPose().getX()/Constants.DriveTrainConstants.metersToTicks);
+      SmartDashboard.putNumber("yPosition", getPose().getY()/Constants.DriveTrainConstants.metersToTicks);
+
+      m_odometry.update(
+        m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition());
+
+    }
+
+    
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
     //Motor Controller Configs
@@ -67,6 +94,8 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.setNeutralMode(NeutralMode.Coast);
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
+      
+  resetEncoders();
   }
 
   //Drive
@@ -137,6 +166,50 @@ public class DrivetrainSub extends SubsystemBase {
 
   public void arcadeDrive(double speed, double turn) {
     arcadeDrive.arcadeDrive(speed, turn);
+  }
+
+  
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition());
+  }
+  
+  public void resetOdometry() {
+    resetEncoders();
+    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
+  }
+
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+  }
+
+  public void resetEncoders(){
+    drivetrainLeftFront.setSelectedSensorPosition(0);
+    drivetrainRightFront.setSelectedSensorPosition(0); 
+  }
+  public double getAverageEncoderDistance() {
+    return (drivetrainLeftFront.getSelectedSensorPosition() + drivetrainRightFront.getSelectedSensorPosition()) / 2.0;
+  }
+
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
+
+  public void tankDriveVolts(double l, double r){
+      arcadeDrive.tankDrive(l, r);
+  }
+
+
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+  public double getTurnRate() {
+    return -m_gyro.getRate();
   }
 
 
