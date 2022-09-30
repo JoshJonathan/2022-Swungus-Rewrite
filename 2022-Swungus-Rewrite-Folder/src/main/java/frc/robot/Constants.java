@@ -37,7 +37,7 @@ public final class Constants {
             public static final double SHOOTER_HOOD_WHEELS_KF = 0.051; //0.051
             public static final double SHOOTER_HOOD_WHEELS_KP = 0.1; //0.1
             public static final double SHOOTER_HOOD_WHEELS_KI = 0.001; //0.001
-            public static final double SHOOTER_HOOD_WHEELS_KI_ZONE = 100.0; //100
+            public static final double SHOOTER_HOOD_WHEELS_KI_ZONE = 250.0; //100
             public static final double SHOOTER_HOOD_WHEELS_KD = 0.0; //unassigned
             //KickerWheel
             public static final double SHOOTER_KICKER_WHEEL_KF = 0.0478; //.0478
@@ -55,10 +55,13 @@ public final class Constants {
             //KickerWheel
             public static final double SHOOTER_KICKER_WHEEL_IDLE_VELOCITY = 1000; //1000
             public static final double SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY = 4000;//unassigned //4000 for testing
+            //servos
+            public static final double SHOOTER_SERVOS_VELOCITY = 0.357; //0.357, distance per second, where distance is in servo units and the servo lenth is 2 units
+            public static final double SHOOTER_SERVOS_MAXIMUM_TIME_DELTA = 0.06; //0.06 is 3 missed code loops
         //Positions
             //servos
-            public static final double SHOOTER_SERVOS_IDLE_POSITION = 0;//unassigned
-            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = 0;//unassigned
+            public static final double SHOOTER_SERVOS_IDLE_POSITION = 0;//unassigned //0 for testing
+            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = -0.5;//unassigned //-0.5 for testing
         //Configurations
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_RAMP_TIME = 0.25;
@@ -68,13 +71,13 @@ public final class Constants {
             public static final double SHOOTER_KICKER_WHEEL_RAMP_TIME = 0.25;
         //Allowable Errors
             //MainWheel
-            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 0.0154; //100/6500
+            public static final double SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR = 100.0; //100/6500
             //HoodWheels
-            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 0.01; //100/10000
+            public static final double SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR = 100.0; //100/10000
             //KickerWheels
-            public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 0.0125; //50/4000
+            public static final double SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR = 100.0; //50/4000
             //Servos
-            public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0;//unassigned
+            public static final double SHOOTER_SERVOS_ALLOWABLE_ERROR = 0.02; //0.04/2
 ////////
 
     //Drivetrain
@@ -89,11 +92,9 @@ public final class Constants {
             public static final int DRIVETRAIN_RIGHT_REAR_ID = 1;
         //Config Parameters
             //NeutralDeadband
-            public static final double DRIVETRAIN_NEUTRAL_DEADBAND = 0.0;//unassigned, .1
+            public static final double DRIVETRAIN_NEUTRAL_DEADBAND = 0.0;//unassigned
             //NominalVoltage
-            public static final double DRIVETRAIN_NOMINAL_VOLTAGE = 12.5;//unsure
-            //VoltageFilterWindowSamples
-            public static final int DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unsure
+            public static final double DRIVETRAIN_NOMINAL_VOLTAGE = 12.0; //12.5
         //Slew Rates
             //speed
             public static final double DRIVETRAIN_SPEED_SLEW = 0.8;
