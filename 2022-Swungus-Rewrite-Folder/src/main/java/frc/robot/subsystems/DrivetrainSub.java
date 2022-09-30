@@ -45,23 +45,11 @@ public class DrivetrainSub extends SubsystemBase {
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
 
   //Values
-    double lt;
-    double rt;
-    double lx;
-    double speed;
-    double turn;
-
-
-    @Override
-    public void periodic(){
-      SmartDashboard.putNumber("xPosition", getPose().getX()/Constants.DriveTrainConstants.metersToTicks);
-      SmartDashboard.putNumber("yPosition", getPose().getY()/Constants.DriveTrainConstants.metersToTicks);
-
-      m_odometry.update(
-        m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition());
-
-    }
-
+  double dt_lt;
+  double dt_rt;
+  double dt_lx;
+  double dt_speed;
+  double dt_turn;
     
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
@@ -212,5 +200,12 @@ public class DrivetrainSub extends SubsystemBase {
     return -m_gyro.getRate();
   }
 
+  @Override
+  public void periodic(){
+    SmartDashboard.putNumber("xPosition", getPose().getX()/Constants.DriveTrainConstants.metersToTicks);
+    SmartDashboard.putNumber("yPosition", getPose().getY()/Constants.DriveTrainConstants.metersToTicks);
 
+    m_odometry.update(
+      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition());
+  }
 }
