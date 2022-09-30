@@ -55,8 +55,7 @@ public class DrivetrainSub extends SubsystemBase {
         //Front
         drivetrainLeftFront.configFactoryDefault();
         drivetrainLeftFront.configNeutralDeadband(Constants.DRIVETRAIN_NEUTRAL_DEADBAND);
-        drivetrainLeftFront.configVoltageCompSaturation(Constants.DRIVETRAIN_NOMINAL_VOLTAGE);
-        drivetrainLeftFront.configVoltageMeasurementFilter(Constants.DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES);
+        drivetrainLeftFront.configVoltageCompSaturation(12.0);
         drivetrainLeftFront.enableVoltageCompensation(true);
         drivetrainLeftFront.setInverted(TalonFXInvertType.Clockwise);
         drivetrainLeftFront.setNeutralMode(NeutralMode.Coast);
@@ -64,12 +63,13 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainLeftRear.follow(drivetrainLeftFront);
         drivetrainLeftRear.setInverted(TalonFXInvertType.FollowMaster);
         drivetrainLeftRear.setNeutralMode(NeutralMode.Coast);
+        drivetrainLeftRear.configVoltageCompSaturation(12.0);
+        drivetrainLeftRear.enableVoltageCompensation(true);
       //Right
         //Front
         drivetrainRightFront.configFactoryDefault();
         drivetrainRightFront.configNeutralDeadband(Constants.DRIVETRAIN_NEUTRAL_DEADBAND);
-        drivetrainRightFront.configVoltageCompSaturation(Constants.DRIVETRAIN_NOMINAL_VOLTAGE);
-        drivetrainRightFront.configVoltageMeasurementFilter(Constants.DRIVETRAIN_VOLTAGE_FILTER_WINDOW_SAMPLES);
+        drivetrainRightFront.configVoltageCompSaturation(12.0);
         drivetrainRightFront.enableVoltageCompensation(true);
         drivetrainRightFront.setInverted(TalonFXInvertType.CounterClockwise);
         drivetrainRightFront.setNeutralMode(NeutralMode.Coast);
@@ -77,10 +77,15 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.follow(drivetrainRightFront);
         drivetrainRightRear.setInverted(TalonFXInvertType.FollowMaster);
         drivetrainRightRear.setNeutralMode(NeutralMode.Coast);
+        drivetrainRightRear.configVoltageCompSaturation(12.0);
+        drivetrainRightRear.enableVoltageCompensation(true);
+        //All
+        resetEncoders();
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
-      
-  resetEncoders();
+    //Static Variables
+      //last turn
+      lastTurnRight = true;
   }
 
   //Drive
