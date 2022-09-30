@@ -97,22 +97,27 @@ public final class Constants {
             public static final double DRIVETRAIN_NOMINAL_VOLTAGE = 12.0; //12.5
         //Slew Rates
             //speed
-            public static final double DRIVETRAIN_SPEED_SLEW = 0.8;
+            public static final double DRIVETRAIN_SPEED_SLEW = 0.8; //0.8
             //turn
-            public static final double DRIVETRAIN_TURN_SLEW = 2.0;
+            public static final double DRIVETRAIN_TURN_SLEW = 100000.0; //2.0
         //Controller Deadzones
             //speed
-            public static final double DRIVETRAIN_SPEED_DEADZONE = 0.00;
+            public static final double DRIVETRAIN_SPEED_DEADZONE = 0.00; //0.0
             //turn
-            public static final double DRIVETRAIN_TURN_DEADZONE = 0.075;
+            public static final double DRIVETRAIN_TURN_DEADZONE = 0.075; //0.75
         //Minimum Outputs
             //speed
-            public static final double DRIVETRAIN_SPEED_MINIMUM_OUTPUT = 0.11;
+            public static final double DRIVETRAIN_SPEED_MINIMUM_OUTPUT = 0.15; //.15
             //Turn
-            public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.19;
+            public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.21; //.21
         //Maximum Outputs
             //Turn
-            public static double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6;
+            public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6; //.6
+        //Automation Constants	
+            //Turn kP	
+            public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned	
+            //Allowable error	
+            public static final double DRIVETRAIN_ALLOWABLE_ERROR = 3;//unassigned	
 ////////
 
     //Indexer
@@ -149,6 +154,14 @@ public final class Constants {
             public static final double INTAKE_NOMINAL_ROBOT_VOLTAGE = 12.5;
             //VoltageFilterWindowSamples
             public static final int INTAKE_VOLTAGE_FILTER_WINDOW_SAMPLES = 64;//unassigned
+    //Limelight
+        //Pipeline
+            //Standard
+            public static final int LIMELIGHT_STANDARD_PIPELINE = 8;
+        //Speed
+            //Search	
+            public static final double LIMELIGHT_SEARCH_SPEED = 0.5;//unassigned
+
 ////////
 
     //IO
@@ -156,22 +169,7 @@ public final class Constants {
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int OPERATOR_CONTROLLER_PORT = 1;
 
-////////
-
-    //MISC.
-        //Pursuit speed
-        public static final double SWUNGUS_SPEED_MULTIPLIER = 1.5;
-        public static final double SWUNGUS_CHASE_MAX_SPEED = 1; //hard max
-
-        //Turning speeds
-        public static final double SWUNGUS_CHASE_ROTATION_SPEED = 0.45; // turning speed when target is not visible
-        public static final double SWUNGUS_MIN_TURN_SPEED = 0.19;
-        public static final double SWUNGUS_TURN_MULTIPLIER = 1/125; // higher value => faster turning when target is visible
-
-        //distsance and sensitivity
-        public static final double SWUNGUS_DESIRED_AREA = 0.5;// lower value => longer following distance
-        public static final double SWUNGUS_MIN_AREA = 0.05; // lower value => higher sensitivity
-        
+////////        
 
         public static final class DriveTrainConstants{
             public static final double kS = 0.6206; //Volts (static friction)
