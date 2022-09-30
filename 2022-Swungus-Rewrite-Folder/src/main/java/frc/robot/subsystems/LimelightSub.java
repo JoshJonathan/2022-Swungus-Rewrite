@@ -13,12 +13,53 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightSub extends SubsystemBase {
-  /** Creates a new LimelightSub. */
-  static double x;
-  static double y;
-  static double area;
-  public LimelightSub() {
+  //Timer
+  Timer timer = new Timer();
+  //Entries
+    NetworkTable table;
+    NetworkTableEntry tx;
+    NetworkTableEntry ty;
+    NetworkTableEntry tv;
+    NetworkTableEntry tpipeline;
+  //Static Variables
+    public static double x;
+    public static double y;
+    public static double v;
 
+  public static double turn;	
+
+  public LimelightSub() {
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+    tx = table.getEntry("tx");
+    ty = table.getEntry("ty");
+    tv = table.getEntry("tv");
+    tpipeline = table.getEntry("pipeline");
+    tpipeline.setNumber(Constants.LIMELIGHT_STANDARD_PIPELINE);
+
+    timer.start();	
+
+    turn = 0;	
+  }	
+
+  public void setTurn() {	
+    if (v == 1) {
+      timer.reset();
+      timer.start();
+      if (x < 0) {
+        turn = -Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_kP*x;
+      }
+      else if (x > 0) {
+        turn = Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_kP*x;
+      }
+    }
+    else if (timer.get() > 0.06) {
+      if (DrivetrainSub.lastTurnRight == false) {
+        turn = -Constants.LIMELIGHT_SEARCH_SPEED;
+      }
+      else if (DrivetrainSub.lastTurnRight == true) {
+        turn = Constants.LIMELIGHT_SEARCH_SPEED;
+      }
+    }
   }
 
   public double getX(){return x;}
