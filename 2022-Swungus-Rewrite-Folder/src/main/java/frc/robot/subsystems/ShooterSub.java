@@ -177,14 +177,15 @@ public class ShooterSub extends SubsystemBase {
         }
       }
     }
-  
-    //Linear Output
-    public double linearOutput (int tIndex) {
-      if (tablety > 0) {
-        return ((tC[tIndex][tablety] - tC[tIndex][tablety-1]) / (tC[0][tablety] - tC[0][tablety-1])) * (LimelightSub.y - tC[0][tablety-1]) + tC[tIndex][tablety-1];
-      }
-      else return tC[tIndex][0];
+  }
+
+  //Linear Output
+  public double linearOutput (int tIndex) {
+    if (tablety > 0) {
+      return ((tC[tIndex][tablety] - tC[tIndex][tablety-1]) / (tC[0][tablety] - tC[0][tablety-1])) * (LimelightSub.y - tC[0][tablety-1]) + tC[tIndex][tablety-1];
     }
+    else return tC[tIndex][0];
+  }
 
   //PID tuning, change values as needed
   /*
