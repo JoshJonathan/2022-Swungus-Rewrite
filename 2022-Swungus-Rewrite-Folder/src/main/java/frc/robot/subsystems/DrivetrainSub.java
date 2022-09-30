@@ -31,10 +31,8 @@ public class DrivetrainSub extends SubsystemBase {
     WPI_TalonFX drivetrainRightRear = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_REAR_ID);
   //Gyro
     public final Gyro m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
-
   //Drivetrain
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
-
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
     private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
   //Input Filters
