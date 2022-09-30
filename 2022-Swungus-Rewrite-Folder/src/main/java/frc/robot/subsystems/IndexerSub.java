@@ -65,9 +65,9 @@ public class IndexerSub extends SubsystemBase {
   public boolean readyToShoot(double setpoint, double value, double allowableError) {
     if ((value > (setpoint-allowableError) &&
         value < (setpoint+allowableError))
-        ||	
+        ||
         value == setpoint
-        ) return true;	
+        ) return true;
     else return false;
   }
 }
