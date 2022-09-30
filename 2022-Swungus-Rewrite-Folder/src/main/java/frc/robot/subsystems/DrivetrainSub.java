@@ -44,6 +44,9 @@ public class DrivetrainSub extends SubsystemBase {
   double dt_lx;
   double dt_speed;
   double dt_turn;
+  //Static Variables	
+    //last turn	
+    static boolean lastTurnRight;	
     
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
