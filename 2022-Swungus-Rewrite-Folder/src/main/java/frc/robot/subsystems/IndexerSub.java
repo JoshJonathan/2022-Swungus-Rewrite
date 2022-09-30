@@ -47,8 +47,6 @@ public class IndexerSub extends SubsystemBase {
 
   //Shoot
   public void shoot() {
-    SmartDashboard.putBoolean("mainWheel", readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR));
-    SmartDashboard.putNumber("mainWheelValue", ShooterSub.mainWheelValue);
     //determine if we are at setpoints
     if(ShooterSub.mainWheelSetpoint != Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY &&
        readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
