@@ -30,13 +30,13 @@ public class ShooterSub extends SubsystemBase {
     Servo shooterServoLeft = new Servo(Constants.SERVO_LEFT_PORT);
     Servo shooterServoRight = new Servo(Constants.SERVO_RIGHT_PORT);
     //Characterization Table
-      double[][] tC = {
-        /*tY*/{   15.0,   11.0,    7.0,    3.0,   -1.0,   -5.0,   -9.0},
-        /*mW*/{ 6000.0, 6300.0, 6700.0, 7000.0, 7300.0, 7700.0, 8000.0},
-        /*hW*/{ 8000.0, 8600.0, 9300.0,10000.0,10700.0,11300.0,12000.0},
-        /*kW*/{ 4000.0, 4000.0, 4000.0, 4000.0, 4000.0, 4000.0, 4000.0},
-        /*sP*/{   -1.0,  -0.66,  -0.33,   0.00,    0.33,   0.66,   1.00}
-      };
+    double[][] tC = {
+      /*tY*/{   15.0,   11.0,    7.0,    3.0,   -1.0,   -5.0,   -9.0},
+      /*mW*/{ 6000.0, 6300.0, 6700.0, 7000.0, 7300.0, 7700.0, 8000.0},
+      /*hW*/{ 8000.0, 8600.0, 9300.0,10000.0,10700.0,11300.0,12000.0},
+      /*kW*/{ 4000.0, 4000.0, 4000.0, 4000.0, 4000.0, 4000.0, 4000.0},
+      /*sP*/{   -1.0,  -0.66,  -0.33,   0.00,    0.33,   0.66,   1.00}
+    };
   //static variables
     //setpoints
     public static double mainWheelSetpoint = 0;
@@ -51,8 +51,8 @@ public class ShooterSub extends SubsystemBase {
     //timestamps
     double lastTimestamp = 0;
     //table indices
-    public static int tablety = 0; 
-    
+    public static int tablety = 0;
+
   public ShooterSub() {
     //Config Motor Controllers
       //mainWheelLeft
@@ -115,12 +115,12 @@ public class ShooterSub extends SubsystemBase {
       shooterServoLeft.setBounds(2, 1.8, 1.5, 1.2, 1.0);
       shooterServoRight.setBounds(2, 1.8, 1.5, 1.2, 1.0);
     //DashBoards
-      //PID tuning, edit names as needed
-        //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
-        //SmartDashboard.putNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP);
-        //SmartDashboard.putNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KI);
-        //SmartDashboard.putNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
-        //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
+        //PID tuning, edit names as needed
+          //SmartDashboard.putNumber("shooterKickerWheelkF", Constants.SHOOTER_KICKER_WHEEL_KF);
+          //SmartDashboard.putNumber("shooterKickerWheelkP", Constants.SHOOTER_KICKER_WHEEL_KP);
+          //SmartDashboard.putNumber("shooterKickerWheelkI", Constants.SHOOTER_KICKER_WHEEL_KI);
+          //SmartDashboard.putNumber("shooterKickerWheelkIZone", Constants.SHOOTER_KICKER_WHEEL_KI_ZONE);
+          //SmartDashboard.putNumber("shooterKickerWheelkD", Constants.SHOOTER_KICKER_WHEEL_KD);
   }
 
   //Output To Shooter
@@ -154,6 +154,7 @@ public class ShooterSub extends SubsystemBase {
       servoValue -= Constants.SHOOTER_SERVOS_VELOCITY*(Timer.getFPGATimestamp()-lastTimestamp);
     }
     lastTimestamp = Timer.getFPGATimestamp();
+
     //PID Tuning, change names as needed
       //SmartDashboard.putNumber("mainWheelValue", mainWheelValue);
       //SmartDashboard.putNumber("hoodWheelsValue", hoodWheelsValue);

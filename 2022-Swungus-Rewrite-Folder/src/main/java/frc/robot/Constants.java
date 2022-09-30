@@ -161,11 +161,29 @@ public final class Constants {
         //Speed
             //Search
             public static final double LIMELIGHT_SEARCH_SPEED = 0.5;//unassigned
-
 ////////
 
     //IO
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int OPERATOR_CONTROLLER_PORT = 1;
+////////        
+
+        public static final class DriveTrainConstants{
+            public static final double kS = 0.6206; //Volts (static friction)
+            public static final double kV = 0.69817; // volts*s/m
+            public static final double kA = 0.097454; // volts*s^2/m
+            public static final double kP = 0.95033;
+
+            public static final double kTrackwidthMeters = 0.5588;
+
+            public static final double kMaxSpeedMetersPerSecond = 3.5;
+            public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+
+            public static final double kRamseteB = 2;
+            public static final double kRamseteZeta = 0.7;
+
+            public static final double metersToTicks = 25722.88;
+        }
 }
+
