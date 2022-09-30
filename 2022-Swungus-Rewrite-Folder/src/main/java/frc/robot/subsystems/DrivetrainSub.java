@@ -29,21 +29,17 @@ public class DrivetrainSub extends SubsystemBase {
     //right
     WPI_TalonFX drivetrainRightFront = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_FRONT_ID);
     WPI_TalonFX drivetrainRightRear = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_REAR_ID);
+  //Gyro
+    public final Gyro m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
 
   //Drivetrain
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
 
-    public static final DifferentialDriveKinematics kDriveKinematics =
-    new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
-
-    public final Gyro m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
-
-    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());;
-
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
+    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
   //Input Filters
     SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW);
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
-
   //Values
   double dt_lt;
   double dt_rt;
