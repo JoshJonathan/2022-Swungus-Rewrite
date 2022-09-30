@@ -113,11 +113,11 @@ public final class Constants {
         //Maximum Outputs
             //Turn
             public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6; //.6
-        //Automation Constants	
-            //Turn kP	
-            public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned	
-            //Allowable error	
-            public static final double DRIVETRAIN_ALLOWABLE_ERROR = 3;//unassigned	
+        //Automation Constants
+            //Turn kP
+            public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
+            //Allowable error
+            public static final double DRIVETRAIN_ALLOWABLE_ERROR = 3;//unassigned
 ////////
 
     //Indexer
@@ -159,16 +159,14 @@ public final class Constants {
             //Standard
             public static final int LIMELIGHT_STANDARD_PIPELINE = 8;
         //Speed
-            //Search	
+            //Search
             public static final double LIMELIGHT_SEARCH_SPEED = 0.5;//unassigned
-
 ////////
 
     //IO
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int OPERATOR_CONTROLLER_PORT = 1;
-
 ////////        
 
         public static final class DriveTrainConstants{
