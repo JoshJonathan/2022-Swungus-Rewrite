@@ -161,20 +161,19 @@ public class ShooterSub extends SubsystemBase {
       //SmartDashboard.putNumber("kickerWheelValue", kickerWheelValue);
   }
 
-    //Limelight shot
-    public void limelightShot() {
-      searchTablety();
-      outputToShooter(linearOutput(1), linearOutput(2), linearOutput(3), linearOutput(4));
-    }
-  
-    //search characterization table for ty column
-    public void searchTablety() {
-      if (LimelightSub.v == 1) {
-        for(int i = 0; i<tC[0].length; i++) {
-          if(tC[0][i] < LimelightSub.y) {
-            tablety = i;
-            break;
-          }
+  //Limelight shot
+  public void limelightShot() {
+    searchTablety();
+    outputToShooter(linearOutput(1), linearOutput(2), linearOutput(3), linearOutput(4));
+  }
+
+  //search characterization table for ty column
+  public void searchTablety() {
+    if (LimelightSub.v == 1) {
+      for(int i = 0; i<tC[0].length; i++) {
+        if(tC[0][i] < LimelightSub.y) {
+          tablety = i;
+          break;
         }
       }
     }
