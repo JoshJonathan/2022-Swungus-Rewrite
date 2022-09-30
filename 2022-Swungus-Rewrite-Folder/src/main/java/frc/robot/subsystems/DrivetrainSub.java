@@ -142,25 +142,23 @@ public class DrivetrainSub extends SubsystemBase {
     //Turn
     if (dt_turn > 0) {
       dt_turn = (Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(dt_turn)-((Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(dt_turn))-((1-Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE)*(dt_turn));
-      lastTurnRight = true;	
+      lastTurnRight = true;
     }
     if (dt_turn < 0) {
       dt_turn = (-Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)+(dt_turn)-((Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT)*(dt_turn))-((1-Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE)*(dt_turn));
-      lastTurnRight = false;	
+      lastTurnRight = false;
     }
-    turn = turn*Constants.DRIVETRAIN_MAX_TURN_PERCENTAGE;
   }
 
   //Arcade Drive
-  public void arcadeDrive() {
-    arcadeDrive.arcadeDrive(speed, turn);
-  }
-
   public void arcadeDrive(double speed, double turn) {
     arcadeDrive.arcadeDrive(speed, turn);
   }
 
-  
+  //Aim
+  public void aim() {
+    arcadeDrive(0, LimelightSub.turn);
+  }
 
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
