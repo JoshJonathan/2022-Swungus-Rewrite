@@ -65,7 +65,6 @@ public class LimelightSub extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
     //read values periodically
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
