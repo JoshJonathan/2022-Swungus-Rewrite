@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.ClimbSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IndexerSub;
 import frc.robot.subsystems.IntakeSub;
@@ -70,7 +71,12 @@ public class RobotContainer {
       //LimelightShot
       private final Command rc_limelightShotDrive = new RunCommand(rc_drivetrainsub::aim, rc_drivetrainsub);
       private final Command rc_limelightShotSpinShooter = new RunCommand(rc_shootersub::limelightShot, rc_shootersub);
-
+  //Climb
+    private final ClimbSub rc_climbsub = new ClimbSub();
+      //Extend
+      private final Command rc_climbextend = new InstantCommand(rc_climbsub::extendClimb, rc_climbsub);
+      //Retract
+      private final Command rc_climbretract = new InstantCommand(rc_climbsub::retractClimb, rc_climbsub);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -107,7 +113,10 @@ public class RobotContainer {
     //Limelight
       new JoystickButton(rc_driverController, XboxController.Button.kX.value).whileHeld(rc_limelightShotDrive);
       new JoystickButton(rc_driverController, XboxController.Button.kX.value).whileHeld(rc_limelightShotSpinShooter);
-    }
+    //Climb
+      new JoystickButton(rc_driverController, XboxController.Button.kStart.value).whenPressed(rc_climbextend);
+      new JoystickButton(rc_driverController, XboxController.Button.kBack.value).whenPressed(rc_climbretract);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

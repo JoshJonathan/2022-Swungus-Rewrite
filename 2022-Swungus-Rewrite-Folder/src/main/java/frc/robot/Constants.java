@@ -161,8 +161,10 @@ public final class Constants {
         //Speed
             //Search
             public static final double LIMELIGHT_SEARCH_SPEED = 0.5;//unassigned
-
 ////////
+    //Climb
+        //Solenoids
+        public static final int CLIMB_SOLENOID_CHANNEL = 2;
 
     //IO
         //Controller Ports
