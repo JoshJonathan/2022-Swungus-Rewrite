@@ -163,7 +163,7 @@ public class ShooterSub extends SubsystemBase {
   //Limelight shot
   public void limelightShot() {
     searchTablety();
-    outputToShooter(linearOutput(1), linearOutput(2), linearOutput(3), linearOutput(4));
+    outputToShooter(linearOutput(1)/2, linearOutput(2)/2, linearOutput(3), linearOutput(4));
   }
 
   //search characterization table for ty column

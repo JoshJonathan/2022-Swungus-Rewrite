@@ -97,9 +97,17 @@ public final class Constants {
             public static final double DRIVETRAIN_NOMINAL_VOLTAGE = 12.0; //12.5
         //Slew Rates
             //speed
-            public static final double DRIVETRAIN_SPEED_SLEW = 0.8; //0.8
+                //regular
+                public static final double DRIVETRAIN_SPEED_SLEW_FORWARD = 1.2; //1.2
+                public static final double DRIVETRAIN_SPEED_SLEW_REVERSE = 1.4; //1.4
+                //max speed
+                public static final double DRIVETRAIN_MAX_SPEED_SLEW_FORWARD = 0.8;
+                public static final double DRIVETRAIN_MAX_SPEED_SLEW_REVERSE = 1.0;
+                //limit speed
+                public static final double DRIVETRAIN_LIMIT_OUTPUT_FORWARD = 0.71;
+                public static final double DRIVETRAIN_LIMIT_OUTPUT_REVERSE = -0.63;
             //turn
-            public static final double DRIVETRAIN_TURN_SLEW = 100000.0; //2.0
+            public static final double DRIVETRAIN_TURN_SLEW = 4.0; //4.0
         //Controller Deadzones
             //speed
             public static final double DRIVETRAIN_SPEED_DEADZONE = 0.00; //0.0
@@ -111,8 +119,11 @@ public final class Constants {
             //Turn
             public static final double DRIVETRAIN_TURN_MINIMUM_OUTPUT = 0.21; //.21
         //Maximum Outputs
+            //Speeds
+            public static  final double DRIVETRAIN_MAX_OUTPUT_FORWARD = 1;
+            public static  final double DRIVETRAIN_MAX_OUTPUT_REVERSE = 1;
             //Turn
-            public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .6; //.6
+            public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .7; //.7
         //Automation Constants
             //Turn kP
             public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
