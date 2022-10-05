@@ -7,14 +7,20 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.JoshSlewFilter;
 
 public class DrivetrainSub extends SubsystemBase {
+  //Gyro
+    AHRS navX = new AHRS(SPI.Port.kMXP);
   //Motor Controllers
     //left
     WPI_TalonFX drivetrainLeftFront = new WPI_TalonFX(Constants.DRIVETRAIN_LEFT_FRONT_ID);
@@ -27,15 +33,21 @@ public class DrivetrainSub extends SubsystemBase {
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
 
   //Input Filters
-    SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW);
+    //SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD);
+    //SlewRateLimiter speedFilterReverse = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_REVERSE);
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
+    JoshSlewFilter speedFilter = new JoshSlewFilter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD, Constants.DRIVETRAIN_SPEED_SLEW_REVERSE, 0, Constants.DRIVETRAIN_MAX_SPEED_SLEW_FORWARD, Constants.DRIVETRAIN_MAX_SPEED_SLEW_REVERSE, Constants.DRIVETRAIN_MAX_OUTPUT_FORWARD, Constants.DRIVETRAIN_MAX_OUTPUT_REVERSE, Constants.DRIVETRAIN_LIMIT_OUTPUT_FORWARD, Constants.DRIVETRAIN_LIMIT_OUTPUT_REVERSE);
 
   //Values
     double dt_lt;
     double dt_rt;
     double dt_lx;
     double dt_speed;
+    double dt_speed_forward;
+    double dt_speed_reverse;
+    boolean lastAccelForward;
     double dt_turn;
+    double lastSpeed = 0;
 
   //Static Variables
     //last turn
@@ -43,6 +55,9 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
+    //Gyro Configs
+      //NavX
+      navX.calibrate();
     //Motor Controller Configs
       //Left
         //Front
@@ -74,7 +89,9 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.enableVoltageCompensation(true);
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
-
+    //Values
+      //last accel
+      lastAccelForward = true;
     //Static Variables
       //last turn
       lastTurnRight = true;
@@ -86,6 +103,7 @@ public class DrivetrainSub extends SubsystemBase {
     simplifyInputs();
     filterValues();
     scaleValues();
+    //filterValues();
     arcadeDrive(dt_speed, dt_turn);
   }
 
@@ -112,7 +130,9 @@ public class DrivetrainSub extends SubsystemBase {
 
   //filter Inputs
   public void filterValues() {
+    //speed
     dt_speed = speedFilter.calculate(dt_speed);
+    //turn
     dt_turn = turnFilter.calculate(dt_turn);
   }
 
@@ -126,10 +146,10 @@ public class DrivetrainSub extends SubsystemBase {
   public void scaleValues() {
     //Speed
     if (dt_speed > 0) {
-      dt_speed = (Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+(dt_speed)-((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(dt_speed));
+      dt_speed = (dt_speed)+(Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)-((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(dt_speed));
     }
     if (dt_speed < 0) {
-      dt_speed = (-Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+(dt_speed)-((-Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(dt_speed));
+      dt_speed = (dt_speed)-(Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(-dt_speed));
     }
     //Turn
     if (dt_turn > 0) {
@@ -145,6 +165,7 @@ public class DrivetrainSub extends SubsystemBase {
   //Arcade Drive
   public void arcadeDrive(double speed, double turn) {
     arcadeDrive.arcadeDrive(speed, turn);
+    SmartDashboard.putNumber("voltageOut", speed);
   }
 
   //Aim
