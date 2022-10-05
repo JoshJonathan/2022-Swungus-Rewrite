@@ -41,11 +41,7 @@ public class DrivetrainSub extends SubsystemBase {
     double dt_rt;
     double dt_lx;
     double dt_speed;
-    double dt_speed_forward;
-    double dt_speed_reverse;
-    boolean lastAccelForward;
     double dt_turn;
-    double lastSpeed = 0;
 
   //Static Variables
     //last turn
@@ -84,9 +80,6 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.enableVoltageCompensation(true);
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
-    //Values
-      //last accel
-      lastAccelForward = true;
     //Static Variables
       //last turn
       lastTurnRight = true;

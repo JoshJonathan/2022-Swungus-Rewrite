@@ -123,7 +123,7 @@ public final class Constants {
             public static  final double DRIVETRAIN_MAX_OUTPUT_FORWARD = 1;
             public static  final double DRIVETRAIN_MAX_OUTPUT_REVERSE = 1;
             //Turn
-            public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .7; //.6
+            public static  final double DRIVETRAIN_MAX_TURN_PERCENTAGE = .7; //.7
         //Automation Constants
             //Turn kP
             public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
