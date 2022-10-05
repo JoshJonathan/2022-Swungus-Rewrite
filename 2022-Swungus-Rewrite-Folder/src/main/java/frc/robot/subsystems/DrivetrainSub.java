@@ -50,6 +50,8 @@ public class DrivetrainSub extends SubsystemBase {
     
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
+    //Gyro Calibration
+      m_gyro.calibrate();
     //Motor Controller Configs
       //Left
         //Front
