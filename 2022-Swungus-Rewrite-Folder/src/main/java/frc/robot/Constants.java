@@ -101,11 +101,11 @@ public final class Constants {
                 public static final double DRIVETRAIN_SPEED_SLEW_FORWARD = 1.2; //1.2
                 public static final double DRIVETRAIN_SPEED_SLEW_REVERSE = 1.4; //1.4
                 //max speed
-                public static final double DRIVETRAIN_MAX_SPEED_SLEW_FORWARD = 1.2;
-                public static final double DRIVETRAIN_MAX_SPEED_SLEW_REVERSE = 1.4;
+                public static final double DRIVETRAIN_MAX_SPEED_SLEW_FORWARD = 0.8;
+                public static final double DRIVETRAIN_MAX_SPEED_SLEW_REVERSE = 1.0;
                 //limit speed
-                public static final double DRIVETRAIN_LIMIT_OUTPUT_FORWARD = 1;
-                public static final double DRIVETRAIN_LIMIT_OUTPUT_REVERSE = -1;
+                public static final double DRIVETRAIN_LIMIT_OUTPUT_FORWARD = 0.71;
+                public static final double DRIVETRAIN_LIMIT_OUTPUT_REVERSE = -0.63;
             //turn
             public static final double DRIVETRAIN_TURN_SLEW = 4.0; //4.0
         //Controller Deadzones
