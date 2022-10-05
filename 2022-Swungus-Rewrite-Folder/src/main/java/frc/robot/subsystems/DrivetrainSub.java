@@ -19,8 +19,6 @@ import frc.robot.Constants;
 import frc.robot.JoshSlewFilter;
 
 public class DrivetrainSub extends SubsystemBase {
-  //Gyro
-    AHRS navX = new AHRS(SPI.Port.kMXP);
   //Motor Controllers
     //left
     WPI_TalonFX drivetrainLeftFront = new WPI_TalonFX(Constants.DRIVETRAIN_LEFT_FRONT_ID);
@@ -55,9 +53,6 @@ public class DrivetrainSub extends SubsystemBase {
 
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
-    //Gyro Configs
-      //NavX
-      navX.calibrate();
     //Motor Controller Configs
       //Left
         //Front
@@ -103,7 +98,6 @@ public class DrivetrainSub extends SubsystemBase {
     simplifyInputs();
     filterValues();
     scaleValues();
-    //filterValues();
     arcadeDrive(dt_speed, dt_turn);
   }
 
