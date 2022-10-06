@@ -60,8 +60,8 @@ public class RobotContainer {
   //Drivetrain
     private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
       //default command
-      private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(), 
-                                                                                  rc_driverController.getLeftTriggerAxis(), 
+      private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(),
+                                                                                  rc_driverController.getLeftTriggerAxis(),
                                                                                   rc_driverController.getLeftX()), rc_drivetrainsub);
   //Indexer
     private final IndexerSub rc_indexersub = new IndexerSub();
