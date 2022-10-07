@@ -133,13 +133,13 @@ public class RobotContainer {
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Constants.DriveTrainConstants.kS, Constants.DriveTrainConstants.kV, Constants.DriveTrainConstants.kA), DrivetrainSub.kDriveKinematics, 12);
+            new SimpleMotorFeedforward(Constants.DriveTrainConstants.kS, Constants.DriveTrainConstants.kV, Constants.DriveTrainConstants.kA), DrivetrainSub.kDriveKinematics, 12); //should decrease max voltage to 10v -josh
 
     // Create config for trajectory
     TrajectoryConfig config =
         new TrajectoryConfig(
-          Constants.DriveTrainConstants.kMaxSpeedMetersPerSecond,
-                Constants.DriveTrainConstants.kMaxAccelerationMetersPerSecondSquared)
+            Constants.DriveTrainConstants.kMaxSpeedMetersPerSecond,
+            Constants.DriveTrainConstants.kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DrivetrainSub.kDriveKinematics)
             // Apply the voltage constraint

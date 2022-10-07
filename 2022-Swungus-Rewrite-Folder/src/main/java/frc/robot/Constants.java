@@ -170,15 +170,15 @@ public final class Constants {
 ////////        
 
         public static final class DriveTrainConstants{
-            public static final double kS = 0.6206; //Volts (static friction)
-            public static final double kV = 0.69817; // volts*s/m
+            public static final double kS = 0.6206; //Volts (static friction) //should really be ~1.8 right? -josh
+            public static final double kV = 0.69817; // volts*s/m //should really be ~2.74 -josh
             public static final double kA = 0.097454; // volts*s^2/m
-            public static final double kP = 0.95033;
+            public static final double kP = 0.95033; //should be ~3.4? -josh
 
-            public static final double kTrackwidthMeters = 0.5588;
+            public static final double kTrackwidthMeters = 0.5588; //should change to experimental value -josh
 
-            public static final double kMaxSpeedMetersPerSecond = 3.5;
-            public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+            public static final double kMaxSpeedMetersPerSecond = 3.5; //should set to 1.83(6fps) for starters -josh
+            public static final double kMaxAccelerationMetersPerSecondSquared = 1; //should increase to maybe 2.7(9fps^2, we run 21 fps^2 in matches) -josh
 
             public static final double kRamseteB = 2;
             public static final double kRamseteZeta = 0.7;

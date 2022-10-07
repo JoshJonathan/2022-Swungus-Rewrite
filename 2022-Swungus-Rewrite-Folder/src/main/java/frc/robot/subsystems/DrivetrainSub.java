@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -34,7 +35,7 @@ public class DrivetrainSub extends SubsystemBase {
   //Drivetrain
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
-    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); //should be set after gyro initializes to get an accurate value; -josh
   //Input Filters
     SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW);
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
@@ -166,7 +167,7 @@ public class DrivetrainSub extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition());
+    return new DifferentialDriveWheelSpeeds(drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition()); //should return in *meters*/second, not ticks. its rate not position -josh
   }
   
   public void resetOdometry() {
@@ -185,7 +186,7 @@ public class DrivetrainSub extends SubsystemBase {
     drivetrainRightFront.setSelectedSensorPosition(0); 
   }
   public double getAverageEncoderDistance() {
-    return (drivetrainLeftFront.getSelectedSensorPosition() + drivetrainRightFront.getSelectedSensorPosition()) / 2.0;
+    return (drivetrainLeftFront.getSelectedSensorPosition() + drivetrainRightFront.getSelectedSensorPosition()) / 2.0; //this should be in meters, not ticks -josh
   }
 
   public void zeroHeading() {
@@ -193,15 +194,14 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void tankDriveVolts(double l, double r){
-      arcadeDrive.tankDrive(l, r);
+      arcadeDrive.tankDrive(l, r); //should be using motorController.setVoltage(voltage); rather than diff drive object -josh //use differentialDrive.feed(); to keep motor safety happy -josh
   }
-
 
   public double getHeading() {
     return m_gyro.getRotation2d().getDegrees();
   }
   public double getTurnRate() {
-    return -m_gyro.getRate();
+    return -m_gyro.getRate(); //idk if we use this, but could potentially be backwards b/c our gyro is upside down -josh
   }
 
   @Override
@@ -210,6 +210,6 @@ public class DrivetrainSub extends SubsystemBase {
     SmartDashboard.putNumber("yPosition", getPose().getY()/Constants.DriveTrainConstants.metersToTicks);
 
     m_odometry.update(
-      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition());
+      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition()); //This should be updated using meters, not ticks. this is *the* reason we were jerking forward and back. -josh
   }
 }
