@@ -61,7 +61,7 @@ public final class Constants {
         //Positions
             //servos
             public static final double SHOOTER_SERVOS_IDLE_POSITION = 0;//unassigned //0 for testing
-            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = -0.5;//unassigned //-0.5 for testing
+            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = -0.55;//unassigned //-0.5 for testing
         //Configurations
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_RAMP_TIME = 0.25;
@@ -162,6 +162,9 @@ public final class Constants {
             //Search
             public static final double LIMELIGHT_SEARCH_SPEED = 0.5;//unassigned
 ////////
+    //Climb
+        //Solenoids
+        public static final int CLIMB_SOLENOID_CHANNEL = 2;
 
     //IO
         //Controller Ports
