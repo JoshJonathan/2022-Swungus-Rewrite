@@ -45,12 +45,13 @@ public class LimelightSub extends SubsystemBase {
     if (v == 1) {
       timer.reset();
       timer.start();
-      if (x < 0) {
+      if (x < -1) {
         turn = -Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_kP*x;
       }
-      else if (x > 0) {
+      else if (x > 1) {
         turn = Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_kP*x;
-      }  
+      }
+      else turn = 0;
     }
     else if (timer.get() > 0.06) {
       if (DrivetrainSub.lastTurnRight == false) {
