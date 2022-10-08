@@ -167,7 +167,7 @@ public class DrivetrainSub extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition()); //should return in *meters*/second, not ticks. its rate not position -josh
+    return new DifferentialDriveWheelSpeeds(drivetrainLeftFront.getSelectedSensorVelocity()/Constants.DriveTrainConstants.metersToTicks, drivetrainRightFront.getSelectedSensorVelocity()/Constants.DriveTrainConstants.metersToTicks);
   }
   
   public void resetOdometry() {
@@ -186,7 +186,7 @@ public class DrivetrainSub extends SubsystemBase {
     drivetrainRightFront.setSelectedSensorPosition(0); 
   }
   public double getAverageEncoderDistance() {
-    return (drivetrainLeftFront.getSelectedSensorPosition() + drivetrainRightFront.getSelectedSensorPosition()) / 2.0; //this should be in meters, not ticks -josh
+    return (drivetrainLeftFront.getSelectedSensorPosition()*Constants.DriveTrainConstants.metersToTicks + drivetrainRightFront.getSelectedSensorPosition()*Constants.DriveTrainConstants.metersToTicks) / 2.0;
   }
 
   public void zeroHeading() {
@@ -194,7 +194,9 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public void tankDriveVolts(double l, double r){
-      arcadeDrive.tankDrive(l, r); //should be using motorController.setVoltage(voltage); rather than diff drive object -josh //use differentialDrive.feed(); to keep motor safety happy -josh
+      drivetrainLeftFront.setVoltage(l);
+      drivetrainRightFront.setVoltage(r);
+      arcadeDrive.feed();
   }
 
   public double getHeading() {
@@ -206,10 +208,10 @@ public class DrivetrainSub extends SubsystemBase {
 
   @Override
   public void periodic(){
-    SmartDashboard.putNumber("xPosition", getPose().getX()/Constants.DriveTrainConstants.metersToTicks);
-    SmartDashboard.putNumber("yPosition", getPose().getY()/Constants.DriveTrainConstants.metersToTicks);
+    SmartDashboard.putNumber("xPosition", getPose().getX());
+    SmartDashboard.putNumber("yPosition", getPose().getY());
 
     m_odometry.update(
-      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition(), drivetrainRightFront.getSelectedSensorPosition()); //This should be updated using meters, not ticks. this is *the* reason we were jerking forward and back. -josh
+      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks, drivetrainRightFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks);
   }
 }
