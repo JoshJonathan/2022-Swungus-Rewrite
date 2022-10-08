@@ -6,8 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -15,7 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimelightSub extends SubsystemBase {
   //Timer
     Timer timer = new Timer();
-  //Entries  
+  //Entries
     NetworkTable table;
     NetworkTableEntry tx;
     NetworkTableEntry ty;
@@ -27,7 +27,7 @@ public class LimelightSub extends SubsystemBase {
     public static double v;
 
   public static double turn;
-  
+
   public LimelightSub() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
     tx = table.getEntry("tx");
@@ -37,10 +37,10 @@ public class LimelightSub extends SubsystemBase {
     tpipeline.setNumber(Constants.LIMELIGHT_STANDARD_PIPELINE);
 
     timer.start();
-    
+
     turn = 0;
   }
-  
+
   public void setTurn() {
     if (v == 1) {
       timer.reset();
@@ -59,7 +59,7 @@ public class LimelightSub extends SubsystemBase {
       }
       else if (DrivetrainSub.lastTurnRight == true) {
         turn = Constants.LIMELIGHT_SEARCH_SPEED;
-      }  
+      }
     }
   }
 

@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.ClimbSub;
@@ -14,9 +18,17 @@ import frc.robot.subsystems.LimelightSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.*;
 
 
 /**
@@ -49,8 +61,8 @@ public class RobotContainer {
   //Drivetrain
     private final DrivetrainSub rc_drivetrainsub = new DrivetrainSub();
       //default command
-      private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(), 
-                                                                                  rc_driverController.getLeftTriggerAxis(), 
+      private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(),
+                                                                                  rc_driverController.getLeftTriggerAxis(),
                                                                                   rc_driverController.getLeftX()), rc_drivetrainsub);
   //Indexer
     private final IndexerSub rc_indexersub = new IndexerSub();
@@ -62,6 +74,7 @@ public class RobotContainer {
       private final Command rc_indexshoot = new RunCommand(rc_indexersub::shoot, rc_indexersub);
   //Intake
     private final IntakeSub rc_intakesub = new IntakeSub();
+    //Commands
       //Deploy
       private final Command rc_deployIntake = new InstantCommand(rc_intakesub::deployIntake, rc_intakesub);
       //Retract
@@ -123,10 +136,58 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  /*
+
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(Constants.DriveTrainConstants.kS, Constants.DriveTrainConstants.kV, Constants.DriveTrainConstants.kA), DrivetrainSub.kDriveKinematics, 10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+            Constants.DriveTrainConstants.kMaxSpeedMetersPerSecond,
+            Constants.DriveTrainConstants.kMaxAccelerationMetersPerSecondSquared)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(DrivetrainSub.kDriveKinematics)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            // Pass config
+            config);
+
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            exampleTrajectory,
+            rc_drivetrainsub::getPose,
+            new RamseteController(Constants.DriveTrainConstants.kRamseteB, Constants.DriveTrainConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(
+              Constants.DriveTrainConstants.kS,
+              Constants.DriveTrainConstants.kV,
+              Constants.DriveTrainConstants.kA),
+            DrivetrainSub.kDriveKinematics,
+            rc_drivetrainsub::getWheelSpeeds,
+            new PIDController(Constants.DriveTrainConstants.kP, 0, 0),
+            new PIDController(Constants.DriveTrainConstants.kP, 0, 0),
+            // RamseteCommand passes volts to the callback
+            rc_drivetrainsub::tankDriveVolts,
+            rc_drivetrainsub);
+
+    // Reset odometry to the starting pose of the trajectory.
+    rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0));
+  // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
   }
-  */
 }
