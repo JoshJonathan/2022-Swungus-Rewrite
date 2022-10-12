@@ -91,6 +91,13 @@ public class DrivetrainSub extends SubsystemBase {
       lastTurnRight = true;
   }
 
+  public void enableVoltageCompensation(boolean onOff) {
+      drivetrainRightRear.enableVoltageCompensation(onOff);
+      drivetrainLeftRear.enableVoltageCompensation(onOff);
+      drivetrainRightFront.enableVoltageCompensation(onOff);
+      drivetrainLeftFront.enableVoltageCompensation(onOff);
+  }
+
   //Drive
   public void drive(double irt, double ilt, double ilx) {
     deadzoneInputs(irt, ilt, ilx);

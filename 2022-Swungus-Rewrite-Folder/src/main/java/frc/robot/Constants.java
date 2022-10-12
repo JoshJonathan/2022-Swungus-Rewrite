@@ -180,13 +180,13 @@ public final class Constants {
 
             public static final double kTrackwidthMeters = 0.61612;
 
-            public static final double kMaxSpeedMetersPerSecond = 1.83;
-            public static final double kMaxAccelerationMetersPerSecondSquared = 2.7;
+            public static final double kMaxSpeedMetersPerSecond = 1.00; //1.83
+            public static final double kMaxAccelerationMetersPerSecondSquared = 2.0;
 
             public static final double kRamseteB = 2;
             public static final double kRamseteZeta = 0.7;
 
-            public static final double metersToTicks = 25722.88;
+            public static final double metersToTicks = 42347.747;
         }
 }
 
