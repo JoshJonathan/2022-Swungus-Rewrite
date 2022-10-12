@@ -194,12 +194,15 @@ public class RobotContainer {
     rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
     rc_drivetrainsub.enableVoltageCompensation(false);
 
-    Command checkTimer = new Command(){
 
-    };
 
-    Command oneBall = new ParallelRaceGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.andThen(rc_indexstop)).;
-    Command twoBallAuto = new SequentialCommandGroup(oneBall, ramseteCommand);
+
+    Command oneBall = new ParallelCommandGroup(rc_fendershot, rc_indexshoot).until(()-> Robot.getTime()>5);
+    Command stopOneBall = new ParallelCommandGroup(rc_idleshooter, rc_indexstop).until(()->true);
+    Command deployIntake = new ParallelCommandGroup(rc_deployIntake).until(()->true);
+    Command twoBall = new ParallelCommandGroup(rc_limelightShotDrive, rc_limelightShotSpinShooter, rc_indexshoot).until(()->Robot.getTime()>14);
+    Command stopTwoBall = new ParallelCommandGroup(rc_idleshooter, rc_drive, rc_indexstop, rc_retractIntake).until(()->true);
+    Command twoBallAuto = new SequentialCommandGroup(oneBall, stopOneBall, deployIntake, ramseteCommand, twoBall, stopTwoBall);
     CommandGroupBase.clearGroupedCommands();
     
     // Run path following command, then stop at the end.
