@@ -160,9 +160,9 @@ public class RobotContainer {
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(/*new Translation2d(1, 1), new Translation2d(2, -1)*/),
+            List.of(new Translation2d(3.4, -.75) /*,new Translation2d(2, -1)*/),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(3.8, -1.5, new Rotation2d(-Math.PI/2)),
             // Pass config
             config);
 
@@ -185,9 +185,10 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
+    rc_drivetrainsub.enableVoltageCompensation(false);
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0));
+    return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
   // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
   }
 }
