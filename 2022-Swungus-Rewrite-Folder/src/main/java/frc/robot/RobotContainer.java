@@ -18,12 +18,14 @@ import frc.robot.subsystems.LimelightSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -186,8 +188,9 @@ public class RobotContainer {
     // Reset odometry to the starting pose of the trajectory.
     rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
 
+    Command test = new ParallelCommandGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.until(() -> Robot.getTime()>5).andThen(rc_indexstop));
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0));
+    return test/*.andThen(rc_indexstop, rc_idleshooter)*/;
   // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
   }
 }
