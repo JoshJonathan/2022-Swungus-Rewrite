@@ -18,12 +18,15 @@ import frc.robot.subsystems.LimelightSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -187,8 +190,12 @@ public class RobotContainer {
     rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
     rc_drivetrainsub.enableVoltageCompensation(false);
 
+    Command oneBallAuto = new ParallelCommandGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.until(() -> Robot.getTime()>5).andThen(rc_indexstop));
+    Command twoBallAuto = new SequentialCommandGroup(oneBallAuto);
+    
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
+    //return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
+    return twoBallAuto;
   // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
   }
 }
