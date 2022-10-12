@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -188,9 +189,11 @@ public class RobotContainer {
     // Reset odometry to the starting pose of the trajectory.
     rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
 
-    Command test = new ParallelCommandGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.until(() -> Robot.getTime()>5).andThen(rc_indexstop));
+    Command oneBallAuto = new ParallelCommandGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.until(() -> Robot.getTime()>5).andThen(rc_indexstop));
+    Command twoBallAuto = new SequentialCommandGroup(oneBallAuto);
+    
     // Run path following command, then stop at the end.
-    return test/*.andThen(rc_indexstop, rc_idleshooter)*/;
+    return twoBallAuto;
   // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
   }
 }
