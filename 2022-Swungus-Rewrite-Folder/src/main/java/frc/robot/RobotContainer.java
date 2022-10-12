@@ -17,8 +17,11 @@ import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LimelightSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -155,7 +158,8 @@ public class RobotContainer {
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DrivetrainSub.kDriveKinematics)
             // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+            .addConstraint(autoVoltageConstraint)
+            .setReversed(true);
 
     // An example trajectory to follow.  All units in meters.
     Trajectory exampleTrajectory =
@@ -163,9 +167,9 @@ public class RobotContainer {
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(3.4, -.75) /*,new Translation2d(2, -1)*/),
+            List.of(/*new Translation2d(3.4, -.75) ,new Translation2d(2, -1)*/),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3.8, -1.5, new Rotation2d(-Math.PI/2)),
+            new Pose2d(-3, 0, new Rotation2d(0)),
             // Pass config
             config);
 
@@ -190,12 +194,17 @@ public class RobotContainer {
     rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
     rc_drivetrainsub.enableVoltageCompensation(false);
 
-    Command oneBallAuto = new ParallelCommandGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.until(() -> Robot.getTime()>5).andThen(rc_indexstop));
-    Command twoBallAuto = new SequentialCommandGroup(oneBallAuto);
+    Command checkTimer = new Command(){
+
+    };
+
+    Command oneBall = new ParallelRaceGroup(rc_fendershot.until(() -> Robot.getTime()>5).andThen(rc_idleshooter), rc_indexshoot.andThen(rc_indexstop)).;
+    Command twoBallAuto = new SequentialCommandGroup(oneBall, ramseteCommand);
+    CommandGroupBase.clearGroupedCommands();
     
     // Run path following command, then stop at the end.
     //return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
-    return twoBallAuto;
+    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
   // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
   }
 }
