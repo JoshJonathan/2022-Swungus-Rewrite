@@ -169,7 +169,7 @@ public class RobotContainer {
             // Pass through these two interior waypoints, making an 's' curve path
             List.of(/*new Translation2d(3.4, -.75) ,new Translation2d(2, -1)*/),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(-3, 0, new Rotation2d(0)),
+            new Pose2d(-1, -1.6, new Rotation2d(Math.PI/2)),
             // Pass config
             config);
 
@@ -205,7 +205,7 @@ public class RobotContainer {
     CommandGroupBase.clearGroupedCommands();
     Command stopTwoBall = new ParallelCommandGroup(rc_idleshooter, rc_drive, rc_indexstop, rc_retractIntake).until(()->true);
     CommandGroupBase.clearGroupedCommands();
-    Command twoBallAuto = new SequentialCommandGroup(oneBall, stopOneBall, deployIntake, ramseteCommand, twoBall, stopTwoBall);
+    Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ deployIntake, ramseteCommand, twoBall, stopTwoBall);
     CommandGroupBase.clearGroupedCommands();
     
     // Run path following command, then stop at the end.
