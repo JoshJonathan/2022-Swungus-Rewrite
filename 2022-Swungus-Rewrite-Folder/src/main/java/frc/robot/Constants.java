@@ -48,7 +48,7 @@ public final class Constants {
         //Velocities
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000; //1000
-            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 6500;//unassigned //6500 for testing
+            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 6501;//unassigned //6500 for testing
             //HoodWheels
             public static final double SHOOTER_HOOD_WHEELS_IDLE_VELOCITY = 1000; //1000
             public static final double SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY = 10000;//unassigned //10000 for testing
