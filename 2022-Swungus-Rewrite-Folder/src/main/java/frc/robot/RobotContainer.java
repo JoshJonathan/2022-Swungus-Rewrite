@@ -200,8 +200,11 @@ public class RobotContainer {
     Command oneBall = new ParallelCommandGroup(rc_fendershot, rc_indexshoot).until(()-> Robot.getTime()>5);
     Command stopOneBall = new ParallelCommandGroup(rc_idleshooter, rc_indexstop).until(()->true);
     Command deployIntake = new ParallelCommandGroup(rc_deployIntake).until(()->true);
+    CommandGroupBase.clearGroupedCommands();
     Command twoBall = new ParallelCommandGroup(rc_limelightShotDrive, rc_limelightShotSpinShooter, rc_indexshoot).until(()->Robot.getTime()>14);
+    CommandGroupBase.clearGroupedCommands();
     Command stopTwoBall = new ParallelCommandGroup(rc_idleshooter, rc_drive, rc_indexstop, rc_retractIntake).until(()->true);
+    CommandGroupBase.clearGroupedCommands();
     Command twoBallAuto = new SequentialCommandGroup(oneBall, stopOneBall, deployIntake, ramseteCommand, twoBall, stopTwoBall);
     CommandGroupBase.clearGroupedCommands();
     
