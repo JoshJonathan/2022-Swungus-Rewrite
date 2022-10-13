@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.JoshSlewFilter;
 
 public class DrivetrainSub extends SubsystemBase {
   //Motor Controllers
@@ -37,8 +38,10 @@ public class DrivetrainSub extends SubsystemBase {
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
     private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); //should be set after gyro initializes to get an accurate value; -josh
   //Input Filters
-    SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW);
+    //SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD);
+    //SlewRateLimiter speedFilterReverse = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_REVERSE);
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
+    JoshSlewFilter speedFilter = new JoshSlewFilter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD, Constants.DRIVETRAIN_SPEED_SLEW_REVERSE, 0, Constants.DRIVETRAIN_MAX_SPEED_SLEW_FORWARD, Constants.DRIVETRAIN_MAX_SPEED_SLEW_REVERSE, Constants.DRIVETRAIN_MAX_OUTPUT_FORWARD, Constants.DRIVETRAIN_MAX_OUTPUT_REVERSE, Constants.DRIVETRAIN_LIMIT_OUTPUT_FORWARD, Constants.DRIVETRAIN_LIMIT_OUTPUT_REVERSE);
   //Values
   double dt_lt;
   double dt_rt;
@@ -123,7 +126,9 @@ public class DrivetrainSub extends SubsystemBase {
 
   //filter Inputs
   public void filterValues() {
+    //speed
     dt_speed = speedFilter.calculate(dt_speed);
+    //turn
     dt_turn = turnFilter.calculate(dt_turn);
   }
 
@@ -137,10 +142,10 @@ public class DrivetrainSub extends SubsystemBase {
   public void scaleValues() {
     //Speed
     if (dt_speed > 0) {
-      dt_speed = (Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+(dt_speed)-((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(dt_speed));
+      dt_speed = (dt_speed)+(Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)-((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(dt_speed));
     }
     if (dt_speed < 0) {
-      dt_speed = (-Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+(dt_speed)-((-Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(dt_speed));
+      dt_speed = (dt_speed)-(Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)+((Constants.DRIVETRAIN_SPEED_MINIMUM_OUTPUT)*(-dt_speed));
     }
     //Turn
     if (dt_turn > 0) {
@@ -156,6 +161,7 @@ public class DrivetrainSub extends SubsystemBase {
   //Arcade Drive
   public void arcadeDrive(double speed, double turn) {
     arcadeDrive.arcadeDrive(speed, turn);
+    //SmartDashboard.putNumber("voltageOut", speed);
   }
 
   //Aim
