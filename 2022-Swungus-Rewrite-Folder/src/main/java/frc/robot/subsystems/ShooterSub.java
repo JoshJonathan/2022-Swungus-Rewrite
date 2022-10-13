@@ -38,6 +38,8 @@ public class ShooterSub extends SubsystemBase {
       /*sP*/{/*  -0.21,  -0.18,  -0.11,   0.00,   */-0.4,   -0.4,   -0.1,    0.2,   0.55,    0.6,    0.6}
     };
   //static variables
+    //hood idle position
+    public static double hoodIdlePosition = Constants.SHOOTER_SERVOS_IDLE_POSITION;
     //setpoints
     public static double mainWheelSetpoint = 0;
     public static double hoodWheelsSetpoint = 0;
@@ -185,6 +187,15 @@ public class ShooterSub extends SubsystemBase {
       return ((tC[tIndex][tablety] - tC[tIndex][tablety-1]) / (tC[0][tablety] - tC[0][tablety-1])) * (LimelightSub.y - tC[0][tablety-1]) + tC[tIndex][tablety-1];
     }
     else return tC[tIndex][0];
+  }
+
+  //hood idle position
+  public static void changeIdlePosition(double idlePosition) {
+    hoodIdlePosition = idlePosition;
+  }
+
+  public static double getHoodIdlePosition() {
+    return hoodIdlePosition;
   }
 
   //PID tuning, change values as needed

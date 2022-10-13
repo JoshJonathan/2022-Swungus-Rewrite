@@ -46,11 +46,16 @@ public class RobotContainer {
   //Shooter
     private final ShooterSub rc_shootersub = new ShooterSub();
     //commands
+      //change hood idle position
+      private final Command rc_idlepositionbottom = new InstantCommand(()->ShooterSub.changeIdlePosition(Constants.SHOOTER_HOOD_IDLE_BOTTOM));
+      private final Command rc_idlepositionlow = new InstantCommand(()->ShooterSub.changeIdlePosition(Constants.SHOOTER_HOOD_IDLE_LOW));
+      private final Command rc_idlepositionhigh = new InstantCommand(()->ShooterSub.changeIdlePosition(Constants.SHOOTER_HOOD_IDLE_HIGH));
+      private final Command rc_idlepositiontop = new InstantCommand(()->ShooterSub.changeIdlePosition(Constants.SHOOTER_HOOD_IDLE_TOP));
       //default command
       private final Command rc_idleshooter = new RunCommand(()-> rc_shootersub.outputToShooter(Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY,
                                                                                                Constants.SHOOTER_HOOD_WHEELS_IDLE_VELOCITY,
                                                                                                Constants.SHOOTER_KICKER_WHEEL_IDLE_VELOCITY,
-                                                                                               Constants.SHOOTER_SERVOS_IDLE_POSITION), rc_shootersub);
+                                                                                               ShooterSub.getHoodIdlePosition()), rc_shootersub);
       //Fendershot
       private final Command rc_fendershot = new RunCommand(()-> rc_shootersub.outputToShooter(Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY,
                                                                                               Constants.SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY,
@@ -109,8 +114,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //Shooter
+      //Change Idle Position
+      new JoystickButton(rc_operatorController, XboxController.Button.kY.value).whenPressed(rc_idlepositiontop);
+      new JoystickButton(rc_operatorController, XboxController.Button.kX.value).whenPressed(rc_idlepositionhigh);
+      new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whenPressed(rc_idlepositionlow);
+      new JoystickButton(rc_operatorController, XboxController.Button.kLeftStick.value).whenPressed(rc_idlepositionbottom);
       //Fendershot
-      new JoystickButton(rc_operatorController, XboxController.Button.kB.value).whileHeld(rc_fendershot);
+      new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whileHeld(rc_fendershot);
       //PID Tuning
       //new JoystickButton(rc_operatorController, XboxController.Button.kA.value).whenPressed(rc_setconstants);
     //Indexer
