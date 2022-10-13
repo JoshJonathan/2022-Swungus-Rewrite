@@ -4,13 +4,18 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,29 +31,31 @@ public class DrivetrainSub extends SubsystemBase {
     //right
     WPI_TalonFX drivetrainRightFront = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_FRONT_ID);
     WPI_TalonFX drivetrainRightRear = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_REAR_ID);
-
+  //Gyro
+    public final Gyro m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
   //Drivetrain
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
-
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
+    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); //should be set after gyro initializes to get an accurate value; -josh
   //Input Filters
     //SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD);
     //SlewRateLimiter speedFilterReverse = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_REVERSE);
     SlewRateLimiter turnFilter = new SlewRateLimiter(Constants.DRIVETRAIN_TURN_SLEW);
     JoshSlewFilter speedFilter = new JoshSlewFilter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD, Constants.DRIVETRAIN_SPEED_SLEW_REVERSE, 0, Constants.DRIVETRAIN_MAX_SPEED_SLEW_FORWARD, Constants.DRIVETRAIN_MAX_SPEED_SLEW_REVERSE, Constants.DRIVETRAIN_MAX_OUTPUT_FORWARD, Constants.DRIVETRAIN_MAX_OUTPUT_REVERSE, Constants.DRIVETRAIN_LIMIT_OUTPUT_FORWARD, Constants.DRIVETRAIN_LIMIT_OUTPUT_REVERSE);
-
   //Values
-    double dt_lt;
-    double dt_rt;
-    double dt_lx;
-    double dt_speed;
-    double dt_turn;
-
-  //Static Variables
-    //last turn
-    static boolean lastTurnRight;
-
+  double dt_lt;
+  double dt_rt;
+  double dt_lx;
+  double dt_speed;
+  double dt_turn;
+  //Static Variables	
+    //last turn	
+    static boolean lastTurnRight;	
+    
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
+    //Gyro Calibration
+      m_gyro.calibrate();
     //Motor Controller Configs
       //Left
         //Front
@@ -78,6 +85,8 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.setNeutralMode(NeutralMode.Coast);
         drivetrainRightRear.configVoltageCompSaturation(12.0);
         drivetrainRightRear.enableVoltageCompensation(true);
+        //All
+        resetEncoders();
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
     //Static Variables
@@ -157,6 +166,58 @@ public class DrivetrainSub extends SubsystemBase {
 
   //Aim
   public void aim() {
-      arcadeDrive(0, LimelightSub.turn);
+    arcadeDrive(0, LimelightSub.turn);
+  }
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(drivetrainLeftFront.getSelectedSensorVelocity()/Constants.DriveTrainConstants.metersToTicks, drivetrainRightFront.getSelectedSensorVelocity()/Constants.DriveTrainConstants.metersToTicks);
+  }
+  
+  public void resetOdometry() {
+    resetEncoders();
+    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
+  }
+
+
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+  }
+
+  public void resetEncoders(){
+    drivetrainLeftFront.setSelectedSensorPosition(0);
+    drivetrainRightFront.setSelectedSensorPosition(0); 
+  }
+  public double getAverageEncoderDistance() {
+    return (drivetrainLeftFront.getSelectedSensorPosition()*Constants.DriveTrainConstants.metersToTicks + drivetrainRightFront.getSelectedSensorPosition()*Constants.DriveTrainConstants.metersToTicks) / 2.0;
+  }
+
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
+
+  public void tankDriveVolts(double l, double r){
+      drivetrainLeftFront.setVoltage(l);
+      drivetrainRightFront.setVoltage(r);
+      arcadeDrive.feed();
+  }
+
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+  public double getTurnRate() {
+    return -m_gyro.getRate(); //idk if we use this, but could potentially be backwards b/c our gyro is upside down -josh
+  }
+
+  @Override
+  public void periodic(){
+    SmartDashboard.putNumber("xPosition", getPose().getX());
+    SmartDashboard.putNumber("yPosition", getPose().getY());
+
+    m_odometry.update(
+      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks, drivetrainRightFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks);
   }
 }

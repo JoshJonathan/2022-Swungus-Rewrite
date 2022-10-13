@@ -61,7 +61,11 @@ public final class Constants {
         //Positions
             //servos
             public static final double SHOOTER_SERVOS_IDLE_POSITION = 0;//unassigned //0 for testing
-            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = -0.5;//unassigned //-0.5 for testing
+            public static final double SHOOTER_SERVOS_FENDERSHOT_POSITION = -0.55;//unassigned //-0.5 for testing
+            public static final double SHOOTER_HOOD_IDLE_BOTTOM = SHOOTER_SERVOS_FENDERSHOT_POSITION;
+            public static final double SHOOTER_HOOD_IDLE_LOW = -0.16;
+            public static final double SHOOTER_HOOD_IDLE_HIGH = 0.23;
+            public static final double SHOOTER_HOOD_IDLE_TOP = 0.6;
         //Configurations
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_RAMP_TIME = 0.25;
@@ -181,4 +185,23 @@ public final class Constants {
         //Controller Ports
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final int OPERATOR_CONTROLLER_PORT = 1;
+////////        
+
+        public static final class DriveTrainConstants{
+            public static final double kS = 0.6604; //Volts (static friction) //should really be ~1.8 right? -josh
+            public static final double kV = 2.1926; // volts*s/m
+            public static final double kA = 0.32167; // volts*s^2/m
+            public static final double kP = 3.0265;
+
+            public static final double kTrackwidthMeters = 0.61612;
+
+            public static final double kMaxSpeedMetersPerSecond = 1.83;
+            public static final double kMaxAccelerationMetersPerSecondSquared = 2.7;
+
+            public static final double kRamseteB = 2;
+            public static final double kRamseteZeta = 0.7;
+
+            public static final double metersToTicks = 25722.88;
+        }
 }
+
