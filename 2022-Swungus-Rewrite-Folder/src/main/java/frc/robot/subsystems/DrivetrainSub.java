@@ -152,7 +152,7 @@ public class DrivetrainSub extends SubsystemBase {
   //Arcade Drive
   public void arcadeDrive(double speed, double turn) {
     arcadeDrive.arcadeDrive(speed, turn);
-    SmartDashboard.putNumber("voltageOut", speed);
+    //SmartDashboard.putNumber("voltageOut", speed);
   }
 
   //Aim
