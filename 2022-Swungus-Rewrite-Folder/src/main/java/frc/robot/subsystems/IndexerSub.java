@@ -48,13 +48,14 @@ public class IndexerSub extends SubsystemBase {
   //Shoot
   public void shoot() {
     //determine if we are at setpoints
+    SmartDashboard.putBoolean(" josh <3", ShooterSub.mainWheelSetpoint == Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY);
     if(ShooterSub.mainWheelSetpoint != Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY &&
        readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR) &&
        readyToShoot(ShooterSub.servoSetpoint, ShooterSub.servoValue, Constants.SHOOTER_SERVOS_ALLOWABLE_ERROR) &&
-       (readyToShoot(0, LimelightSub.x, Constants.DRIVETRAIN_ALLOWABLE_ERROR) || ShooterSub.mainWheelSetpoint == Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY)
-       ) {
+       ((readyToShoot(0, LimelightSub.x, Constants.DRIVETRAIN_ALLOWABLE_ERROR) && LimelightSub.v ==1 )|| ShooterSub.mainWheelSetpoint == Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY)
+        ) {
       index(Constants.INDEXER_OUTPUT);
       timer.reset();
       timer.start(); }
