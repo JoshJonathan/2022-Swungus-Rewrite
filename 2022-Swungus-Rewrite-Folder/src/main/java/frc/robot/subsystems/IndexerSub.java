@@ -9,13 +9,18 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IndexerSub extends SubsystemBase {
   //Motors
   WPI_TalonSRX indexerFront = new WPI_TalonSRX(Constants.INDEXER_FRONT_ID);
-  WPI_TalonSRX indexerRear = new WPI_TalonSRX(Constants.INDEXER_REAR_ID); 
+  WPI_TalonSRX indexerRear = new WPI_TalonSRX(Constants.INDEXER_REAR_ID);
+
+  //Timer
+  Timer timer = new Timer();
 
   /** Creates a new IndexerSub. */
   public IndexerSub() {
@@ -30,6 +35,9 @@ public class IndexerSub extends SubsystemBase {
     indexerFront.setNeutralMode(NeutralMode.Coast);
     indexerFront.setNeutralMode(NeutralMode.Coast);
     indexerRear.follow(indexerFront);
+
+    timer.reset();
+    timer.start();
   }
 
   //Index
@@ -38,5 +46,29 @@ public class IndexerSub extends SubsystemBase {
   }
 
   //Shoot
-  
+  public void shoot() {
+    //determine if we are at setpoints
+    SmartDashboard.putBoolean(" josh <3", ShooterSub.mainWheelSetpoint == Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY);
+    if(ShooterSub.mainWheelSetpoint != Constants.SHOOTER_MAIN_WHEEL_IDLE_VELOCITY &&
+       readyToShoot(ShooterSub.mainWheelSetpoint, ShooterSub.mainWheelValue, Constants.SHOOTER_MAIN_WHEEL_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.hoodWheelsSetpoint, ShooterSub.hoodWheelsValue, Constants.SHOOTER_HOOD_WHEELS_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.kickerWheelSetpoint, ShooterSub.kickerWheelValue, Constants.SHOOTER_KICKER_WHEEL_ALLOWABLE_ERROR) &&
+       readyToShoot(ShooterSub.servoSetpoint, ShooterSub.servoValue, Constants.SHOOTER_SERVOS_ALLOWABLE_ERROR) &&
+       ((readyToShoot(0, LimelightSub.x, Constants.DRIVETRAIN_ALLOWABLE_ERROR) && LimelightSub.v ==1 )|| ShooterSub.mainWheelSetpoint == Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY)
+        ) {
+      index(Constants.INDEXER_OUTPUT);
+      timer.reset();
+      timer.start(); }
+    else if (timer.get() > Constants.INDEXER_TIMER_DELAY) index(0);
+  }
+
+  //Check if shooter is ready
+  public boolean readyToShoot(double setpoint, double value, double allowableError) {
+    if ((value > (setpoint-allowableError) &&
+        value < (setpoint+allowableError))
+        ||
+        value == setpoint
+        ) return true;
+    else return false;
+  }
 }
