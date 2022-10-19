@@ -48,7 +48,7 @@ public final class Constants {
         //Velocities
             //MainWheel
             public static final double SHOOTER_MAIN_WHEEL_IDLE_VELOCITY = 1000; //1000
-            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 6500;//unassigned //6500 for testing
+            public static final double SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY = 6501;//unassigned //6500 for testing
             //HoodWheels
             public static final double SHOOTER_HOOD_WHEELS_IDLE_VELOCITY = 1000; //1000
             public static final double SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY = 10000;//unassigned //10000 for testing
@@ -193,15 +193,15 @@ public final class Constants {
             public static final double kA = 0.32167; // volts*s^2/m
             public static final double kP = 3.0265;
 
-            public static final double kTrackwidthMeters = 0.61612;
+            public static final double kTrackwidthMeters = 0.61612; //0.61612
 
-            public static final double kMaxSpeedMetersPerSecond = 1.83;
-            public static final double kMaxAccelerationMetersPerSecondSquared = 2.7;
+            public static final double kMaxSpeedMetersPerSecond = 1.00; //1.83
+            public static final double kMaxAccelerationMetersPerSecondSquared = 2.0;
 
             public static final double kRamseteB = 2;
             public static final double kRamseteZeta = 0.7;
 
-            public static final double metersToTicks = 25722.88;
+            public static final double metersToTicks = 42347.747;
         }
 }
 

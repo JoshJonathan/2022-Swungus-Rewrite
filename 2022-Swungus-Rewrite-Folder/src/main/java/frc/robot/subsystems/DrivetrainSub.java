@@ -32,11 +32,11 @@ public class DrivetrainSub extends SubsystemBase {
     WPI_TalonFX drivetrainRightFront = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_FRONT_ID);
     WPI_TalonFX drivetrainRightRear = new WPI_TalonFX(Constants.DRIVETRAIN_RIGHT_REAR_ID);
   //Gyro
-    public final Gyro m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
+    public final AHRS m_gyro = new AHRS(SPI.Port.kMXP); // maybe replace type with AHRS
   //Drivetrain
     DifferentialDrive arcadeDrive = new DifferentialDrive(drivetrainLeftFront, drivetrainRightFront);
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(Constants.DriveTrainConstants.kTrackwidthMeters);
-    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d()); //should be set after gyro initializes to get an accurate value; -josh
+    private final DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d().times(-1)); //should be set after gyro initializes to get an accurate value; -josh
   //Input Filters
     //SlewRateLimiter speedFilter = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_FORWARD);
     //SlewRateLimiter speedFilterReverse = new SlewRateLimiter(Constants.DRIVETRAIN_SPEED_SLEW_REVERSE);
@@ -92,6 +92,13 @@ public class DrivetrainSub extends SubsystemBase {
     //Static Variables
       //last turn
       lastTurnRight = true;
+  }
+
+  public void enableVoltageCompensation(boolean onOff) {
+      drivetrainRightRear.enableVoltageCompensation(onOff);
+      drivetrainLeftRear.enableVoltageCompensation(onOff);
+      drivetrainRightFront.enableVoltageCompensation(onOff);
+      drivetrainLeftFront.enableVoltageCompensation(onOff);
   }
 
   //Drive
@@ -178,13 +185,13 @@ public class DrivetrainSub extends SubsystemBase {
   
   public void resetOdometry() {
     resetEncoders();
-    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d());
+    m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d().times(-1));
   }
 
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
+    m_odometry.resetPosition(pose, m_gyro.getRotation2d().times(-1));
   }
 
   public void resetEncoders(){
@@ -206,10 +213,10 @@ public class DrivetrainSub extends SubsystemBase {
   }
 
   public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
+    return -m_gyro.getRotation2d().getDegrees();
   }
   public double getTurnRate() {
-    return -m_gyro.getRate(); //idk if we use this, but could potentially be backwards b/c our gyro is upside down -josh
+    return m_gyro.getRate();
   }
 
   @Override
@@ -218,6 +225,6 @@ public class DrivetrainSub extends SubsystemBase {
     SmartDashboard.putNumber("yPosition", getPose().getY());
 
     m_odometry.update(
-      m_gyro.getRotation2d(), drivetrainLeftFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks, drivetrainRightFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks);
+      m_gyro.getRotation2d().times(-1), drivetrainLeftFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks, drivetrainRightFront.getSelectedSensorPosition()/Constants.DriveTrainConstants.metersToTicks);
   }
 }

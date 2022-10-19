@@ -10,6 +10,8 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.ClimbSub;
 import frc.robot.subsystems.DrivetrainSub;
 import frc.robot.subsystems.IndexerSub;
@@ -17,13 +19,21 @@ import frc.robot.subsystems.IntakeSub;
 import frc.robot.subsystems.LimelightSub;
 import frc.robot.subsystems.ShooterSub;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
+
+import org.opencv.video.TrackerGOTURN;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -96,6 +106,8 @@ public class RobotContainer {
       //Retract
       private final Command rc_climbretract = new InstantCommand(rc_climbsub::retractClimb, rc_climbsub);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -103,6 +115,13 @@ public class RobotContainer {
     //set default commands
     rc_shootersub.setDefaultCommand(rc_idleshooter);
     rc_drivetrainsub.setDefaultCommand(rc_drive);
+
+
+    m_chooser.setDefaultOption("Two ball - hangar-facing", twoBallAutoHangar());
+    m_chooser.addOption("Two ball - human player-facing", twoBallAutoHumanPlayer());
+
+// Put the chooser on the dashboard
+SmartDashboard.putData(m_chooser);
   
   }
 
@@ -148,56 +167,110 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() {
+    return m_chooser.getSelected();
+  }
 
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(Constants.DriveTrainConstants.kS, Constants.DriveTrainConstants.kV, Constants.DriveTrainConstants.kA), DrivetrainSub.kDriveKinematics, 10);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-            Constants.DriveTrainConstants.kMaxSpeedMetersPerSecond,
-            Constants.DriveTrainConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DrivetrainSub.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
+  public Command twoBallAutoHangar(){
+
+    Trajectory trajectory =
         TrajectoryGenerator.generateTrajectory(
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            List.of(/*new Translation2d(3.4, -.75) ,new Translation2d(2, -1)*/),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(-1, -1.6, new Rotation2d(Math.PI/2)),
             // Pass config
-            config);
-
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            exampleTrajectory,
-            rc_drivetrainsub::getPose,
-            new RamseteController(Constants.DriveTrainConstants.kRamseteB, Constants.DriveTrainConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-              Constants.DriveTrainConstants.kS,
-              Constants.DriveTrainConstants.kV,
-              Constants.DriveTrainConstants.kA),
-            DrivetrainSub.kDriveKinematics,
-            rc_drivetrainsub::getWheelSpeeds,
-            new PIDController(Constants.DriveTrainConstants.kP, 0, 0),
-            new PIDController(Constants.DriveTrainConstants.kP, 0, 0),
-            // RamseteCommand passes volts to the callback
-            rc_drivetrainsub::tankDriveVolts,
-            rc_drivetrainsub);
+            swungusTrajectoryConfig(true)
+            );
 
     // Reset odometry to the starting pose of the trajectory.
-    rc_drivetrainsub.resetOdometry(exampleTrajectory.getInitialPose());
+    rc_drivetrainsub.zeroHeading();
+    rc_drivetrainsub.resetOdometry(trajectory.getInitialPose());
+    rc_drivetrainsub.enableVoltageCompensation(false);
 
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0));
-  // return new RunCommand(()->rc_drivetrainsub.tankDriveVolts(0, 0)) ;
+    Command oneBall = new ParallelCommandGroup(rc_fendershot, rc_indexshoot).until(()-> Robot.getTime()>5);
+    Command stopOneBall = new ParallelCommandGroup(rc_idleshooter, rc_indexstop).until(()->true);
+    Command deployIntake = new ParallelCommandGroup(rc_deployIntake).until(()->true);
+    CommandGroupBase.clearGroupedCommands();
+    Command twoBall = new ParallelCommandGroup(rc_limelightShotDrive, rc_limelightShotSpinShooter, rc_indexshoot).until(()->Robot.getTime()>14);
+    CommandGroupBase.clearGroupedCommands();
+    Command stopTwoBall = new ParallelCommandGroup(rc_idleshooter, rc_drive, rc_indexstop, rc_retractIntake).until(()->true);
+    CommandGroupBase.clearGroupedCommands();
+    Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ /*deployIntake, */swungusRamseteCommand(trajectory)/*, twoBall, stopTwoBall*/);
+    CommandGroupBase.clearGroupedCommands();
+    
+    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
+
   }
+
+  public Command twoBallAutoHumanPlayer(){
+
+    Trajectory trajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(/*new Translation2d(3.4, -.75) ,new Translation2d(2, -1)*/),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(-1, 1.6, new Rotation2d(-Math.PI/2)),
+            // Pass config
+            swungusTrajectoryConfig(true)
+            );
+
+    // Reset odometry to the starting pose of the trajectory.
+    rc_drivetrainsub.zeroHeading();
+    rc_drivetrainsub.resetOdometry(trajectory.getInitialPose());
+    rc_drivetrainsub.enableVoltageCompensation(false);
+
+    Command oneBall = new ParallelCommandGroup(rc_fendershot, rc_indexshoot).until(()-> Robot.getTime()>5);
+    Command stopOneBall = new ParallelCommandGroup(rc_idleshooter, rc_indexstop).until(()->true);
+    Command deployIntake = new ParallelCommandGroup(rc_deployIntake).until(()->true);
+    CommandGroupBase.clearGroupedCommands();
+    Command twoBall = new ParallelCommandGroup(rc_limelightShotDrive, rc_limelightShotSpinShooter, rc_indexshoot).until(()->Robot.getTime()>14);
+    CommandGroupBase.clearGroupedCommands();
+    Command stopTwoBall = new ParallelCommandGroup(rc_idleshooter, rc_drive, rc_indexstop, rc_retractIntake).until(()->true);
+    CommandGroupBase.clearGroupedCommands();
+    Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ deployIntake, swungusRamseteCommand(trajectory), twoBall, stopTwoBall);
+    CommandGroupBase.clearGroupedCommands();
+    
+    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
+
+  }
+
+  public RamseteCommand swungusRamseteCommand(Trajectory trajectory){
+    return new RamseteCommand(
+      trajectory,
+      rc_drivetrainsub::getPose,
+      new RamseteController(Constants.DriveTrainConstants.kRamseteB, Constants.DriveTrainConstants.kRamseteZeta),
+      new SimpleMotorFeedforward(
+        Constants.DriveTrainConstants.kS,
+        Constants.DriveTrainConstants.kV,
+        Constants.DriveTrainConstants.kA),
+      DrivetrainSub.kDriveKinematics,
+      rc_drivetrainsub::getWheelSpeeds,
+      new PIDController(Constants.DriveTrainConstants.kP, 0, 0),
+      new PIDController(Constants.DriveTrainConstants.kP, 0, 0),
+      // RamseteCommand passes volts to the callback
+      rc_drivetrainsub::tankDriveVolts,
+      rc_drivetrainsub);
+  }
+
+  public TrajectoryConfig swungusTrajectoryConfig(boolean setReversed){
+    var autoVoltageConstraint =
+    new DifferentialDriveVoltageConstraint(
+        new SimpleMotorFeedforward(Constants.DriveTrainConstants.kS, Constants.DriveTrainConstants.kV, Constants.DriveTrainConstants.kA), DrivetrainSub.kDriveKinematics, 10);
+
+    return new TrajectoryConfig(
+        Constants.DriveTrainConstants.kMaxSpeedMetersPerSecond,
+        Constants.DriveTrainConstants.kMaxAccelerationMetersPerSecondSquared)
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(DrivetrainSub.kDriveKinematics)
+        // Apply the voltage constraint
+        .addConstraint(autoVoltageConstraint)
+        .setReversed(setReversed);
+  }
+
 }
