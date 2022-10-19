@@ -178,7 +178,7 @@ public final class Constants {
             public static final double kA = 0.32167; // volts*s^2/m
             public static final double kP = 3.0265;
 
-            public static final double kTrackwidthMeters = 0.61612;
+            public static final double kTrackwidthMeters = 0.61612; //0.61612
 
             public static final double kMaxSpeedMetersPerSecond = 1.00; //1.83
             public static final double kMaxAccelerationMetersPerSecondSquared = 2.0;
