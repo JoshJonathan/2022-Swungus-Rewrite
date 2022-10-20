@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.VisionSub;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -105,6 +106,11 @@ public class RobotContainer {
       private final Command rc_climbextend = new InstantCommand(rc_climbsub::extendClimb, rc_climbsub);
       //Retract
       private final Command rc_climbretract = new InstantCommand(rc_climbsub::retractClimb, rc_climbsub);
+
+
+      private VisionSub camera;
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -122,6 +128,8 @@ public class RobotContainer {
 
 // Put the chooser on the dashboard
 SmartDashboard.putData(m_chooser);
+
+camera = new VisionSub();
   
   }
 
