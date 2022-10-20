@@ -170,7 +170,8 @@ SmartDashboard.putData(m_chooser);
     // Reset odometry to the starting pose of the trajectory.
     rc_drivetrainsub.zeroHeading();
     rc_drivetrainsub.resetOdometry();
-    rc_drivetrainsub.enableVoltageCompensation(false); 
+    rc_drivetrainsub.enableVoltageCompensation(false);
+    rc_drivetrainsub.enableCurrentLimiting(false);
     return m_chooser.getSelected();
   }
 
@@ -202,7 +203,7 @@ SmartDashboard.putData(m_chooser);
     Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ deployIntake, swungusRamseteCommand(trajectory), twoBall, stopTwoBall);
     CommandGroupBase.clearGroupedCommands();
     
-    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
+    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true)).andThen(() -> rc_drivetrainsub.enableCurrentLimiting(true));
 
   }
 
@@ -231,7 +232,7 @@ SmartDashboard.putData(m_chooser);
     Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ deployIntake, swungusRamseteCommand(trajectory), twoBall, stopTwoBall);
     CommandGroupBase.clearGroupedCommands();
     
-    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
+    return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true)).andThen(() -> rc_drivetrainsub.enableCurrentLimiting(true));
 
   }
 

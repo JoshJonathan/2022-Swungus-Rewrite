@@ -103,8 +103,8 @@ public class DrivetrainSub extends SubsystemBase {
       drivetrainLeftFront.enableVoltageCompensation(onOff);
   }
 
-  SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration(true, 50, 50, .05);
-  SupplyCurrentLimitConfiguration currentLimitOff = new SupplyCurrentLimitConfiguration(false, 50, 50, .05);
+  SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration(true, 55, 0, 0);
+  SupplyCurrentLimitConfiguration currentLimitOff = new SupplyCurrentLimitConfiguration(false, 55, 0, 0);
   public void enableCurrentLimiting(boolean onOff) {
     if (onOff) {
       drivetrainRightRear.configSupplyCurrentLimit(currentLimit);
