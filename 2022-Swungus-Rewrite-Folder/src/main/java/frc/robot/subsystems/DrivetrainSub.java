@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
@@ -87,6 +88,7 @@ public class DrivetrainSub extends SubsystemBase {
         drivetrainRightRear.enableVoltageCompensation(true);
         //All
         resetEncoders();
+        enableCurrentLimiting(true);
     //Drivetrain Configs
       arcadeDrive.setDeadband(0);
     //Static Variables
@@ -100,6 +102,23 @@ public class DrivetrainSub extends SubsystemBase {
       drivetrainRightFront.enableVoltageCompensation(onOff);
       drivetrainLeftFront.enableVoltageCompensation(onOff);
   }
+
+  SupplyCurrentLimitConfiguration currentLimit = new SupplyCurrentLimitConfiguration(true, 55, 0, 0);
+  SupplyCurrentLimitConfiguration currentLimitOff = new SupplyCurrentLimitConfiguration(false, 55, 0, 0);
+  public void enableCurrentLimiting(boolean onOff) {
+    if (onOff) {
+      drivetrainRightRear.configSupplyCurrentLimit(currentLimit);
+      drivetrainLeftRear.configSupplyCurrentLimit(currentLimit);
+      drivetrainRightFront.configSupplyCurrentLimit(currentLimit);
+      drivetrainLeftFront.configSupplyCurrentLimit(currentLimit);  
+    }
+    else {
+      drivetrainRightRear.configSupplyCurrentLimit(currentLimitOff);
+      drivetrainLeftRear.configSupplyCurrentLimit(currentLimitOff);
+      drivetrainRightFront.configSupplyCurrentLimit(currentLimitOff);
+      drivetrainLeftFront.configSupplyCurrentLimit(currentLimitOff);
+    }
+}
 
   //Drive
   public void drive(double irt, double ilt, double ilx) {
