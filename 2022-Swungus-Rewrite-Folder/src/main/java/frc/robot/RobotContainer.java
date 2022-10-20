@@ -167,6 +167,10 @@ SmartDashboard.putData(m_chooser);
    */
 
   public Command getAutonomousCommand() {
+    // Reset odometry to the starting pose of the trajectory.
+    rc_drivetrainsub.zeroHeading();
+    rc_drivetrainsub.resetOdometry();
+    rc_drivetrainsub.enableVoltageCompensation(false); 
     return m_chooser.getSelected();
   }
 
@@ -186,10 +190,6 @@ SmartDashboard.putData(m_chooser);
             swungusTrajectoryConfig(true)
             );
 
-    // Reset odometry to the starting pose of the trajectory.
-    rc_drivetrainsub.zeroHeading();
-    rc_drivetrainsub.resetOdometry(trajectory.getInitialPose());
-    rc_drivetrainsub.enableVoltageCompensation(false);
 
     Command oneBall = new ParallelCommandGroup(rc_fendershot, rc_indexshoot).until(()-> Robot.getTime()>5);
     Command stopOneBall = new ParallelCommandGroup(rc_idleshooter, rc_indexstop).until(()->true);
@@ -199,7 +199,7 @@ SmartDashboard.putData(m_chooser);
     CommandGroupBase.clearGroupedCommands();
     Command stopTwoBall = new ParallelCommandGroup(rc_idleshooter, rc_drive, rc_indexstop, rc_retractIntake).until(()->true);
     CommandGroupBase.clearGroupedCommands();
-    Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ /*deployIntake, */swungusRamseteCommand(trajectory)/*, twoBall, stopTwoBall*/);
+    Command twoBallAuto = new SequentialCommandGroup(/*oneBall, stopOneBall,*/ deployIntake, swungusRamseteCommand(trajectory), twoBall, stopTwoBall);
     CommandGroupBase.clearGroupedCommands();
     
     return twoBallAuto.andThen(() -> rc_drivetrainsub.tankDriveVolts(0, 0)).andThen(() -> rc_drivetrainsub.enableVoltageCompensation(true));
@@ -219,11 +219,6 @@ SmartDashboard.putData(m_chooser);
             // Pass config
             swungusTrajectoryConfig(true)
             );
-
-    // Reset odometry to the starting pose of the trajectory.
-    rc_drivetrainsub.zeroHeading();
-    rc_drivetrainsub.resetOdometry(trajectory.getInitialPose());
-    rc_drivetrainsub.enableVoltageCompensation(false);
 
     Command oneBall = new ParallelCommandGroup(rc_fendershot, rc_indexshoot).until(()-> Robot.getTime()>5);
     Command stopOneBall = new ParallelCommandGroup(rc_idleshooter, rc_indexstop).until(()->true);
