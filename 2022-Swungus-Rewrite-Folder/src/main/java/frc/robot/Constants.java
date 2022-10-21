@@ -133,7 +133,7 @@ public final class Constants {
             public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
 
             public static final double DRIVETRAIN_TURN_TELE_kP = 0.01;//unassigned
-            public static final double TELEOP_DEGREES_PER_SECOND = 45;
+            public static final double TELEOP_DEGREES_PER_SECOND = -105;
 
 
             //Allowable error

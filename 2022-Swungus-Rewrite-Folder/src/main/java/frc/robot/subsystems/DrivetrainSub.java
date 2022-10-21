@@ -197,28 +197,42 @@ public class DrivetrainSub extends SubsystemBase {
   static double lastControlTime = 0;
   
   public void arcadeDriveControlledTurn(double speed, double turn) {
+    if(turnControlTimer.get()<20) desiredAngle = m_gyro.getRotation2d().times(-1).getDegrees();
   //  if(turnControlTimer.get()-lastControlTime>1){ turnControlTimer.reset(); turnControlTimer.start();}
     double rotationToAdd = turn*(turnControlTimer.get()-lastControlTime)*Constants.TELEOP_DEGREES_PER_SECOND;
     desiredAngle+=rotationToAdd;
     //arcadeDrive(speed, desiredTurn());
-    arcadeDrive(speed,desiredTurn()/12.0);
+    //if(desiredTurn()>0.3){
+    //  arcadeDrive(speed,0.3);
+   // }
+    //else if(desiredTurn()<-0.3){
+    //  arcadeDrive(speed,-0.3);
+   // }else {
+    arcadeDrive(speed,desiredTurn());
+  //  }
     lastControlTime = turnControlTimer.get();
 
     //dashboard entries
     SmartDashboard.putNumber("rotationToAdd", rotationToAdd);
     SmartDashboard.putNumber("time", turnControlTimer.get());
-    SmartDashboard.putNumber("desiredTurn", desiredTurn()/12.0);
+    SmartDashboard.putNumber("desiredTurn", desiredTurn());
+    SmartDashboard.putNumber("diff", getTurnAngleDifference());
+    
     SmartDashboard.putNumber("desiredAngle", desiredAngle);
-    SmartDashboard.putNumber("turn", turn);
+    SmartDashboard.putNumber("turnfromcontroller", turn);
+    SmartDashboard.putNumber("gyro", m_gyro.getRotation2d().times(-1).getDegrees());
+
     SmartDashboard.putNumber("timeDiff", (turnControlTimer.get()-lastControlTime));
   }
 
   public double desiredTurn(){
-   return Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_TELE_kP*getTurnAngleDifference();
+    if(getTurnAngleDifference()>0)
+      return Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_TELE_kP*getTurnAngleDifference();
+    return Constants.DRIVETRAIN_TURN_TELE_kP*getTurnAngleDifference() - Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT;
   }
 
   public double getTurnAngleDifference(){
-    return desiredAngle - m_gyro.getRotation2d().times(-1).getDegrees(); //this might need reversed
+    return m_gyro.getRotation2d().times(-1).getDegrees() - desiredAngle; //this might need reversed
   }
 
   public double desiredAngle = 180;
