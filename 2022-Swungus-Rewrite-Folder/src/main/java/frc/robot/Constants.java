@@ -131,6 +131,11 @@ public final class Constants {
         //Automation Constants
             //Turn kP
             public static final double DRIVETRAIN_TURN_kP = 0.01;//unassigned
+
+            public static final double DRIVETRAIN_TURN_TELE_kP = 0.01;//unassigned
+            public static final double TELEOP_DEGREES_PER_SECOND = 45;
+
+
             //Allowable error
             public static final double DRIVETRAIN_ALLOWABLE_ERROR = 3;//unassigned
 ////////

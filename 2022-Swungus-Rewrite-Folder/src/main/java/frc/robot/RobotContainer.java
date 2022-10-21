@@ -80,6 +80,8 @@ public class RobotContainer {
       private final Command rc_drive = new RunCommand(()-> rc_drivetrainsub.drive(rc_driverController.getRightTriggerAxis(),
                                                                                   rc_driverController.getLeftTriggerAxis(),
                                                                                   rc_driverController.getLeftX()), rc_drivetrainsub);
+
+    private final Command rc_drive_angleDrive = new RunCommand(()-> rc_drivetrainsub.arcadeDriveControlledTurn(rc_driverController.getLeftY(), rc_driverController.getRightX()), rc_drivetrainsub);
   //Indexer
     private final IndexerSub rc_indexersub = new IndexerSub();
       //Index
@@ -120,7 +122,7 @@ public class RobotContainer {
 
     //set default commands
     rc_shootersub.setDefaultCommand(rc_idleshooter);
-    rc_drivetrainsub.setDefaultCommand(rc_drive);
+    rc_drivetrainsub.setDefaultCommand(rc_drive_angleDrive);
 
 
     m_chooser.setDefaultOption("Two ball - hangar-facing", twoBallAutoHangar());
@@ -167,7 +169,7 @@ camera = new VisionSub();
       new JoystickButton(rc_driverController, XboxController.Button.kStart.value).whenPressed(rc_climbextend);
       new JoystickButton(rc_driverController, XboxController.Button.kBack.value).whenPressed(rc_climbretract);
   }
-
+ 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

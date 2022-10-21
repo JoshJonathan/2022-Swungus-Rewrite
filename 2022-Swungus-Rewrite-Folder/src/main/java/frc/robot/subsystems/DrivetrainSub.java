@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Time;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
@@ -11,9 +13,10 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
-
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -55,6 +58,7 @@ public class DrivetrainSub extends SubsystemBase {
     
   /** Creates a new DrivetrainSub. */
   public DrivetrainSub() {
+    turnControlTimer.start();
     //Gyro Calibration
       m_gyro.calibrate();
     //Motor Controller Configs
@@ -189,6 +193,37 @@ public class DrivetrainSub extends SubsystemBase {
     arcadeDrive.arcadeDrive(speed, turn);
     //SmartDashboard.putNumber("voltageOut", speed);
   }
+  static Timer turnControlTimer = new Timer();
+  static double lastControlTime = 0;
+  
+  public void arcadeDriveControlledTurn(double speed, double turn) {
+  //  if(turnControlTimer.get()-lastControlTime>1){ turnControlTimer.reset(); turnControlTimer.start();}
+    double rotationToAdd = turn*(turnControlTimer.get()-lastControlTime)*Constants.TELEOP_DEGREES_PER_SECOND;
+    desiredAngle+=rotationToAdd;
+    //arcadeDrive(speed, desiredTurn());
+    arcadeDrive(speed,desiredTurn()/12.0);
+    lastControlTime = turnControlTimer.get();
+
+    //dashboard entries
+    SmartDashboard.putNumber("rotationToAdd", rotationToAdd);
+    SmartDashboard.putNumber("time", turnControlTimer.get());
+    SmartDashboard.putNumber("desiredTurn", desiredTurn()/12.0);
+    SmartDashboard.putNumber("desiredAngle", desiredAngle);
+    SmartDashboard.putNumber("turn", turn);
+    SmartDashboard.putNumber("timeDiff", (turnControlTimer.get()-lastControlTime));
+  }
+
+  public double desiredTurn(){
+   return Constants.DRIVETRAIN_TURN_MINIMUM_OUTPUT+Constants.DRIVETRAIN_TURN_TELE_kP*getTurnAngleDifference();
+  }
+
+  public double getTurnAngleDifference(){
+    return desiredAngle - m_gyro.getRotation2d().times(-1).getDegrees(); //this might need reversed
+  }
+
+  public double desiredAngle = 180;
+
+  
 
   //Aim
   public void aim() {
@@ -204,12 +239,16 @@ public class DrivetrainSub extends SubsystemBase {
   
   public void resetOdometry() {
     resetEncoders();
+    desiredAngle = m_gyro.getRotation2d().times(-1).getDegrees();
+    System.out.println(">:(");
     m_odometry.resetPosition(new Pose2d(), m_gyro.getRotation2d().times(-1));
   }
 
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
+    System.out.println(">:(");
+    desiredAngle = m_gyro.getRotation2d().times(-1).getDegrees();
     m_odometry.resetPosition(pose, m_gyro.getRotation2d().times(-1));
   }
 
@@ -230,6 +269,8 @@ public class DrivetrainSub extends SubsystemBase {
       drivetrainRightFront.setVoltage(r);
       arcadeDrive.feed();
   }
+
+
 
   public double getHeading() {
     return -m_gyro.getRotation2d().getDegrees();
