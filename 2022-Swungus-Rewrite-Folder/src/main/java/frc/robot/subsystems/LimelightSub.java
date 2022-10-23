@@ -70,6 +70,7 @@ public class LimelightSub extends SubsystemBase {
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
     v = tv.getDouble(0.0);
+    SmartDashboard.putBoolean("tV", v==1);
     setTurn();
   }
 }

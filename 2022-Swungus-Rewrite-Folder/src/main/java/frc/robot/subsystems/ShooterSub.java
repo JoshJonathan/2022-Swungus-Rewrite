@@ -169,6 +169,9 @@ public class ShooterSub extends SubsystemBase {
     outputToShooter(linearOutput(1), linearOutput(2), linearOutput(3), linearOutput(4));
   }
 
+  public void unjam(){
+    outputToShooter(0-Constants.SHOOTER_MAIN_WHEEL_FENDERSHOT_VELOCITY,0-Constants.SHOOTER_HOOD_WHEELS_FENDERSHOT_VELOCITY, 0-Constants.SHOOTER_KICKER_WHEEL_FENDERSHOT_VELOCITY, Constants.SHOOTER_SERVOS_FENDERSHOT_POSITION);
+  }
   //search characterization table for ty column
   public void searchTablety() {
     if (LimelightSub.v == 1) {
