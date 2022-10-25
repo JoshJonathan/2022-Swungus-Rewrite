@@ -88,6 +88,10 @@ public class RobotContainer {
       private final Command rc_indexstop = new RunCommand(()-> rc_indexersub.index(0), rc_indexersub);
       //Shoot
       private final Command rc_indexshoot = new RunCommand(rc_indexersub::shoot, rc_indexersub);
+
+      //Un-shoot :-)
+      private final Command rc_shooterunjam = new RunCommand(rc_shootersub::unjam, rc_shootersub);
+
   //Intake
     private final IntakeSub rc_intakesub = new IntakeSub();
     //Commands
@@ -99,6 +103,8 @@ public class RobotContainer {
     private final LimelightSub rc_limelightsub = new LimelightSub();
       //LimelightShot
       private final Command rc_limelightShotDrive = new RunCommand(rc_drivetrainsub::aim, rc_drivetrainsub);
+
+
       private final Command rc_limelightShotSpinShooter = new RunCommand(rc_shootersub::limelightShot, rc_shootersub);
   //Climb
     private final ClimbSub rc_climbsub = new ClimbSub();
@@ -106,6 +112,8 @@ public class RobotContainer {
       private final Command rc_climbextend = new InstantCommand(rc_climbsub::extendClimb, rc_climbsub);
       //Retract
       private final Command rc_climbretract = new InstantCommand(rc_climbsub::retractClimb, rc_climbsub);
+
+      
 
 
       private VisionSub camera;
@@ -154,6 +162,11 @@ camera = new VisionSub();
       //Index
       new JoystickButton(rc_operatorController, XboxController.Button.kRightBumper.value).whileHeld(rc_indexup).whenReleased(rc_indexstop);
       new JoystickButton(rc_operatorController, XboxController.Button.kLeftBumper.value).whileHeld(rc_indexdown).whenReleased(rc_indexstop);
+
+      new JoystickButton(rc_operatorController, XboxController.Button.kStart.value).whileHeld(rc_shooterunjam);
+      new JoystickButton(rc_operatorController, XboxController.Button.kStart.value).whileHeld(rc_indexdown).whenReleased(rc_indexstop);
+
+
       //Shoot
       new JoystickButton(rc_driverController, XboxController.Button.kA.value).whileHeld(rc_indexshoot).whenReleased(rc_indexstop);
     //Intake
